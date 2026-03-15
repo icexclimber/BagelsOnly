@@ -1,2 +1,12 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+:root {
+  /** primary - Verde Tenis (Volt) **/
+  --ion-color-primary: #d7ff1a;
+  --ion-color-primary-rgb: 215, 255, 26;
+  --ion-color-primary-contrast: #000000; // Texto negro para que resalte
+  --ion-color-primary-contrast-rgb: 0, 0, 0;
+  --ion-color-primary-shade: #bd3c17; // Un tono más oscuro para el click
+  --ion-color-primary-tint: #dbff31;
+
+  /* También podemos ajustar el success para que sea un verde más pasto */
+  --ion-color-success: #2dd36f;
+}

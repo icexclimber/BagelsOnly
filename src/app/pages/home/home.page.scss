@@ -1,0 +1,75 @@
+// Header
+ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: #000;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  .header-logo {
+    height: 32px; // Tamaño ideal para header
+    width: auto;
+    margin-right: 12px;
+    object-fit: contain;
+  }
+  .brand-text {
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+}
+
+// Carrusel
+.slides-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 15px;
+  padding: 10px 16px 20px 16px;
+  &::-webkit-scrollbar { display: none; }
+
+  .card-wrapper {
+    scroll-snap-align: start;
+    min-width: 280px;
+
+    .torneo-card-bg {
+      height: 200px;
+      border-radius: 20px;
+      background-size: cover;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      z-index: 10;
+
+      .card-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 15px;
+        pointer-events: none; // CRÍTICO: Permite que el clic llegue al padre
+      }
+    }
+  }
+}
+
+// Estilo especial Escaleras (Verde Éxito)
+.ladder-card-bg {
+  border: 1px solid rgba(45, 211, 111, 0.3) !important;
+  .ladder-overlay {
+    background: linear-gradient(to top, rgba(45, 211, 111, 0.7) 0%, transparent 100%) !important;
+  }
+}
+
+.modal-banner {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}

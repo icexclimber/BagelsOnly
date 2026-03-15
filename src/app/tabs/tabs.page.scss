@@ -1,1 +1,39 @@
+// Forzamos al título a comportarse como un contenedor flexible
+ion-title {
+  display: flex !important;
+  align-items: center;
+  width: 100%;
+  padding: 0; // Quitamos paddings que empujan el texto afuera
+}
 
+.header-content {
+  display: flex;
+  align-items: center;
+  flex-direction: row; // Asegura que estén uno al lado del otro
+  width: 100%;
+
+  .header-logo {
+    height: 30px;        // Altura controlada
+    width: auto;         // Proporción real
+    min-width: 30px;     // Evita que desaparezca
+    max-height: 35px;    // Límite de seguridad
+    margin-right: 10px;  // Espacio con el texto
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-text {
+    font-weight: 800;
+    font-size: 1.1rem;   // Bajamos un poco el tamaño para que quepa todo
+    white-space: nowrap; // Evita que el texto se vaya a dos renglones
+    color: #000;
+    display: inline-block;
+  }
+}
+
+ion-tab-button.tab-selected {
+  --color-selected: #d4e157; // Color verde tenis
+  ion-icon {
+    transform: scale(1.1); // Hace el icono un poco más grande cuando se selecciona
+  }
+}

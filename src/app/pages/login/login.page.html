@@ -1,0 +1,41 @@
+<ion-content scroll-y="false">
+  <div class="login-wrapper">
+    
+    <div class="logo-section">
+      <h1>🥯</h1>
+      <h2>BagelsOnly</h2>
+      <p style="color: #666;">El club de los 6-0</p>
+    </div>
+
+    <div class="form-card">
+      <ion-item lines="none">
+        <ion-input 
+          label="Email" 
+          labelPlacement="stacked" 
+          type="email" 
+          placeholder="nadal@tenis.com" 
+          [(ngModel)]="correo">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-input 
+          label="Contraseña" 
+          labelPlacement="stacked" 
+          type="password" 
+          placeholder="••••••" 
+          [(ngModel)]="clave">
+        </ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="entrar()" class="login-button">
+        Entrar a la cancha
+      </ion-button>
+    </div>
+
+    <ion-button expand="block" fill="clear" color="medium" routerLink="/registro" style="margin-top: 20px;">
+      ¿Eres nuevo? <strong>Regístrate aquí</strong>
+    </ion-button>
+
+  </div>
+</ion-content>

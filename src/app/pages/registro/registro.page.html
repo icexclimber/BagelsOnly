@@ -1,0 +1,51 @@
+<ion-content>
+  <div class="register-wrapper">
+    
+    <div class="header-section">
+      <h1>🎾</h1>
+      <h2>Nuevo Perfil</h2>
+      <p style="color: #666;">Únete al club BagelsOnly</p>
+    </div>
+
+    <div class="form-card">
+      <ion-item lines="none">
+        <ion-input 
+          label="Nombre del Jugador" 
+          labelPlacement="stacked" 
+          type="text" 
+          placeholder="Ej. Carlos Alcaraz" 
+          [(ngModel)]="nuevoUsuario.nombre">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-input 
+          label="Email" 
+          labelPlacement="stacked" 
+          type="email" 
+          placeholder="tu@email.com" 
+          [(ngModel)]="nuevoUsuario.email">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-input 
+          label="Contraseña" 
+          labelPlacement="stacked" 
+          type="password" 
+          placeholder="Mínimo 6 caracteres" 
+          [(ngModel)]="nuevoUsuario.password">
+        </ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="registrar()" class="register-button">
+        Crear Cuenta
+      </ion-button>
+    </div>
+
+    <ion-button expand="block" fill="clear" color="medium" routerLink="/login" style="margin-top: 20px;">
+      ¿Ya tienes cuenta? <strong>Inicia sesión</strong>
+    </ion-button>
+
+  </div>
+</ion-content>

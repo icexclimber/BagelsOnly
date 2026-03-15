@@ -1,0 +1,45 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="empty-feed-container">
+    <ion-icon name="people-circle-outline" class="main-icon"></ion-icon>
+    
+    <h1>Tu Feed está tranquilo... por ahora</h1>
+    <p>Conecta con otros tenistas para transformar esta sección en tu centro de noticias deportivo.</p>
+  </div>
+
+  <ion-list lines="none">
+    <ion-list-header>
+      <ion-label>¿Qué encontrarás aquí?</ion-label>
+    </ion-list-header>
+
+    <ion-item class="feature-item">
+      <ion-icon slot="start" name="stats-chart-outline" color="primary"></ion-icon>
+      <ion-label>
+        <h3>Resultados en vivo</h3>
+        <p>Entérate de quién entregó un "Bagel" en los clubes de Tijuana hoy mismo.</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="feature-item">
+      <ion-icon slot="start" name="trophy-outline" color="warning"></ion-icon>
+      <ion-label>
+        <h3>Ascensos de Ranking</h3>
+        <p>Mira quiénes están subiendo de nivel tras sus victorias.</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="feature-item">
+      <ion-icon slot="start" name="megaphone-outline" color="tertiary"></ion-icon>
+      <ion-label>
+        <h3>Retos de la Comunidad</h3>
+        <p>Publicaciones de jugadores buscando pareja para dobles o singles.</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="ion-padding">
+    <ion-button expand="block" shape="round" color="primary" id="open-buscar">
+      <ion-icon slot="start" name="person-add-outline"></ion-icon>
+      Buscar Amigos
+    </ion-button>
+  </div>
+</ion-content>
