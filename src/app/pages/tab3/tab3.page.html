@@ -1,0 +1,100 @@
+<app-header-global titulo="Mi Perfil"></app-header-global>
+
+<ion-content>
+  <div class="profile-header ion-padding ion-text-center" *ngIf="usuario$ | async as user">
+    <div class="avatar-wrapper">
+      <img [src]="user.foto" class="main-avatar">
+      <ion-button fill="clear" size="small" class="edit-photo-btn" (click)="cambiarFoto()">
+        <ion-icon name="camera-reverse"></ion-icon>
+      </ion-button>
+    </div>
+    <h2 class="user-name">{{ user.nombre }}</h2>
+    <p class="user-bio">{{ user.descripcion || 'Tenista de la AMT | Tijuana' }}</p>
+    
+    <ion-badge color="light" class="level-badge-large">
+      <ion-icon name="star"></ion-icon> Nivel {{ user.nivel }}
+    </ion-badge>
+  </div>
+
+  <ion-segment [(ngModel)]="segmentoActual" mode="ios" class="ion-padding-horizontal">
+    <ion-segment-button value="stats">
+      <ion-label>Estadísticas</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="edit">
+      <ion-label>Editar Perfil</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="segmentoActual === 'stats'" class="animate__animated animate__fadeIn">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <div class="mini-stat-card">
+            <span class="stat-label">Win Rate</span>
+            <span class="stat-value">75%</span>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="mini-stat-card">
+            <span class="stat-label">Partidos</span>
+            <span class="stat-value">{{ estadisticas.partidosJugados }}</span>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="mini-stat-card success">
+            <span class="stat-label">Victorias</span>
+            <span class="stat-value">{{ estadisticas.victorias }}</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div class="section-header">
+      <ion-label>Torneos Inscritos</ion-label>
+    </div>
+
+    <ion-list lines="none" class="torneos-list">
+      <ion-item *ngFor="let torneo of torneosInscritos" class="torneo-card">
+        <div class="torneo-icon" slot="start">
+          <ion-icon name="trophy"></ion-icon>
+        </div>
+        <ion-label>
+          <h3>{{ torneo.nombre }}</h3>
+          <p [class]="torneo.estado === 'En curso' ? 'status-active' : 'status-done'">
+            {{ torneo.estado }}
+          </p>
+        </ion-label>
+        <div slot="end" class="points-badge">
+          +{{ torneo.puntos }}
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="segmentoActual === 'edit'" class="ion-padding animate__animated animate__fadeIn">
+    <ion-list lines="full" class="edit-list">
+      <ion-item>
+        <ion-label position="stacked">Descripción Personal</ion-label>
+        <ion-textarea 
+          [(ngModel)]="editUser.descripcion" 
+          placeholder="Escribe algo sobre tu estilo de juego..."
+          [autoGrow]="true">
+        </ion-textarea>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="stacked">Nivel AMT</ion-label>
+        <ion-select [(ngModel)]="editUser.nivel" interface="action-sheet">
+          <ion-select-option value="4.5">4.5 (Avanzado)</ion-select-option>
+          <ion-select-option value="3.5">3.5 (Intermedio)</ion-select-option>
+          <ion-select-option value="2.5">2.5 (Principiante)</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" shape="round" class="save-btn" (click)="guardarCambios()">
+      <ion-icon slot="start" name="save-outline"></ion-icon>
+      Actualizar mis datos
+    </ion-button>
+  </div>
+</ion-content>

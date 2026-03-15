@@ -1,0 +1,97 @@
+/* 1. Reset del contenido */
+ion-content {
+  --offset-bottom: 0px !important;
+  --overflow: auto;
+}
+
+/* 2. El truco maestro: El header no debe atrapar los clics del resto de la página */
+.profile-header {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(to bottom, var(--ion-color-primary), #ffffff);
+  padding-bottom: 5px;
+  pointer-events: none; /* <--- Los clics pasan a través de las zonas vacías */
+
+  /* Solo estos elementos dentro del header pueden recibir clics */
+  .avatar-wrapper, 
+  .xp-card, 
+  .user-name,
+  .edit-photo-btn {
+    pointer-events: auto;
+  }
+
+  .main-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    object-fit: cover;
+  }
+}
+
+/* 3. Forzar interactividad en botones y segmentos */
+ion-segment, 
+ion-button, 
+ion-segment-button,
+.torneos-list {
+  position: relative !important;
+  z-index: 999 !important; /* <--- Siempre al frente */
+  pointer-events: auto !important;
+}
+
+/* 4. Estilo de las estadísticas */
+.mini-stat-card {
+  background: #f8f9fa;
+  padding: 12px 5px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid #eee;
+
+  .stat-label { font-size: 0.6rem; color: #777; text-transform: uppercase; display: block; }
+  .stat-value { font-size: 1.1rem; font-weight: bold; }
+  
+  &.bagel-stat .stat-value { color: var(--ion-color-danger); }
+}
+
+.xp-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  margin: 10px 5px;
+}
+
+/* 1. Desactivamos el bloqueo del header */
+.profile-header {
+  position: relative;
+  z-index: 0 !important; /* Lo mandamos al fondo total */
+  pointer-events: none !important; 
+  
+  * { pointer-events: auto; } /* Solo sus hijos reaccionan */
+}
+
+/* 2. Forzamos que el contenido sea una capa limpia */
+ion-content {
+  --background: #ffffff;
+  overflow-y: auto !important;
+}
+
+/* 3. La regla de oro para tus botones */
+ion-segment, 
+ion-button, 
+ion-segment-button,
+ion-select,
+ion-textarea {
+  --z-index: 9999 !important;
+  position: relative !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important; /* Esto nos dirá si el navegador lo detecta */
+}
+
+/* 4. Si el problema es una capa invisible de Ionic (Backdrop) */
+.click-block-active, 
+ion-backdrop {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

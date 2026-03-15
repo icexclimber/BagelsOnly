@@ -7,7 +7,7 @@ import {
   IonContent, IonHeader, IonTitle, IonToolbar, 
   IonItem, IonLabel, IonInput, IonButton, IonIcon, IonText 
 } from '@ionic/angular/standalone';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-registro',

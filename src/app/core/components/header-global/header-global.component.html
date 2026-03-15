@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+      <div class="logo-wrapper">
+        <img src="assets/icon/logo-bagels.png" class="header-logo" alt="Logo">
+      </div>
+    </ion-buttons>
+
+    <ion-title>{{ titulo }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirModalBusqueda()">
+        <ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
+      </ion-button>
+      
+      <ion-button id="open-notificaciones-global">
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-modal #modalBusqueda [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.8]">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Buscar Tenistas</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="cerrarModalBusqueda()">Cerrar</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-searchbar placeholder="Nombre o Club" (ionInput)="onSearch($event)"></ion-searchbar>
+  </ion-content>
+</ion-modal>

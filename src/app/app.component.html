@@ -1,3 +1,122 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu contentId="main-content" menuId="main-menu" side="start">
+    
+    <div class="user-profile-header ion-padding" *ngIf="usuario$ | async as user">
+      <div class="profile-clickable-area" (click)="irAPerfil()">
+        <div class="profile-avatar-container">
+          <img [src]="user.foto" class="profile-pic" alt="Perfil">
+          <div class="level-badge">{{ user.nivel }}</div>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">{{ user.nombre }}</h2>
+          <p class="user-ranking">
+            <ion-icon name="medal-outline"></ion-icon>
+            Ranking: <strong>#{{ user.ranking || 'S/N' }}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <ion-content>
+      <ion-list lines="none">
+        
+        <ion-list-header><ion-label>Torneos</ion-label></ion-list-header>
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button (click)="organizarTorneo()">
+            <ion-icon slot="start" name="trophy-outline"></ion-icon>
+            <ion-label>Organizar Torneos</ion-label>
+          </ion-item>
+          <ion-item button (click)="verTorneosSeguidos()">
+            <ion-icon slot="start" name="eye-outline"></ion-icon>
+            <ion-label>Torneos que sigo</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <div class="menu-divider"></div>
+
+        <ion-list-header><ion-label>Ayuda</ion-label></ion-list-header>
+        <ion-menu-toggle auto-hide="false">
+         <ion-item button (click)="contacto('icexclimber9@gmail.com')">
+  <ion-icon slot="start" name="mail-outline"></ion-icon>
+  <ion-label>Contacto</ion-label>
+</ion-item>
+          
+          <ion-item button (click)="abrirEnlace('https://www.youtube.com/@BagelsOnlyLeague')">
+            <ion-icon slot="start" name="logo-youtube" color="danger"></ion-icon>
+            <ion-label>YouTube</ion-label>
+          </ion-item>
+
+          <ion-item button (click)="abrirEnlace('https://www.instagram.com/bagelsonlyleague')">
+            <ion-icon slot="start" name="logo-instagram" class="insta-icon"></ion-icon>
+            <ion-label>Instagram</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <div class="menu-divider"></div>
+
+        <ion-list-header><ion-label>Legal</ion-label></ion-list-header>
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button (click)="abrirModal('terminos')">
+            <ion-icon slot="start" name="document-text-outline"></ion-icon>
+            <ion-label>Términos y Condiciones</ion-label>
+          </ion-item>
+          <ion-item button (click)="abrirModal('privacidad')">
+            <ion-icon slot="start" name="shield-checkmark-outline"></ion-icon>
+            <ion-label>Políticas de Privacidad</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <div class="menu-divider"></div>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button (click)="logout()" class="logout-item">
+            <ion-icon slot="start" name="log-out-outline" color="danger"></ion-icon>
+            <ion-label color="danger">Cerrar Sesión</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+
+  <ion-modal #modalTerminos>
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar color="primary">
+          <ion-title>Términos y Condiciones</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cerrarModal('terminos')">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="legal-container">
+          <h2>Términos de Uso AMT</h2>
+          <p>Bienvenido a la plataforma oficial de la AMT en Tijuana...</p>
+          </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal #modalPrivacidad>
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar color="primary">
+          <ion-title>Privacidad</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cerrarModal('privacidad')">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="legal-container">
+          <h2>Política de Privacidad</h2>
+          <p>En Bagels Only League valoramos tu privacidad...</p>
+          </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-app>

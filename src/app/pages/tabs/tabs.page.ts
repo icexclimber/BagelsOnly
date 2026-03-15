@@ -3,13 +3,13 @@ import {
   IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, 
   IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
   IonModal, IonContent, IonSearchbar, IonList, IonItem,
-  IonBadge, IonRouterOutlet // 👈 1. FALTA IMPORTAR ESTO
+  IonBadge, IonRouterOutlet, IonMenuButton // 👈 1. FALTA IMPORTAR ESTO
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
   personOutline, trophyOutline, settingsOutline, 
   personAddOutline, notificationsOutline, chatbubbleEllipsesOutline, 
-  homeOutline, newspaperOutline, addCircle, trophy, locationOutline, calendarNumberOutline, peopleOutline, ribbonOutline, cashOutline, arrowForwardOutline } from 'ionicons/icons';
+  homeOutline, newspaperOutline, addCircle, trophy, locationOutline, calendarNumberOutline, peopleOutline, ribbonOutline, cashOutline, arrowForwardOutline,menuOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tabs',
@@ -20,13 +20,13 @@ import {
     IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, 
     IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
     IonBadge,
-    IonRouterOutlet // 👈 2. DEBES AGREGARLO AQUÍ
+    IonRouterOutlet, IonMenuButton // 👈 2. DEBES AGREGARLO AQUÍ
   ],
 })
 export class TabsPage {
   
   constructor() {
-    addIcons({locationOutline,calendarNumberOutline,peopleOutline,ribbonOutline,cashOutline,arrowForwardOutline,personAddOutline,notificationsOutline,chatbubbleEllipsesOutline,addCircle,trophy,homeOutline,newspaperOutline,personOutline,trophyOutline,settingsOutline});
+    addIcons({locationOutline,calendarNumberOutline,peopleOutline,ribbonOutline,cashOutline,arrowForwardOutline,personAddOutline,notificationsOutline,chatbubbleEllipsesOutline,addCircle,trophy,homeOutline,newspaperOutline,personOutline,trophyOutline,settingsOutline, menuOutline});
   }
 
   // Si usas Modals con 'trigger', estas funciones son opcionales

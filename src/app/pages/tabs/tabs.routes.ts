@@ -8,11 +8,11 @@ export const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadComponent: () => import('../pages/home/home.page').then(m => m.HomePage),
+        loadComponent: () => import('../home/home.page').then(m => m.HomePage),
       },
       {
         path: 'feed',
-        loadComponent: () => import('../pages/feed/feed.page').then(m => m.FeedPage),
+        loadComponent: () => import('../feed/feed.page').then(m => m.FeedPage),
       },
       {
         path: 'tab1',

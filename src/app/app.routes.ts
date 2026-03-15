@@ -15,7 +15,7 @@ export const routes: Routes = [
   
   {
     path: 'tabs',
-    loadComponent: () => import('./tabs/tabs.page').then(m => m.TabsPage),
+    loadComponent: () => import('./pages/tabs/tabs.page').then(m => m.TabsPage),
     children: [
       {
         path: 'home', // 🎾 MOVIDO AQUÍ
@@ -27,11 +27,15 @@ export const routes: Routes = [
       },
       {
         path: 'tab1',
-        loadComponent: () => import('./tab1/tab1.page').then(m => m.Tab1Page)
+        loadComponent: () => import('./pages/tab1/tab1.page').then(m => m.Tab1Page)
       },
       {
         path: 'tab2',
-        loadComponent: () => import('./tab2/tab2.page').then(m => m.Tab2Page)
+        loadComponent: () => import('./pages/tab2/tab2.page').then(m => m.Tab2Page)
+      },
+      {
+        path: 'tab3',
+        loadComponent: () => import('./pages/tab3/tab3.page').then(m => m.Tab3Page)
       },
       {
         path: '',

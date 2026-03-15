@@ -12,15 +12,16 @@ ion-title {
   flex-direction: row; // Asegura que estén uno al lado del otro
   width: 100%;
 
-  .header-logo {
-    height: 30px;        // Altura controlada
-    width: auto;         // Proporción real
-    min-width: 30px;     // Evita que desaparezca
-    max-height: 35px;    // Límite de seguridad
-    margin-right: 10px;  // Espacio con el texto
-    object-fit: contain;
-    display: block;
-  }
+  .logo-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 8px; // Espacio entre el botón de menú y el logo
+}
+
+.header-logo {
+  height: 30px;
+  width: auto;
+}
 
   .brand-text {
     font-weight: 800;
