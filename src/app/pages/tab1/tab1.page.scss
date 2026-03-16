@@ -8,7 +8,7 @@ ion-content {
 .profile-header {
   position: relative;
   z-index: 1;
-  background: linear-gradient(to bottom, var(--ion-color-primary), #ffffff);
+  background: linear-gradient(to bottom, var(--ion-color-primary), #000000);
   padding-bottom: 5px;
   pointer-events: none; /* <--- Los clics pasan a través de las zonas vacías */
 
@@ -24,7 +24,7 @@ ion-content {
     width: 90px;
     height: 90px;
     border-radius: 50%;
-    border: 3px solid white;
+    border: 3px solid rgb(0, 0, 0);
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     object-fit: cover;
   }
@@ -71,7 +71,7 @@ ion-segment-button,
 
 /* 2. Forzamos que el contenido sea una capa limpia */
 ion-content {
-  --background: #ffffff;
+  --background: #000000;
   overflow-y: auto !important;
 }
 

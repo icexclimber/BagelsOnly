@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  position: relative;
+  z-index: 10; // Un valor moderado para que no tape los modales de las páginas
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  
+  .header-logo {
+    height: 38px; // Tamaño ideal para el logo de BagelsOnly
+    width: auto;
+    object-fit: contain;
+  }
+}
+
+ion-toolbar {
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+}

@@ -1,36 +1,48 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { 
   IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, 
   IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
   IonModal, IonContent, IonSearchbar, IonList, IonItem,
-  IonBadge, IonRouterOutlet, IonMenuButton // 👈 1. FALTA IMPORTAR ESTO
+  IonBadge, IonRouterOutlet, IonMenuButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
   personOutline, trophyOutline, settingsOutline, 
   personAddOutline, notificationsOutline, chatbubbleEllipsesOutline, 
-  homeOutline, newspaperOutline, addCircle, trophy, locationOutline, calendarNumberOutline, peopleOutline, ribbonOutline, cashOutline, arrowForwardOutline,menuOutline } from 'ionicons/icons';
+  homeOutline, newspaperOutline, addCircle, trophy, locationOutline, 
+  closeOutline, menuOutline 
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
+  styleUrls: ['tabs.page.scss'],
   standalone: true,
   imports: [
     IonItem, IonList, IonSearchbar, IonContent, IonModal, 
     IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, 
     IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
-    IonBadge,
-    IonRouterOutlet, IonMenuButton // 👈 2. DEBES AGREGARLO AQUÍ
+    IonBadge, IonRouterOutlet, IonMenuButton
   ],
 })
 export class TabsPage {
-  
+  // Referencias para cerrar manualmente si el trigger falla
+  @ViewChild('modalBuscar') modalBuscar!: IonModal;
+  @ViewChild('modalNotis') modalNotis!: IonModal;
+  @ViewChild('modalMensajes') modalMensajes!: IonModal;
+
   constructor() {
-    addIcons({locationOutline,calendarNumberOutline,peopleOutline,ribbonOutline,cashOutline,arrowForwardOutline,personAddOutline,notificationsOutline,chatbubbleEllipsesOutline,addCircle,trophy,homeOutline,newspaperOutline,personOutline,trophyOutline,settingsOutline, menuOutline});
+    addIcons({
+      personOutline, trophyOutline, settingsOutline, personAddOutline, 
+      notificationsOutline, chatbubbleEllipsesOutline, homeOutline, 
+      newspaperOutline, addCircle, trophy, locationOutline, closeOutline, menuOutline
+    });
   }
 
-  // Si usas Modals con 'trigger', estas funciones son opcionales
-  irABuscarAmigos() { console.log('Buscando tenistas...'); }
-  verNotificaciones() { console.log('Mostrando alertas...'); }
-  irAMensajes() { console.log('Abriendo chat...'); }
+  // Función genérica para cerrar cualquier modal que cause conflicto
+  cerrarTodo() {
+    if (this.modalBuscar) this.modalBuscar.dismiss();
+    if (this.modalNotis) this.modalNotis.dismiss();
+    if (this.modalMensajes) this.modalMensajes.dismiss();
+  }
 }

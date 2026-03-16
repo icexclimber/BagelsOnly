@@ -13,58 +13,65 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  // Inyección de dependencias moderna
   private auth = inject(Auth);
   private firestore = inject(Firestore);
   private router = inject(Router);
-  private zone = inject(NgZone); // 👈 Crucial para la estabilidad de la App
+  private zone = inject(NgZone);
 
-  // Observable para monitorear al usuario en toda la app
   user$ = user(this.auth);
 
-  /**
-   * Registra un nuevo tenista y crea su perfil en la base de datos
-   */
   async registro(email: string, pass: string, nombre: string) {
-    // Forzamos la ejecución dentro de la zona de Angular para evitar errores de contexto
+    // 1. Todo el proceso debe ocurrir dentro de zone.run para que Angular lo "vea"
     return this.zone.run(async () => {
-      const credenciales = await createUserWithEmailAndPassword(this.auth, email, pass);
-      
-      // Creamos el documento del perfil con los stats iniciales de BagelsOnly
-      await setDoc(doc(this.firestore, `perfiles/${credenciales.user.uid}`), {
-        nombre: nombre,
-        email: email,
-        nivel: 1.0,
-        xp: 0,
-        bagelsEntregados: 0,
-        record: { ganados: 0, perdidos: 0 }
-      });
-      
-      return credenciales;
+      try {
+        // 2. Registro en Firebase Auth
+        const credenciales = await createUserWithEmailAndPassword(this.auth, email, pass);
+        
+        // 3. Guardado en Firestore
+        await setDoc(doc(this.firestore, `perfiles/${credenciales.user.uid}`), {
+          nombre: nombre,
+          email: email,
+          nivel: "2.5", 
+          xp: 0,
+          bagelsEntregados: 0,
+          record: { ganados: 0, perdidos: 0 },
+          descripcion: "",
+          uid: credenciales.user.uid // Recomendado guardar el UID dentro del doc
+        });
+
+        // 4. NAVEGACIÓN: Usar await y asegurar el contexto
+        // Si '/tabs/tab1' es tu ruta de Dashboard, esto disparará el Onboarding
+        const navego = await this.router.navigate(['/tabs/tab1'], { 
+          queryParams: { nuevoUsuario: true },
+          replaceUrl: true 
+        });
+
+        console.log('¿Navegación exitosa?:', navego);
+        return credenciales;
+
+      } catch (error) {
+        console.error("Error en AuthService.registro:", error);
+        throw error; 
+      }
     });
   }
 
-  /**
-   * Inicia sesión y redirige al Tab principal (Perfil)
-   */
   async login(email: string, pass: string) {
     return this.zone.run(async () => {
-      const credenciales = await signInWithEmailAndPassword(this.auth, email, pass);
-      
-      // replaceUrl: true evita que el usuario regrese al login con el botón 'atrás'
-      this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
-      
-      return credenciales;
+      try {
+        const credenciales = await signInWithEmailAndPassword(this.auth, email, pass);
+        await this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+        return credenciales;
+      } catch (error) {
+        throw error;
+      }
     });
   }
 
-  /**
-   * Cierra la sesión y regresa al login
-   */
   async logout() {
     return this.zone.run(async () => {
       await signOut(this.auth);
-      this.router.navigateByUrl('/login', { replaceUrl: true });
+      await this.router.navigateByUrl('/login', { replaceUrl: true });
     });
   }
 }

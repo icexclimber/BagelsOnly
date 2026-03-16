@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -34,11 +34,12 @@ export class RegistroPage {
   private authService = inject(AuthService);
   private router = inject(Router);
   private toastController = inject(ToastController);
+  private zone = inject(NgZone);
 
   nuevoUsuario = { nombre: '', email: '', password: '' };
 
   async registrar() {
-    // Validación básica para evitar el Error 400 de Firebase
+    // 1. Validación inicial
     if (!this.nuevoUsuario.email || this.nuevoUsuario.password.length < 6 || !this.nuevoUsuario.nombre) {
       this.mostrarToast('Datos incompletos o contraseña muy corta (mín. 6)', 'warning');
       return;
@@ -46,14 +47,23 @@ export class RegistroPage {
 
     try {
       const res = await this.authService.registro(
-        this.nuevoUsuario.email,
+        this.nuevoUsuario.email.trim(),
         this.nuevoUsuario.password,
-        this.nuevoUsuario.nombre
+        this.nuevoUsuario.nombre.trim()
       );
 
       if (res) {
+        // Mostramos el mensaje de éxito
         await this.mostrarToast('¡Bienvenido a BagelsOnly! Cuenta creada.', 'success');
-        this.router.navigateByUrl('/login');
+        
+        // 2. NAVEGACIÓN FORZADA EN ZONA
+        // Esto soluciona el problema de que no te permite navegar al perfil
+        this.zone.run(() => {
+          this.router.navigate(['/tabs/tab1'], { 
+            queryParams: { nuevoUsuario: true },
+            replaceUrl: true 
+          });
+        });
       }
     } catch (error: any) {
       console.error('Error capturado:', error);
@@ -61,6 +71,8 @@ export class RegistroPage {
       let mensajeError = 'Hubo un error al crear la cuenta.';
       if (error.code === 'auth/email-already-in-use') {
         mensajeError = 'Este correo ya está en uso.';
+      } else if (error.code === 'auth/invalid-email') {
+        mensajeError = 'El formato del correo no es válido.';
       }
 
       this.mostrarToast(mensajeError, 'danger');

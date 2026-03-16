@@ -1,10 +1,25 @@
+/* Configuración global de modales para esta página */
+ion-modal {
+  --z-index: 99999 !important; 
+}
+
 .ranking-card {
   position: relative;
   border-radius: 20px;
   overflow: hidden;
   margin-bottom: 20px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-  border: none; // Quita cualquier borde residual
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  --background: transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  /* CORRECCIÓN: El selector &:active ahora está dentro de .ranking-card */
+  &:active {
+    transform: scale(0.97); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
 
   img {
     width: 100%;
@@ -18,54 +33,56 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    padding: 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 100%);
+    padding: 15px;
+    
+    /* CRÍTICO: Permite que el click atraviese el texto y llegue a la card */
+    pointer-events: none; 
 
     ion-card-title {
-      color: white;
+      color: #ffffff;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+      text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
     }
 
     ion-card-subtitle {
-      color: #ccc;
+      color: #e0e0e0;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
   }
 }
 
+/* Estilos del Header y Logo */
 .logo-container {
   display: flex;
   align-items: center;
   padding-left: 12px;
   
   img {
-    height: 32px; // Ajusta según el diseño de tu logo
+    height: 32px;
     width: auto;
     object-fit: contain;
-    // Si tu logo es oscuro y quieres que resalte sobre el verde:
     filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.2));
   }
 }
 
-// 2. HEADER PERSONALIZADO (Logo + Texto)
-// Agrupamos todo aquí para evitar duplicados
 .header-content {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  height: 100%; // Se ajusta al toolbar
+  height: 100%;
 
   .header-logo {
-    // AJUSTE DE TAMAÑO CRÍTICO
-    height: 32px;            // Altura fija controlada
-    width: auto;             // Mantiene la proporción
-    max-height: 100%;        // Seguridad para que no se salga del header
-    margin-right: 12px;      // Espacio con el texto
-    
-    object-fit: contain;     // Evita que la imagen se estire feo
-    display: block;          // Quita espacios fantasmas abajo de la imagen
-    
-    // Mejora visual para logos oscuros sobre verde
+    height: 32px;
+    width: auto;
+    max-height: 100%;
+    margin-right: 12px;
+    object-fit: contain;
+    display: block;
     filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.15));
   }
 
@@ -78,14 +95,12 @@
   }
 }
 
-// Ajuste para que el título no empuje los botones hacia afuera
 ion-title {
   padding-inline: 8px;
   font-weight: 700;
 }
 
 ion-toolbar {
-  // Aseguramos que el fondo sea nuestro verde tenis
   --background: var(--ion-color-primary);
   --color: black;
 }
