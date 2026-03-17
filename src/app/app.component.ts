@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; 
 import { 
@@ -10,11 +10,11 @@ import { addIcons } from 'ionicons';
 import { 
   medalOutline, trophyOutline, eyeOutline, mailOutline, 
   logoYoutube, logoInstagram, documentTextOutline, 
-  shieldCheckmarkOutline, logOutOutline 
+  shieldCheckmarkOutline, logOutOutline, locationOutline 
 } from 'ionicons/icons';
 
-// Importamos el servicio
-import { UserService } from './core/services/user.service'; 
+// Importamos el servicio actualizado con logs de depuración
+import { RankingsService } from './core/services/rankings.service'; 
 
 @Component({
   selector: 'app-root',
@@ -36,15 +36,16 @@ import { UserService } from './core/services/user.service';
     IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton
   ],
 })
-export class AppComponent {
-  private userService = inject(UserService);
+export class AppComponent implements OnInit {
+  private rankingsService = inject(RankingsService);
   private router = inject(Router);
   
-  // Referencias a los modales
+  // Referencias a los modales (asegúrate de que los IDs coincidan en el HTML)
   @ViewChild('modalTerminos') modalTerminos!: IonModal;
   @ViewChild('modalPrivacidad') modalPrivacidad!: IonModal;
 
-  usuario$ = this.userService.user$;
+  // Observable que alimenta el menú lateral
+  usuario$ = this.rankingsService.usuarioActual$;
 
   constructor() {
     addIcons({ 
@@ -56,13 +57,31 @@ export class AppComponent {
       logoInstagram, 
       documentTextOutline, 
       shieldCheckmarkOutline, 
-      logOutOutline 
+      logOutOutline,
+      locationOutline 
+    });
+  }
+
+  ngOnInit() {
+    // Monitoreo preventivo: Si esto no imprime nada en consola, 
+    // el problema está en la conexión de Firebase o el Auth.
+    this.usuario$.subscribe({
+      next: (user) => {
+        if (user) {
+          console.log('✅ Menú Lateral: Datos de usuario cargados', user.nombre);
+        } else {
+          console.warn('⚠️ Menú Lateral: No se encontró perfil de usuario.');
+        }
+      },
+      error: (err) => console.error('❌ Error en el stream de usuario:', err)
     });
   }
 
   // --- NAVEGACIÓN ---
+  
   irAPerfil() {
-    this.router.navigate(['/tabs/tab1']);
+    // Redirige a Tab3 donde está la edición de perfil
+    this.router.navigate(['/tabs/tab3']);
   }
 
   organizarTorneo() {
@@ -70,10 +89,11 @@ export class AppComponent {
   }
 
   logout() {
+    // Puedes llamar a un método de logout en tu servicio de auth aquí
     this.router.navigate(['/login']);
   }
   
-  // --- MODALES ---
+  // --- CONTROL DE MODALES ---
   abrirModal(tipo: string) {
     if (tipo === 'terminos') this.modalTerminos.present();
     if (tipo === 'privacidad') this.modalPrivacidad.present();
@@ -84,28 +104,23 @@ export class AppComponent {
     if (tipo === 'privacidad') this.modalPrivacidad.dismiss();
   }
 
-  // --- CONTACTO Y ENLACES ---
+  // --- CONTACTO Y REDES SOCIALES ---
   
-  // Hemos movido la lógica de correo dentro de la clase
   contacto(email: string) {
-    const asunto = encodeURIComponent('Consulta desde App AMT - Bagels Only');
-    const cuerpo = encodeURIComponent('Hola, me gustaría obtener más información sobre...');
-    
-    // Construimos el enlace mailto
+    const asunto = encodeURIComponent('Consulta desde App Bagels Only');
+    const cuerpo = encodeURIComponent('Hola, me gustaría obtener más información sobre la liga...');
     const mailtoUrl = `mailto:${email}?subject=${asunto}&body=${cuerpo}`;
     
-    // Abrimos el cliente de correo
     window.location.href = mailtoUrl;
-    
-    console.log('Abriendo cliente de correo para:', email);
   }
 
   abrirEnlace(url: string) {
     if (url) {
       window.open(url, '_blank');
-      console.log('Navegando a enlace externo:', url);
     }
   }
 
-  verTorneosSeguidos() { console.log('Torneos seguidos'); }
+  verTorneosSeguidos() { 
+    console.log('Navegando a torneos seguidos...'); 
+  }
 }

@@ -1,97 +1,248 @@
-/* 1. Reset del contenido */
-ion-content {
-  --offset-bottom: 0px !important;
-  --overflow: auto;
+/* ==========================================================================
+   1. ESTRUCTURA Y FONDO (FULL VIEWPORT)
+   ========================================================================== */
+:host {
+  display: block;
+  height: 100vh;
 }
 
-/* 2. El truco maestro: El header no debe atrapar los clics del resto de la página */
+ion-content {
+  --background: #0f1115; // Fondo oscuro profundo base
+  height: 100vh;
+  --overflow: hidden;
+
+  &::part(scroll) {
+    &::-webkit-scrollbar { display: none; width: 0 !important; }
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+.full-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.content-flex-area {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+/* ==========================================================================
+   2. HEADER DE PERFIL (ESTILO ESTANDARTE)
+   ========================================================================== */
 .profile-header {
   position: relative;
-  z-index: 1;
-  background: linear-gradient(to bottom, var(--ion-color-primary), #000000);
-  padding-bottom: 5px;
-  pointer-events: none; /* <--- Los clics pasan a través de las zonas vacías */
+  padding: 30px 0 20px;
+  min-height: 220px;
+  background-size: cover !important;
+  background-position: center !important;
+  transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
 
-  /* Solo estos elementos dentro del header pueden recibir clics */
-  .avatar-wrapper, 
-  .xp-card, 
-  .user-name,
-  .edit-photo-btn {
-    pointer-events: auto;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(to top, #0f1115, transparent);
+  }
+
+  .avatar-wrapper, .user-name, .user-bio, .xp-card {
+    position: relative;
+    z-index: 2;
   }
 
   .main-avatar {
     width: 90px;
     height: 90px;
     border-radius: 50%;
-    border: 3px solid rgb(0, 0, 0);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 3px solid #f1ff2f;
+    box-shadow: 0 0 20px rgba(241, 255, 47, 0.3);
     object-fit: cover;
+  }
+
+  .user-name {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 10px 0 2px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  }
+
+  .user-bio {
+    color: #ccc;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
   }
 }
 
-/* 3. Forzar interactividad en botones y segmentos */
-ion-segment, 
-ion-button, 
-ion-segment-button,
-.torneos-list {
-  position: relative !important;
-  z-index: 999 !important; /* <--- Siempre al frente */
-  pointer-events: auto !important;
-}
-
-/* 4. Estilo de las estadísticas */
+/* ==========================================================================
+   3. ESTADÍSTICAS (MINI STAT CARDS DARK)
+   ========================================================================== */
 .mini-stat-card {
-  background: #f8f9fa;
+  background: #1c1f26;
   padding: 12px 5px;
-  border-radius: 10px;
-  text-align: center;
-  border: 1px solid #eee;
-
-  .stat-label { font-size: 0.6rem; color: #777; text-transform: uppercase; display: block; }
-  .stat-value { font-size: 1.1rem; font-weight: bold; }
-  
-  &.bagel-stat .stat-value { color: var(--ion-color-danger); }
-}
-
-.xp-card {
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  margin: 10px 5px;
-}
+  text-align: center;
+  border: 1px solid #333;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
 
-/* 1. Desactivamos el bloqueo del header */
-.profile-header {
-  position: relative;
-  z-index: 0 !important; /* Lo mandamos al fondo total */
-  pointer-events: none !important; 
+  .stat-label { 
+    font-size: 0.6rem; 
+    color: #f1ff2f; 
+    text-transform: uppercase; 
+    display: inline-block;
+    background: rgba(241, 255, 47, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
   
-  * { pointer-events: auto; } /* Solo sus hijos reaccionan */
+  .stat-value {
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: block;
+  }
+  
+  &.bagel-stat {
+    border: 1px solid rgba(255, 68, 68, 0.5);
+    .stat-label { color: #ff4444; background: rgba(255, 68, 68, 0.1); }
+    .stat-value { color: #ff4444; }
+  }
+
+  &:active { transform: scale(0.95); }
 }
 
-/* 2. Forzamos que el contenido sea una capa limpia */
-ion-content {
-  --background: #000000;
-  overflow-y: auto !important;
+/* ==========================================================================
+   4. BANNERS DE LOGROS (ESTILO VIDEOJUEGO)
+   ========================================================================== */
+.banners-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 15px;
 }
 
-/* 3. La regla de oro para tus botones */
-ion-segment, 
-ion-button, 
-ion-segment-button,
-ion-select,
-ion-textarea {
-  --z-index: 9999 !important;
-  position: relative !important;
-  z-index: 9999 !important;
-  pointer-events: auto !important;
-  cursor: pointer !important; /* Esto nos dirá si el navegador lo detecta */
+.banner-item {
+  background: #1c1f26;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+  .banner-preview {
+    height: 70px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+
+    // Overlay con la leyenda de desbloqueo
+    &::before {
+      content: attr(data-leyenda);
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9);
+      color: #f1ff2f;
+      font-size: 0.65rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+
+    ion-icon { 
+      font-size: 24px; 
+      color: white; 
+      z-index: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+  }
+
+  // Hover/Active para mostrar la leyenda (estilo videojuego)
+  &:hover .banner-preview::before, 
+  &:active .banner-preview::before {
+    opacity: 1;
+  }
+
+  .banner-info {
+    padding: 8px;
+    background: #121418;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .banner-name {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: white;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .banner-req {
+      font-size: 0.6rem;
+      color: #f1ff2f;
+      font-weight: 700;
+    }
+  }
+
+  &.locked {
+    filter: grayscale(1);
+    opacity: 0.7;
+    .banner-preview ion-icon { opacity: 0.8; }
+  }
 }
 
-/* 4. Si el problema es una capa invisible de Ionic (Backdrop) */
-.click-block-active, 
-ion-backdrop {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+/* ==========================================================================
+   5. COMPONENTES IONIC
+   ========================================================================== */
+ion-segment {
+  --background: #1c1f26;
+  margin: 10px 15px;
+  width: auto;
+  border-radius: 12px;
+}
+
+ion-segment-button {
+  --color: #888;
+  --color-checked: #f1ff2f;
+  --indicator-color: transparent;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.footer-button-container {
+  background: #0f1115;
+  padding-top: 10px;
+  ion-button {
+    --border-radius: 12px;
+    --background: #f1ff2f;
+    --color: #000;
+    font-weight: 800;
+    margin: 0;
+  }
 }

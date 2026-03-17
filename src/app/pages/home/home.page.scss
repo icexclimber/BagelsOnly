@@ -73,3 +73,107 @@ ion-toolbar {
   border-radius: 15px;
   margin-bottom: 15px;
 }
+
+.user-profile-header {
+  background: var(--ion-color-primary);
+  color: white;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  text-align: center;
+
+  .profile-clickable-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .profile-avatar-container {
+    position: relative;
+    margin-bottom: 12px;
+
+    .profile-pic {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      border: 3px solid white;
+      object-fit: cover;
+    }
+
+    .level-badge {
+      position: absolute;
+      bottom: 0;
+      right: -5px;
+      background: #2dd36f; // color success
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 2px solid var(--ion-color-primary);
+    }
+  }
+
+  .user-name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .user-ranking {
+    margin: 5px 0 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+}
+.full-page-wrapper {
+  pointer-events: none; // El wrapper no atrapa clics...
+}
+
+.content-flex-area, 
+.bubble-card, 
+ion-modal, 
+ion-segment {
+  pointer-events: auto !important; // ...pero los componentes internos SÍ.
+}
+
+.slides-container {
+  display: flex;
+  flex-direction: row; // Alinea los torneos en fila
+  overflow-x: auto;    // Habilita el scroll horizontal
+  overflow-y: hidden;  // Evita scroll vertical accidental
+  gap: 10px;           // Espacio entre tarjetas
+  padding: 10px 20px;
+  
+  /* 1. EFECTO DRAG SUAVE (Para móvil) */
+  scroll-snap-type: x mandatory; // Hace que las tarjetas "se peguen" al centro
+  -webkit-overflow-scrolling: touch; // Scroll fluido en iOS
+
+  /* 2. OCULTAR BARRA DE SCROLL (Para que se vea limpio) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
+
+.card-wrapper {
+  min-width: 80%;      // Controla cuánto de la siguiente tarjeta se asoma
+  scroll-snap-align: center; // Alineación al soltar el dedo
+  flex-shrink: 0;      // Evita que las tarjetas se aplasten
+  
+  /* Mejora visual para el mouse */
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
+  }
+}

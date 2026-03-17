@@ -1,0 +1,51 @@
+<ion-content [fullscreen]="true">
+  <div class="tennis-setup-container">
+    
+    <div class="ball-glow"></div>
+
+    <div class="header-section">
+      <div class="icon-badge">
+        <ion-icon name="tennisball"></ion-icon>
+      </div>
+      <h1>Tu Perfil</h1>
+      <p>Configura tu identidad en BagelsOnly.</p>
+    </div>
+
+    <div class="setup-card">
+      <div class="card-edge"></div>
+      
+      <ion-list lines="none">
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Nombre de Jugador</ion-label>
+          <ion-input [(ngModel)]="perfil.nombre" placeholder="Tu nombre"></ion-input>
+        </ion-item>
+
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Ciudad Principal</ion-label>
+          <ion-select [(ngModel)]="perfil.ubicacion" interface="action-sheet" placeholder="Selecciona">
+            <ion-select-option value="Tijuana">Tijuana</ion-select-option>
+            <ion-select-option value="Ensenada">Ensenada</ion-select-option>
+            <ion-select-option value="Rosarito">Rosarito</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Descripción de Juego</ion-label>
+          <ion-textarea 
+            [(ngModel)]="perfil.descripcion" 
+            placeholder="Ej. Agresivo desde el fondo..."
+            [autoGrow]="true">
+          </ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <ion-button 
+        expand="block" 
+        (click)="finalizarSetup()" 
+        class="btn-play">
+        ¡LISTO PARA JUGAR!
+        <ion-icon slot="end" name="play-forward"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

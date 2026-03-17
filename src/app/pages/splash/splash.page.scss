@@ -1,0 +1,54 @@
+.splash-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #0f1115 !important; // Negro profundo
+  color: white;
+
+  .logo-wrapper {
+    text-align: center;
+    animation: pulseLogo 2s infinite ease-in-out;
+    z-index: 100;
+
+    .splash-logo {
+      height: 100px; // Tamaño del logo BO
+      width: auto;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(241, 255, 47, 0.2));
+    }
+
+    .logo-text {
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 2.2rem;
+      margin: 0;
+      letter-spacing: -1px;
+      
+      span { color: #f1ff2f; } // Amarillo Pelota
+    }
+  }
+
+  .loading-section {
+    position: absolute;
+    bottom: 10%;
+    text-align: center;
+    
+    ion-spinner { --color: #f1ff2f; }
+    p { 
+      color: #888; 
+      font-size: 0.8rem; 
+      margin-top: 10px; 
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  }
+}
+
+@keyframes pulseLogo {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}

@@ -16,3 +16,8 @@ describe('Tab1Page', () => {
     expect(component).toBeTruthy();
   });
 });
+
+.stat-value {
+  color: #000000 !important; /* Fuerza el color negro */
+  font-weight: 700;          /* Opcional: los hace resaltar más */
+}

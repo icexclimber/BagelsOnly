@@ -9,6 +9,7 @@ import {
   peopleCircleOutline, statsChartOutline, trophyOutline, 
   megaphoneOutline, personAddOutline 
 } from 'ionicons/icons';
+import { HeaderGlobalComponent } from '../../core/components/header-global/header-global.component';
 
 @Component({
   selector: 'app-feed',
@@ -17,7 +18,7 @@ import {
   standalone: true,
   imports: [
     CommonModule, IonContent, IonHeader, IonTitle, IonToolbar, 
-    IonList, IonItem, IonLabel, IonIcon, IonListHeader, IonButton
+    IonList, IonItem, IonLabel, IonIcon, IonListHeader, IonButton, HeaderGlobalComponent
   ]
 })
 export class FeedPage {

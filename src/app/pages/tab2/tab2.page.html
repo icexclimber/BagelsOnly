@@ -1,63 +1,74 @@
-<app-header-global titulo="Sedes AMT Tijuana"></app-header-global>
+<app-header-global titulo="Ranking Local"></app-header-global>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  
-  <div class="ranking-intro">
-    <h2>Rankings Locales</h2>
-    <p>Estadísticas históricas de los tenistas en cada sede.</p>
-  </div>
+<ion-content [fullscreen]="true">
+  <div class="full-page-wrapper">
+    
+    <div class="content-flex-area">
+      
+      <div class="ranking-intro ion-padding-horizontal ion-padding-top">
+        <h2 style="color: rgb(183, 196, 14); font-weight: bold; margin-bottom: 5px;">Rankings Locales</h2>
+        <p style="color: #666;">Estadísticas históricas de los tenistas en cada sede.</p>
+      </div>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-md="6" *ngFor="let club of sedes">
-        <ion-card class="ranking-card" (click)="abrirRankingClub(club.nombre, m)" button="true">
-          <img [src]="club.img" [alt]="club.nombre">
-          <div class="card-overlay">
-            <ion-card-header>
-              <ion-card-title>{{ club.nombre }}</ion-card-title>
-              <ion-card-subtitle>{{ club.sub }}</ion-card-subtitle>
-            </ion-card-header>
-          </div>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <ion-modal #m [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85, 1]">
-    <ng-template>
-      <ion-header class="ion-no-border">
-        <ion-toolbar color="primary">
-          <ion-title>Ranking: {{ sedeSeleccionada }}</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="m.dismiss()">
-              <ion-icon name="close-outline"></ion-icon>
+      <ion-grid class="ion-padding">
+        <ion-row>
+          <ion-col size="12" size-md="6" *ngFor="let club of sedes">
+            <div class="ranking-card bubble-card" 
+                 (click)="abrirRankingClub(club.nombre)" 
+                 [style.background-image]="'url(' + club.img + ')'">
+              
+              <div class="card-overlay">
+                <div class="card-text-content">
+                  <h3 style="color: white; font-weight: bold; margin: 0;">{{ club.nombre }}</h3>
+                  <p style="color: #ddd; margin: 0; font-size: 0.85rem;">{{ club.sub }}</p>
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div> <ion-modal #m class="burbuja-modal-home">
+      <ng-template>
+        <div class="modal-bubble-wrapper">
+          
+          <div class="modal-bubble-header ion-padding" style="background: #222; display: flex; align-items: center; justify-content: space-between;">
+            <h2 style="color: white; margin: 0; font-size: 1.1rem; font-weight: bold;">Ranking: {{ sedeSeleccionada }}</h2>
+            <ion-button fill="clear" (click)="m.dismiss()" style="--color: white;">
+              <ion-icon name="close-circle" style="font-size: 1.8rem;"></ion-icon>
             </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-content>
-        <ion-list lines="full">
-          <ion-item *ngFor="let jugador of rankingActual; let i = index" class="animate__animated animate__fadeIn">
-            <ion-avatar slot="start">
-              <img [src]="jugador.foto || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + jugador.nombre">
-            </ion-avatar>
-            <ion-label>
-              <h2>{{ i + 1 }}. {{ jugador.nombre }}</h2>
-              <p>Puntos: {{ jugador.xp || 0 }}</p>
-            </ion-label>
-            <ion-badge slot="end" [color]="i < 3 ? 'warning' : 'medium'">
-              Nivel {{ jugador.nivel }}
-            </ion-badge>
-          </ion-item>
-
-          <div class="ion-padding ion-text-center" *ngIf="rankingActual.length === 0">
-            <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
-            <p>No hay jugadores registrados en {{ sedeSeleccionada }} todavía.</p>
           </div>
-        </ion-list>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
 
-</ion-content>
+          <div class="modal-body">
+            <ion-content style="--max-height: 450px; --background: white;">
+              
+              <div *ngIf="rankingActual.length === 0 && sedeSeleccionada" class="ion-padding ion-text-center">
+                <p style="color: #666;">Cargando jugadores...</p>
+              </div>
+
+              <ion-list lines="full" style="padding: 0;">
+                <ion-item *ngFor="let jugador of rankingActual; let i = index" class="animate__animated animate__fadeIn">
+                  <ion-avatar slot="start" style="border: 2px solid #f1ff2f;">
+                    <img [src]="jugador.foto || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + jugador.nombre">
+                  </ion-avatar>
+                  <ion-label>
+                    <h2 style="font-weight: bold; color: black;">{{ i + 1 }}. {{ jugador.nombre }}</h2>
+                    <p style="color: #666;">Puntos: {{ jugador.xp || 0 }}</p>
+                  </ion-label>
+                  <ion-badge slot="end" [color]="i < 3 ? 'warning' : 'medium'" mode="ios">
+                    Nivel {{ jugador.nivel }}
+                  </ion-badge>
+                </ion-item>
+
+                <div class="ion-padding ion-text-center" *ngIf="rankingActual.length === 0 && !sedeSeleccionada" style="background: white;">
+                  <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
+                  <p style="color: #666;">No hay jugadores registrados todavía.</p>
+                </div>
+              </ion-list>
+            </ion-content>
+          </div>
+
+        </div>
+      </ng-template>
+    </ion-modal>
+
+  </div> </ion-content>

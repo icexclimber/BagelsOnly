@@ -12,6 +12,10 @@ export const routes: Routes = [
     path: 'registro', 
     loadComponent: () => import('./pages/registro/registro.page').then(m => m.RegistroPage) 
   },
+  {
+  path: 'setup-perfil',
+  loadComponent: () => import('./pages/setup-perfil/setup-perfil.page').then(m => m.SetupPerfilPage)
+},
   
   {
     path: 'tabs',
@@ -53,5 +57,15 @@ export const routes: Routes = [
   {
     path: 'crear-partido',
     loadComponent: () => import('./pages/crear-partido/crear-partido.page').then( m => m.CrearPartidoPage)
+  },
+  {
+    path: 'setup-perfil',
+    loadComponent: () => import('./pages/setup-perfil/setup-perfil.page').then( m => m.SetupPerfilPage)
+  },
+  {
+    path: 'splash',
+    loadComponent: () => import('./pages/splash/splash.page').then( m => m.SplashPage)
   }
+
+
 ];

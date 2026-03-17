@@ -1,0 +1,139 @@
+.tennis-setup-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 25px;
+  background: #0f1115; // Negro azulado profundo
+  position: relative;
+  overflow: hidden;
+
+  // Efecto de brillo de pelota de tenis de fondo
+  .ball-glow {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(241, 255, 47, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 40px;
+  z-index: 10;
+
+  .icon-badge {
+    background: #f1ff2f; // Amarillo pelota de tenis
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    transform: rotate(-10deg);
+    box-shadow: 0 10px 20px rgba(241, 255, 47, 0.3);
+
+    ion-icon {
+      font-size: 40px;
+      color: #000;
+    }
+  }
+
+  h1 {
+    color: #fff;
+    font-weight: 900;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin: 0;
+  }
+
+  p {
+    color: #a0a0a0;
+    font-size: 0.95rem;
+    margin-top: 10px;
+  }
+}
+
+.setup-card {
+  background: #1c1f26; // Gris oscuro
+  width: 100%;
+  border-radius: 30px;
+  padding: 30px 20px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+  // Línea verde de acento lateral
+  .card-edge {
+    position: absolute;
+    left: 0;
+    top: 20%;
+    height: 60%;
+    width: 4px;
+    background: #f1ff2f;
+    border-radius: 0 10px 10px 0;
+  }
+
+  .custom-item {
+    --background: transparent;
+    --padding-start: 0;
+    margin-bottom: 20px;
+
+    ion-label {
+      color: #f1ff2f !important;
+      font-weight: 700 !important;
+      text-transform: uppercase;
+      font-size: 0.75rem !important;
+      letter-spacing: 1px;
+      margin-bottom: 8px !important;
+    }
+
+    ion-input, ion-select, ion-textarea {
+      background: #282c35;
+      border-radius: 12px;
+      color: #fff;
+      --padding-start: 15px;
+      --placeholder-color: #666;
+      border: 1px solid #353a45;
+      min-height: 50px;
+    }
+  }
+}
+
+.btn-play {
+  margin-top: 30px;
+  --background: #f1ff2f;
+  --color: #000;
+  --border-radius: 15px;
+  height: 60px;
+  font-weight: 900;
+  font-size: 1.1rem;
+  --box-shadow: 0 10px 25px rgba(241, 255, 47, 0.4);
+  
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+.footer-note {
+  color: #555;
+  font-size: 0.75rem;
+  margin-top: 25px;
+}
+
+.btn-play {
+  --background: #f1ff2f; // Amarillo Volt
+  --color: #000;
+  --border-radius: 16px;
+  height: 55px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-top: 30px;
+  --box-shadow: 0 8px 20px rgba(241, 255, 47, 0.4);
+}

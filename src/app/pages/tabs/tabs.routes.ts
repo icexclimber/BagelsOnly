@@ -15,27 +15,27 @@ export const routes: Routes = [
         loadComponent: () => import('../feed/feed.page').then(m => m.FeedPage),
       },
       {
-        path: 'tab1',
-        loadComponent: () => import('../tab1/tab1.page').then((m) => m.Tab1Page),
+        path: 'tab1', // Perfil
+        loadComponent: () => import('../tab1/tab1.page').then(m => m.Tab1Page),
       },
       {
-        path: 'tab2',
-        loadComponent: () => import('../tab2/tab2.page').then((m) => m.Tab2Page),
+        path: 'tab2', // Rankings
+        loadComponent: () => import('../tab2/tab2.page').then(m => m.Tab2Page),
       },
       {
-        path: 'tab3',
-        loadComponent: () => import('../tab3/tab3.page').then((m) => m.Tab3Page),
+        path: 'tab3', // Ajustes
+        loadComponent: () => import('../tab3/tab3.page').then(m => m.Tab3Page),
       },
       {
         path: '',
-        redirectTo: 'home', // 🎾 Es mejor redirigir al Home al entrar a tabs
+        redirectTo: 'home', // 👈 Importante: sin slash inicial aquí
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/home',
+    redirectTo: '/tabs/home', // 👈 Aquí sí lleva slash para la ruta principal
     pathMatch: 'full',
   },
 ];

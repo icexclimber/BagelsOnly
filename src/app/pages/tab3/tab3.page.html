@@ -3,16 +3,21 @@
 <ion-content>
   <div class="profile-header ion-padding ion-text-center" *ngIf="usuario$ | async as user">
     <div class="avatar-wrapper">
-      <img [src]="user.foto" class="main-avatar">
+      <img [src]="user.foto || 'assets/img/default-avatar.png'" 
+           class="main-avatar"
+           (click)="cambiarFoto()"
+           style="cursor: pointer;">
+      
       <ion-button fill="clear" size="small" class="edit-photo-btn" (click)="cambiarFoto()">
         <ion-icon name="camera-reverse"></ion-icon>
       </ion-button>
     </div>
+    
     <h2 class="user-name">{{ user.nombre }}</h2>
     <p class="user-bio">{{ user.descripcion || 'Tenista de la AMT | Tijuana' }}</p>
     
     <ion-badge color="light" class="level-badge-large">
-      <ion-icon name="star"></ion-icon> Nivel {{ user.nivel }}
+      <ion-icon name="star"></ion-icon> Nivel {{ user.nivel || '1.0' }}
     </ion-badge>
   </div>
 
@@ -64,15 +69,19 @@
             {{ torneo.estado }}
           </p>
         </ion-label>
-        <div slot="end" class="points-badge">
-          +{{ torneo.puntos }}
-        </div>
+        <div slot="end" class="points-badge">+{{ torneo.puntos }}</div>
       </ion-item>
     </ion-list>
   </div>
 
   <div *ngIf="segmentoActual === 'edit'" class="ion-padding animate__animated animate__fadeIn">
     <ion-list lines="full" class="edit-list">
+      
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input type="text" [(ngModel)]="editUser.nombre" placeholder="Tu nombre"></ion-input>
+      </ion-item>
+
       <ion-item>
         <ion-label position="stacked">Descripción Personal</ion-label>
         <ion-textarea 
@@ -90,11 +99,34 @@
           <ion-select-option value="2.5">2.5 (Principiante)</ion-select-option>
         </ion-select>
       </ion-item>
-    </ion-list>
 
-    <ion-button expand="block" shape="round" class="save-btn" (click)="guardarCambios()">
-      <ion-icon slot="start" name="save-outline"></ion-icon>
-      Actualizar mis datos
-    </ion-button>
+      <ion-item>
+        <ion-label position="stacked">Sede Principal (Tijuana)</ion-label>
+        <ion-select [(ngModel)]="editUser.sede" interface="popover" placeholder="Selecciona un club">
+          <ion-select-option value="Club Britania Tijuana">Club Britania Tijuana</ion-select-option>
+          <ion-select-option value="Club Campestre Tijuana">Club Campestre Tijuana</ion-select-option>
+          <ion-select-option value="Club Bancario Tijuana">Club Bancario Tijuana</ion-select-option>
+          <ion-select-option value="Unidad Deportiva Tijuana">Unidad Deportiva Tijuana</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Mano Dominante</ion-label>
+        <ion-select [(ngModel)]="editUser.mano" interface="action-sheet">
+          <ion-select-option value="derecha">Derecha</ion-select-option>
+          <ion-select-option value="izquierda">Izquierda</ion-select-option>
+        </ion-select>
+      </ion-item>
+      
+      <ion-button 
+        expand="block" 
+        shape="round" 
+        class="save-btn ion-margin-top" 
+        (click)="guardarCambios()"
+        style="--background: #d4e157; --color: black; font-weight: bold;">
+        <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+        Guardar cambios en mi perfil
+      </ion-button>
+    </ion-list>
   </div>
 </ion-content>

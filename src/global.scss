@@ -35,3 +35,52 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+
+/* Tarjetas de Home estilo burbuja */
+.bubble-card {
+  border-radius: 25px !important;
+  margin: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Modal específico para Home */
+.burbuja-modal-home {
+  --height: fit-content;
+  --width: 90%;
+  --border-radius: 28px;
+  
+  .modal-bubble-wrapper {
+    background: white;
+    overflow: hidden;
+    
+    .modal-banner {
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      
+      .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        --padding-start: 0;
+        --padding-end: 0;
+      }
+    }
+  }
+}
+
+/* Ajuste para los slides horizontales */
+.slides-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  &::-webkit-scrollbar { display: none; }
+  
+  .card-wrapper {
+    min-width: 85%;
+    scroll-snap-align: center;
+  }
+}

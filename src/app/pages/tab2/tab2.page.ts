@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, OnDestroy } from '@angular/core'; // Aseguramos OnDestroy
+import { Component, inject, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   IonContent, IonHeader, IonToolbar, IonTitle, IonCard, 
@@ -7,7 +7,10 @@ import {
   IonGrid, IonRow, IonCol, IonIcon, IonButtons, IonButton, IonNote
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { trophyOutline, locationOutline, closeOutline, informationCircleOutline } from 'ionicons/icons';
+import { 
+  trophyOutline, locationOutline, closeOutline, 
+  informationCircleOutline, closeCircle 
+} from 'ionicons/icons';
 import { HeaderGlobalComponent } from '../../core/components/header-global/header-global.component';
 import { RankingsService } from '../../core/services/rankings.service'; 
 import { Subscription } from 'rxjs';
@@ -25,7 +28,10 @@ import { Subscription } from 'rxjs';
     IonGrid, IonRow, IonCol, IonIcon, IonButtons, IonButton, IonNote
   ]
 })
-export class Tab2Page implements OnDestroy { // Aquí empieza el contrato
+export class Tab2Page implements OnDestroy {
+  // REFERENCIA DIRECTA AL MODAL (Esto soluciona que las tarjetas no abran)
+  @ViewChild('m') modalRanking!: IonModal;
+
   private rankingsService = inject(RankingsService);
 
   sedeSeleccionada: string = '';
@@ -41,35 +47,43 @@ export class Tab2Page implements OnDestroy { // Aquí empieza el contrato
   ];
 
   constructor() {
-    addIcons({ trophyOutline, locationOutline, closeOutline, informationCircleOutline });
+    // Añadimos closeCircle para el estilo de burbuja que implementamos
+    addIcons({ trophyOutline, locationOutline, closeOutline, informationCircleOutline, closeCircle });
   }
 
-  // Recibimos el modal como parámetro para asegurar que abra
-async abrirRankingClub(nombreSede: string, modal: any) {
-  console.log('Clic detectado en:', nombreSede);
-  this.sedeSeleccionada = nombreSede;
-  
-  // 1. Abrimos el modal PRIMERO para que el usuario vea acción inmediata
-  modal.present();
+  /**
+   * Nueva función simplificada. 
+   * Ya no necesita recibir el modal por parámetro desde el HTML.
+   */
+  async abrirRankingClub(nombreSede: string) {
+    console.log('Solicitando ranking para:', nombreSede);
+    this.sedeSeleccionada = nombreSede;
+    
+    // 1. Limpiamos datos anteriores para que no se vea el ranking anterior mientras carga
+    this.rankingActual = [];
 
-  if (this.rankingSub) this.rankingSub.unsubscribe();
-
-  // 2. Luego nos suscribimos a los datos
-  this.rankingSub = this.rankingsService.getRankingPorCiudad(nombreSede).subscribe({
-    next: (datos: any[]) => {
-      this.rankingActual = datos;
-    },
-    error: (err: any) => {
-      console.error('Error de Firebase:', err);
+    // 2. Abrimos el modal usando la referencia @ViewChild
+    if (this.modalRanking) {
+      this.modalRanking.present();
     }
-  });
-}
 
-  // ESTA ES LA FUNCIÓN QUE TE FALTABA Y CAUSABA EL ERROR
+    // 3. Gestión de suscripción
+    if (this.rankingSub) this.rankingSub.unsubscribe();
+
+    this.rankingSub = this.rankingsService.getRankingPorCiudad(nombreSede).subscribe({
+      next: (datos: any[]) => {
+        this.rankingActual = datos;
+        console.log('Datos recibidos:', datos.length);
+      },
+      error: (err: any) => {
+        console.error('Error de Firebase:', err);
+      }
+    });
+  }
+
   ngOnDestroy() {
     if (this.rankingSub) {
       this.rankingSub.unsubscribe();
-      console.log('Suscripción de Ranking cerrada correctamente.');
     }
   }
 }

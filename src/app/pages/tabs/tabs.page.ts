@@ -3,14 +3,13 @@ import {
   IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, 
   IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
   IonModal, IonContent, IonSearchbar, IonList, IonItem,
-  IonBadge, IonRouterOutlet, IonMenuButton
+  IonRouterOutlet, IonMenuButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
   personOutline, trophyOutline, settingsOutline, 
   personAddOutline, notificationsOutline, chatbubbleEllipsesOutline, 
-  homeOutline, newspaperOutline, addCircle, trophy, locationOutline, 
-  closeOutline, menuOutline 
+  homeOutline, newspaperOutline, addCircle, trophy, menuOutline 
 } from 'ionicons/icons';
 
 @Component({
@@ -22,27 +21,19 @@ import {
     IonItem, IonList, IonSearchbar, IonContent, IonModal, 
     IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, 
     IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
-    IonBadge, IonRouterOutlet, IonMenuButton
+    IonRouterOutlet, IonMenuButton
   ],
 })
 export class TabsPage {
-  // Referencias para cerrar manualmente si el trigger falla
-  @ViewChild('modalBuscar') modalBuscar!: IonModal;
-  @ViewChild('modalNotis') modalNotis!: IonModal;
-  @ViewChild('modalMensajes') modalMensajes!: IonModal;
+  @ViewChild('mBuscar') mBuscar!: IonModal;
+  @ViewChild('mNotis') mNotis!: IonModal;
+  @ViewChild('mMensajes') mMensajes!: IonModal;
 
   constructor() {
     addIcons({
       personOutline, trophyOutline, settingsOutline, personAddOutline, 
       notificationsOutline, chatbubbleEllipsesOutline, homeOutline, 
-      newspaperOutline, addCircle, trophy, locationOutline, closeOutline, menuOutline
+      newspaperOutline, addCircle, trophy, menuOutline
     });
-  }
-
-  // Función genérica para cerrar cualquier modal que cause conflicto
-  cerrarTodo() {
-    if (this.modalBuscar) this.modalBuscar.dismiss();
-    if (this.modalNotis) this.modalNotis.dismiss();
-    if (this.modalMensajes) this.modalMensajes.dismiss();
   }
 }

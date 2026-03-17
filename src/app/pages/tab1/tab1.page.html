@@ -1,120 +1,106 @@
-<app-header-global titulo="Dashboard AMT"></app-header-global>
+<app-header-global titulo="Dashboard"></app-header-global>
 
 <ion-content [fullscreen]="true">
-  <ng-container *ngIf="usuario$ | async as user">
+  <ng-container *ngIf="usuarioActual$ | async as user; else cargando">
     
-    <div class="profile-header ion-padding ion-text-center">
-      <div class="avatar-wrapper">
-        <img [src]="user.foto" class="main-avatar">
-        <ion-button fill="clear" size="small" class="edit-photo-btn" (click)="cambiarFoto()">
-          <ion-icon name="camera-reverse"></ion-icon>
+    <div class="full-page-wrapper">
+      
+      <div class="content-flex-area">
+        
+        <div class="profile-header ion-padding ion-text-center" 
+             [ngStyle]="getBannerStyle(user.bannerSeleccionado)">
+          
+          <div class="avatar-wrapper">
+            <img [src]="user.foto || 'assets/img/default-avatar.png'" class="main-avatar">
+            <ion-button fill="clear" size="small" class="edit-photo-btn" (click)="cambiarFoto(user.uid)">
+              <ion-icon name="camera-reverse"></ion-icon>
+            </ion-button>
+          </div>
+
+          <h2 class="user-name">{{ user.nombre }}</h2>
+          <p class="user-bio">{{ user.descripcion || 'Tenista BagelsOnly | Tijuana' }}</p>
+          
+          <ion-card class="xp-card ion-margin-top">
+            <ion-card-content>
+              <div class="xp-header">
+                <ion-badge color="tertiary" mode="ios">Nivel {{ user.nivel || 1 }}</ion-badge>
+                <span class="small-text">{{ user.xp || 0 }} / 1000 XP</span>
+              </div>
+              <ion-progress-bar color="success" [value]="(user.xp || 0) / 1000" class="ion-margin-vertical"></ion-progress-bar>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <div class="segment-container">
+          <ion-segment (ionChange)="segmentChanged($event)" [value]="segmentoActual" mode="ios">
+            <ion-segment-button value="stats"><ion-label>Estadísticas</ion-label></ion-segment-button>
+            <ion-segment-button value="banners"><ion-label>Logros</ion-label></ion-segment-button>
+          </ion-segment>
+        </div>
+
+        <div *ngIf="segmentoActual === 'stats'" class="animate__animated animate__fadeIn">
+          <ion-grid class="ion-padding">
+            <ion-row>
+              <ion-col size="4">
+                <div class="mini-stat-card">
+                  <span class="stat-label">G / P</span>
+                  <span class="stat-value">{{ user.record?.ganados || 0 }}-{{ user.record?.perdidos || 0 }}</span>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="mini-stat-card">
+                  <span class="stat-label">Win Rate</span>
+                  <span class="stat-value">{{ user.winRate || 0 }}%</span>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="mini-stat-card bagel-stat">
+                  <span class="stat-label">🥯 Bagels</span>
+                  <span class="stat-value">{{ user.bagelsEntregados || 0 }}</span>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div *ngIf="segmentoActual === 'banners'" class="animate__animated animate__fadeIn">
+          <ion-grid class="ion-padding">
+            <ion-row>
+              <ion-col size="6" *ngFor="let banner of listaBanners">
+                <div class="banner-item" 
+                     [class.locked]="(user.nivel || 1) < banner.nivelRequerido"
+                     (click)="seleccionarBanner(banner, user)">
+                  
+                  <div class="banner-preview" 
+                       [ngStyle]="getBannerStyle(banner.imagenBanner)"
+                       [attr.data-leyenda]="banner.leyenda">
+                    
+                    <ion-icon *ngIf="(user.nivel || 1) < banner.nivelRequerido" name="lock-closed" class="lock-icon"></ion-icon>
+                    <ion-icon *ngIf="(user.nivel || 1) >= banner.nivelRequerido" [name]="banner.icono" class="achievement-icon"></ion-icon>
+                  </div>
+
+                  <div class="banner-info">
+                    <span class="banner-name">{{ banner.nombre }}</span>
+                    <span class="banner-req">LVL {{ banner.nivelRequerido }}</span>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </div> <div class="footer-button-container">
+        <ion-button expand="block" shape="round" color="primary" (click)="guardarCambios()">
+          <ion-icon slot="start" name="save-outline"></ion-icon> 
+          Guardar Perfil
         </ion-button>
       </div>
-      <h2 class="user-name">{{ user.nombre }}</h2>
-      <p class="user-bio">{{ user.descripcion || 'Tenista AMT | Tijuana' }}</p>
-      
-      <ion-card class="xp-card ion-margin-top">
-        <ion-card-content>
-          <div class="xp-header">
-            <ion-badge color="tertiary" mode="ios">Nivel {{ user.nivel }}</ion-badge>
-            <span class="small-text">{{ user.xp || 450 }} / 1000 XP</span>
-          </div>
-          <ion-progress-bar color="success" [value]="(user.xp || 450) / 1000" class="ion-margin-vertical"></ion-progress-bar>
-          <p class="xp-footer">Siguiente nivel: Tenista Pro</p>
-        </ion-card-content>
-      </ion-card>
+
+    </div> </ng-container>
+
+  <ng-template #cargando>
+    <div class="loading-container ion-text-center ion-padding">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Sincronizando con la red AMT...</p>
     </div>
-
-<div style="position: relative; z-index: 9999; pointer-events: auto;">
-  <ion-segment 
-    (ionChange)="segmentChanged($event)" 
-    [value]="segmentoActual" 
-    mode="ios" 
-    class="ion-padding-horizontal">
-    <ion-segment-button value="stats">
-      <ion-label>Estadísticas</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="edit">
-      <ion-label>Configurar</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-</div>
-
-    <div *ngIf="segmentoActual === 'stats'" class="animate__animated animate__fadeIn">
-      <ion-grid class="ion-padding">
-        <ion-row>
-          <ion-col size="4">
-            <div class="mini-stat-card">
-              <span class="stat-label">G / P</span>
-              <span class="stat-value">{{ user.record?.ganados || 0 }}-{{ user.record?.perdidos || 0 }}</span>
-            </div>
-          </ion-col>
-          <ion-col size="4">
-            <div class="mini-stat-card">
-              <span class="stat-label">Win Rate</span>
-              <span class="stat-value">75%</span>
-            </div>
-          </ion-col>
-          <ion-col size="4">
-            <div class="mini-stat-card bagel-stat">
-              <span class="stat-label">🥯 Bagels</span>
-              <span class="stat-value">{{ user.bagelsEntregados || 0 }}</span>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      <div class="section-header ion-padding-horizontal">
-        <ion-label>Torneos Activos</ion-label>
-      </div>
-
-      <ion-list lines="none" class="torneos-list">
-        <ion-item *ngFor="let torneo of torneosInscritos" class="torneo-card">
-          <div class="torneo-icon" slot="start">
-            <ion-icon name="trophy"></ion-icon>
-          </div>
-          <ion-label>
-            <h3>{{ torneo.nombre }}</h3>
-            <p [class]="torneo.estado === 'En curso' ? 'status-active' : 'status-done'">{{ torneo.estado }}</p>
-          </ion-label>
-          <div slot="end" class="points-badge">+{{ torneo.puntos }}</div>
-        </ion-item>
-      </ion-list>
-
-      <div class="ion-padding">
-       <ion-button expand="block" color="secondary" shape="round" (click)="retarOponente()">
-  <ion-icon slot="start" name="search-outline"></ion-icon>
-  Retar Oponente
-</ion-button>
-      </div>
-    </div>
-
-    <div *ngIf="segmentoActual === 'edit'" class="ion-padding animate__animated animate__fadeIn">
-      <ion-list lines="full" class="edit-list">
-        <ion-item>
-          <ion-label position="stacked">Descripción Personal</ion-label>
-          <ion-textarea [(ngModel)]="editUser.descripcion" placeholder="Sobre tu estilo de juego..." [autoGrow]="true"></ion-textarea>
-        </ion-item>
-        
-        <ion-item>
-          <ion-label position="stacked">Nivel de Juego</ion-label>
-          <ion-select [(ngModel)]="editUser.nivel" interface="action-sheet">
-            <ion-select-option value="4.5">4.5 (Avanzado)</ion-select-option>
-            <ion-select-option value="3.5">3.5 (Intermedio)</ion-select-option>
-            <ion-select-option value="2.5">2.5 (Principiante)</ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-list>
-
-      <ion-button expand="block" shape="round" color="primary" class="ion-margin-top" (click)="guardarCambios()">
-        <ion-icon slot="start" name="save-outline"></ion-icon>
-        Guardar Perfil
-      </ion-button>
-
-      <ion-button expand="block" fill="clear" color="danger" (click)="logout()">
-        Cerrar Sesión
-      </ion-button>
-    </div>
-
-  </ng-container>
+  </ng-template>
 </ion-content>

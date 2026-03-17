@@ -1,38 +1,10 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar color="primary">
-    
-    <ion-buttons slot="start">
-      <ion-menu-button autoHide="false"></ion-menu-button>
-      
-      <div class="logo-wrapper">
-        <img src="assets/icon/logo-bagels.png" class="header-logo" alt="Logo">
-      </div>
-    </ion-buttons>
-
-    <ion-title>BagelsOnly</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button id="open-buscar-main">
-        <ion-icon name="person-add-outline"></ion-icon>
-      </ion-button>
-      <ion-button id="open-notificaciones-main">
-        <ion-icon name="notifications-outline"></ion-icon>
-      </ion-button>
-      <ion-button id="open-mensajes-main">
-        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-  </ion-toolbar>
-</ion-header>
-
 <ion-tabs>
   <ion-router-outlet></ion-router-outlet>
 
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="home">
       <ion-icon name="home-outline"></ion-icon>
-      <ion-label>Home</ion-label>
+      <ion-label>Inicio</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="feed">
@@ -49,63 +21,10 @@
       <ion-icon name="trophy-outline"></ion-icon>
       <ion-label>Ranking</ion-label>
     </ion-tab-button>
+
+    <ion-tab-button tab="tab3">
+      <ion-icon name="settings-outline"></ion-icon>
+      <ion-label>Ajustes</ion-label>
+    </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>
-
-<ion-modal trigger="open-buscar-main" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.8]">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Buscar Tenistas</ion-title>
-        <ion-buttons slot="end">
-           <ion-button (click)="cerrarTodo()">Cerrar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <ion-searchbar placeholder="Nombre o Club"></ion-searchbar>
-      <ion-list>
-        <ion-item lines="full">
-          <ion-label>Jugador de ejemplo (Nivel 1.5)</ion-label>
-          <ion-button slot="end" fill="clear">
-            <ion-icon name="add-circle"></ion-icon>
-          </ion-button>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<ion-modal trigger="open-notificaciones-main" [initialBreakpoint]="0.75" [breakpoints]="[0, 0.75]">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Notificaciones</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <ion-list>
-        <ion-item lines="none">
-          <ion-icon name="trophy" color="warning" slot="start"></ion-icon>
-          <ion-label>¡Nuevo reto de Juan P.!</ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<ion-modal #modalMensajes trigger="open-mensajes-main">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Buzón de Mensajes</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="modalMensajes.dismiss()">Cerrar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <p class="ion-text-center">No tienes mensajes nuevos.</p>
-    </ion-content>
-  </ng-template>
-</ion-modal>
