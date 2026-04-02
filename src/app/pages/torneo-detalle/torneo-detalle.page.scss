@@ -1,0 +1,212 @@
+// --- CONFIGURACIÓN DE FONDO ---
+ion-content {
+  --background: #ffffff !important; // Fuerza el fondo blanco en el inner-scroll
+}
+
+// --- SECCIÓN DE ENCABEZADO Y SEGMENTOS ---
+ion-toolbar {
+  --border-width: 0;
+  --background: #ffffff;
+  --color: #000000;
+}
+
+ion-segment {
+  background: #f0f7ff; // Azul muy clarito
+  border-radius: 12px;
+  margin: 10px 16px;
+  padding: 4px;
+  
+  ion-segment-button {
+    --color: #7a9bb8;
+    --color-checked: #7044ff; // Tu morado premium
+    --indicator-color: #ffffff;
+    --indicator-height: 3px;
+    font-size: 0.85rem;
+    min-width: 90px;
+    font-weight: 700;
+  }
+}
+
+// --- VISTA HOME: BANNER ---
+.tournament-banner {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 0 0 24px 24px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .banner-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 24px 16px;
+    // Gradiente más suave para no chocar con el blanco
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    ion-badge {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      --background: #7044ff; 
+    }
+
+    h1 {
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 850;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+.info-container {
+  padding: 16px;
+  .action-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    margin-top: -10px;
+  }
+
+  h3 { font-weight: 800; color: #000; margin-bottom: 8px; }
+  .text-muted { color: #666; line-height: 1.5; font-size: 0.95rem; font-weight: 500; }
+
+  .location-item {
+    --background: transparent;
+    --padding-start: 0;
+    margin-top: 15px;
+    ion-icon { color: #7044ff; } 
+    ion-label { color: #333; font-size: 0.9rem; font-weight: 600; }
+  }
+}
+
+// --- VISTA STATS: TABLA (Glass Blue Style) ---
+.table-responsive {
+  overflow-x: auto;
+  background: rgba(235, 245, 255, 0.7); // Azul traslúcido
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 123, 255, 0.1);
+  margin: 0 10px;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th {
+    text-align: left;
+    color: #5a7b9a;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 16px 12px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  td {
+    padding: 16px 12px;
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0, 123, 255, 0.05);
+    strong { color: #7044ff; font-weight: 800; }
+  }
+}
+
+// --- CONFIGURACIÓN MAESTRA (MODAL BLANCO) ---
+.config-modal {
+  --background: #ffffff;
+
+  ion-list-header {
+    --color: #7044ff;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    margin-top: 25px;
+    font-weight: 900;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .config-list {
+    background: #f8faff; // Azul nieve
+    border-radius: 20px;
+    margin: 12px 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 123, 255, 0.05);
+    
+    ion-item {
+      --background: transparent;
+      --color: #000;
+      --border-color: rgba(0, 0, 0, 0.03);
+      --padding-start: 16px;
+
+      ion-icon { color: #7a9bb8; }
+      
+      ion-input, ion-textarea {
+        --color: #000;
+        --placeholder-color: #999;
+      }
+
+      ion-toggle {
+        --handle-background: #ffffff;
+        --background-checked: #7044ff;
+      }
+    }
+  }
+
+  .points-item {
+    ion-input { text-align: right; font-weight: 900; color: #7044ff; }
+  }
+}
+
+// --- VISTA JUGADORES Y FORO ---
+.section-title {
+  padding: 0 16px;
+  margin-bottom: 20px;
+  h3 { font-weight: 850; color: #000; margin-bottom: 4px; }
+  p { color: #666; font-weight: 600; }
+}
+
+.player-item {
+  --background: #ffffff;
+  --border-radius: 18px;
+  margin: 0 10px 10px 10px;
+  border: 1px solid rgba(0, 123, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  h2 { font-weight: 800; color: #000; }
+}
+
+.post-box {
+  background: #f8faff;
+  border-radius: 18px;
+  padding: 4px;
+  margin: 0 16px 24px 16px;
+  border: 1px solid rgba(0, 123, 255, 0.05);
+  ion-item { --background: transparent; --color: #000; }
+}
+
+// --- ESTADOS VACÍOS ---
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  
+  ion-icon { 
+    font-size: 5rem; 
+    margin-bottom: 20px; 
+    color: #e1efff;
+  }
+  h4 { color: #1a1a1a; font-weight: 800; }
+}
+

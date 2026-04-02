@@ -1,0 +1,290 @@
+/* --- CONTENEDORES PRINCIPALES --- */
+ion-content {
+  // Cambio clave: Fondo blanco premium para el área de scroll
+  --background: #ffffff !important;
+}
+
+.header-section {
+  padding: 20px 10px 10px 10px;
+  h2 { 
+    font-weight: 850; 
+    color: #000000; // Cambio: Blanco -> Negro
+    font-size: 1.8rem;
+    letter-spacing: -1px;
+  }
+  p { 
+    color: #666; // Cambio: Gris oscuro para legibilidad
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  padding: 20px;
+
+  .big-icon {
+    font-size: 6rem;
+    color: #cbd5e0; // Cambio: Gris azulado suave
+    margin-bottom: 20px;
+  }
+
+  h3 { 
+    font-weight: 800; 
+    color: #000000; // Cambio: Blanco -> Negro
+  }
+  
+  p { 
+    color: #888; 
+    margin-bottom: 30px; 
+    max-width: 250px;
+    font-weight: 500;
+  }
+}
+
+/* --- TARJETAS DE TORNEO (GLASS BLUE STYLE) --- */
+.tournament-card {
+  // Cambio: Fondo oscuro -> Azul Claro Traslúcido (Glassmorphism)
+  background: rgba(235, 245, 255, 0.7) !important;
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px);
+  
+  --background: transparent;
+  border-radius: 20px;
+  margin: 0 0 20px 0;
+  // Cambio: Sombra pesada -> Sombra ligera azulada premium
+  box-shadow: 0 10px 30px rgba(0, 123, 255, 0.08);
+  border: 1px solid rgba(0, 123, 255, 0.15);
+  overflow: hidden;
+
+  .card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .followers-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.6); // Cambio: Fondo claro traslúcido
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 123, 255, 0.1);
+    
+    ion-icon {
+      color: #007bff; // Cambio: Azul
+      font-size: 1.1rem;
+    }
+    
+    ion-note {
+      color: #0056b3; // Cambio: Azul fuerte
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+  }
+
+  ion-card-title {
+    color: #007bff; // Cambio: Verde -> Azul Profesional
+    font-weight: 900;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+  }
+
+  ion-card-subtitle {
+    color: #5a7b9a; // Cambio: Azul grisáceo
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(0, 123, 255, 0.1); // Cambio: Línea azul tenue
+    padding-top: 12px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #333; // Cambio: Negro suave
+
+    strong {
+      color: #7044ff; // Cambio: Verde -> Tu Morado de acento
+      font-weight: 800;
+    }
+
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+}
+
+/* --- ESTILOS DE MODALES (BLANCO PREMIUM) --- */
+ion-modal {
+  --background: #ffffff; // Cambio: Negro -> Blanco
+  --border-radius: 32px 32px 0 0;
+  
+  ion-toolbar {
+    --background: #ffffff;
+    --color: #000000;
+    --border-width: 0;
+  }
+}
+
+.modal-bg {
+  --background: #ffffff;
+}
+
+.clonacion-container {
+  padding-top: 10px;
+  
+  h2 {
+    font-weight: 850;
+    color: #000;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .clon-list {
+    background: transparent;
+    
+    ion-item {
+      --background: #f0f7ff; // Cambio: Fondo azul muy pálido
+      --color: #000;
+      --border-radius: 14px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(0, 123, 255, 0.05);
+
+      &.input-item {
+        --background: #ffffff;
+        margin-bottom: 20px;
+        border: 2px solid #7044ff; // Acento morado para el input
+      }
+
+      ion-label {
+        font-weight: 700;
+        color: #444;
+      }
+    }
+  }
+}
+
+/* Barra de progreso (Stepper) */
+.stepper-bar {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 40px 0;
+  padding: 0 10px;
+
+  .step {
+    flex: 1;
+    height: 5px;
+    background: #e0e7ff; // Cambio: Azul grisáceo pálido
+    margin: 0 5px;
+    border-radius: 10px;
+    transition: all 0.4s ease;
+
+    &.active {
+      background: #7044ff; // Cambio: Verde -> Morado
+      box-shadow: 0 0 12px rgba(112, 68, 255, 0.3);
+    }
+  }
+}
+
+.step-container {
+  text-align: center;
+  animation: slideFade 0.4s ease-out;
+
+  h2 { 
+    font-weight: 850; 
+    font-size: 1.7rem; 
+    color: #000;
+    margin-bottom: 10px;
+  }
+
+  p { 
+    color: #666; 
+    margin-bottom: 35px;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+
+.wizard-btn {
+  --border-radius: 20px;
+  --border-color: #f0f7ff;
+  --border-width: 2px;
+  --color: #000;
+  margin-bottom: 16px;
+  height: 75px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  --background: #ffffff;
+  --background-activated: #7044ff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  
+  ion-icon {
+    font-size: 1.5rem;
+    margin-right: 12px;
+    color: #007bff;
+  }
+}
+
+.sistema-card {
+  --background: #f8faff; // Cambio: Azul nieve
+  border-radius: 18px;
+  margin: 0 0 12px 0;
+  border: 1px solid rgba(0, 123, 255, 0.05);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+
+  &:active {
+    transform: scale(0.97);
+    border-color: #7044ff;
+  }
+
+  ion-item {
+    --background: transparent;
+    --padding-start: 10px;
+    
+    h3 { 
+      color: #000; 
+      font-weight: 800; 
+      font-size: 1.1rem;
+    }
+    p { 
+      color: #666; 
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    ion-icon {
+      font-size: 2rem;
+    }
+  }
+}
+
+/* FAB Button en Verde Neón para resaltar sobre el blanco */
+ion-fab-button {
+  --background: #d4ff00;
+  --color: #000;
+  --box-shadow: 0 8px 20px rgba(212, 255, 0, 0.3);
+}
+
+/* --- ANIMACIONES (Sin cambios) --- */
+@keyframes slideFade {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}

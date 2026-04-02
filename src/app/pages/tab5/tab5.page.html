@@ -1,0 +1,346 @@
+<app-header-global titulo="Perfil"></app-header-global>
+
+<ion-content [fullscreen]="true" class="bg-dark">
+
+  <div class="profile-header">
+    <div class="avatar-wrapper">
+      <div class="avatar-main">
+        <img [src]="$any(perfil.infoBasica).fotoURL || 'assets/img/default-avatar.png'" 
+             alt="Avatar" 
+             width="120" 
+             height="120"
+             (click)="cambiarFoto()">
+      </div>
+    </div>
+
+    <div class="user-meta ion-text-center">
+      <h1 class="user-name">{{ perfil.infoBasica?.nombre || 'Tenista' }}</h1>
+      <p class="user-bio">"{{ perfil.infoBasica?.bio || '¡Listo para el set!' }}"</p>
+
+      <div class="badge-row">
+        <ion-badge class="ntrp-badge">NTRP {{ perfil.infoBasica?.nivel || '1.0' }}</ion-badge>
+        <ion-badge color="primary" mode="ios" class="location-badge">
+          <ion-icon name="location-outline"></ion-icon> 
+          {{ perfil.infoBasica?.ubicacion || 'Seleccionar Sede' }}
+        </ion-badge>
+      </div>
+    </div>
+  </div>
+
+  <ion-segment [(ngModel)]="segmentoActual" mode="ios" class="custom-segment ion-padding-horizontal">
+    <ion-segment-button value="stats">
+      <ion-label>Estadísticas</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="edit">
+      <ion-label>Configurar</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="segmentoActual === 'stats'" class="animate__animated animate__fadeIn">
+
+    <ion-grid class="stats-container">
+      <ion-row>
+        <ion-col size="4">
+          <div class="stat-card">
+            <span class="stat-val text-neon">{{ winRate || 0 }}%</span>
+            <span class="stat-label">Win Rate</span>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="stat-card">
+            <span class="stat-val">{{ perfil.stats?.partidos || 0 }}</span>
+            <span class="stat-label">Partidos</span>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="stat-card">
+            <span class="stat-val text-success">{{ perfil.stats?.victorias || 0 }}</span>
+            <span class="stat-label">Victorias</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-list-header class="section-title">
+      <ion-label>Torneos Inscritos</ion-label>
+    </ion-list-header>
+
+    <ion-card class="list-card">
+      <ion-list lines="none">
+        <ion-item *ngFor="let torneo of torneosInscritos" class="tournament-item">
+          <div class="icon-box" slot="start">
+            <ion-icon name="trophy-outline"></ion-icon>
+          </div>
+          <ion-label>
+            <h2>{{ torneo.nombre }}</h2>
+            <p>{{ torneo.estado }}</p>
+          </ion-label>
+          <ion-note slot="end" class="points-tag">+{{ torneo.puntos }} XP</ion-note>
+        </ion-item>
+        <ion-item *ngIf="!torneosInscritos || torneosInscritos.length === 0">
+          <ion-label class="ion-text-center">
+            <p class="text-dim">No tienes torneos activos</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <ion-list-header class="section-title ion-margin-top">
+      <ion-label>Mis Equipos (Dobles)</ion-label>
+      <ion-badge color="primary" mode="ios" class="ion-margin-start">{{ misEquipos?.length || 0 }}/3</ion-badge>
+    </ion-list-header>
+
+    <ion-card class="list-card glass-card">
+      <ion-list lines="none" class="bg-transparent-list">
+        <ion-item *ngFor="let equipo of misEquipos" class="tournament-item">
+          <div class="icon-box team-icon" slot="start">
+            <ion-icon name="people"></ion-icon>
+          </div>
+          <ion-label>
+            <h2 class="text-white">{{ equipo.nombres[0] }} & {{ equipo.nombres[1] }}</h2>
+            <p class="text-success">Pareja Activa 🎾</p>
+          </ion-label>
+          <ion-button slot="end" fill="clear" color="danger" (click)="disolverEquipo(equipo.id)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item *ngIf="!misEquipos || misEquipos.length === 0">
+          <ion-label class="ion-text-center">
+            <p class="text-dim">No tienes equipos formados</p>
+            <ion-button fill="clear" size="small" color="primary" routerLink="/tabs/tab1">
+              Buscar pareja en Comunidad
+            </ion-button>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <ion-list-header class="section-title mini-title ion-margin-top">
+      <ion-label>Actividad de {{ nombreMesActual }}</ion-label>
+    </ion-list-header>
+
+    <ion-card class="streak-card-mini">
+      <div class="mini-streak-header">
+        <div class="flame-box">
+          <ion-icon name="flame"></ion-icon>
+          <span>{{ perfil.stats?.streak || 0 }}</span>
+        </div>
+        <div class="streak-info-container">
+          <div class="streak-label">Días de racha</div>
+          <div class="best-streak-text">Best Streak: {{ perfil.stats?.bestStreak || 0 }} días 🔥</div>
+        </div>
+        <ion-badge color="warning" mode="ios">+{{ perfil.stats?.puntos || 0 }} XP Total</ion-badge>
+      </div>
+
+      <div class="month-grid-mini">
+        <div class="day-labels-mini">
+          <span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span>
+        </div>
+        <div class="days-grid-mini">
+          <div *ngFor="let dia of diasDelMes" class="day-bubble" 
+               [class.bubble-empty]="dia.vacio"
+               [class.bubble-active]="dia.activo" 
+               [class.bubble-today]="dia.esHoy">
+            <span *ngIf="!dia.vacio">{{ dia.numero }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="share-action-area">
+        <ion-button expand="block" fill="clear" (click)="abrirModalResumen()" class="share-btn">
+          <ion-icon name="share-social-outline" slot="start"></ion-icon>
+          Compartir Resumen
+        </ion-button>
+      </div>
+    </ion-card>
+
+    <div class="bento-grid-container ion-padding-horizontal ion-margin-bottom">
+      <div class="bento-card bento-main animate__animated animate__fadeIn">
+        <div class="card-label">Rango Global</div>
+        <div class="rank-flex ion-align-items-center">
+          <div class="rank-info">
+            <span class="rank-value">Top {{ perfil.bentoUI?.topPercentil || 0 }}%</span>
+            <p class="rank-trend text-success">
+              <ion-icon name="trending-up-outline"></ion-icon> 
+              Sincronizado
+            </p>
+          </div>
+          <div class="rank-chart-box">
+            <svg viewBox="0 0 36 36" class="circular-chart">
+              <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle" 
+                [attr.stroke-dasharray]="(perfil.bentoUI?.progresoRango || 0) + ', 100'"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <text x="18" y="20.35" class="percentage">{{ perfil.bentoUI?.progresoRango || 0 }}%</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento-card bento-full ion-margin-vertical animate__animated animate__fadeInUp">
+        <div class="card-label">Últimos Matches</div>
+        <div class="streak-history-container">
+          <ng-container *ngIf="perfil.bentoUI?.historiaChallenges?.length; else emptyStreak">
+            <div *ngFor="let match of perfil.bentoUI?.historiaChallenges?.slice(-7)" 
+                 class="streak-pill" 
+                 [ngClass]="$any(match).resultado === 'W' ? 'pill-win' : 'pill-loss'">
+              {{ $any(match).resultado }}
+            </div>
+          </ng-container>
+          <ng-template #emptyStreak>
+            <div class="empty-streak">No hay partidos registrados</div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="bento-row" style="display: flex; gap: 10px; width: 100%;">
+        <div class="bento-card bento-small" style="flex: 1;">
+          <span class="stat-num text-neon">{{ perfil.stats?.partidos || 0 }}</span>
+          <span class="stat-desc">Matches</span>
+        </div>
+        <div class="bento-card bento-small" style="flex: 1;">
+          <span class="stat-num text-success">{{ perfil.stats?.streak || 0 }}</span>
+          <span class="stat-desc">Racha Actual</span>
+        </div>
+      </div>
+    </div> 
+
+    <div class="bento-grid-container ion-padding-horizontal ion-margin-bottom animate__animated animate__fadeInUp">
+  <div class="bento-card bento-main" style="border-left: 4px solid #3880ff; background: rgba(56, 128, 255, 0.05);">
+    <div class="card-label">Dominio en Dobles</div>
+    <div class="rank-flex ion-align-items-center">
+      <div class="rank-info">
+        <span class="rank-value">Pareja Nivel {{ perfil.infoBasica?.nivel || '1.0' }}</span>
+        <p style="color: #3880ff; font-size: 0.75rem; margin-top: 4px; font-weight: 600;">
+          <ion-icon name="people-circle-outline"></ion-icon> Sincronía Total
+        </p>
+      </div>
+      <div class="rank-chart-box">
+        <div style="position: relative; width: 50px; height: 50px;">
+          <ion-icon name="tennisball" style="font-size: 2rem; color: #ccff00; position: absolute; top: 0; left: 0; z-index: 2;"></ion-icon>
+          <ion-icon name="tennisball" style="font-size: 2rem; color: #ccff00; position: absolute; top: 15px; left: 15px; opacity: 0.5; z-index: 1;"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bento-row" style="display: flex; gap: 10px; width: 100%;">
+    <div class="bento-card bento-small" style="flex: 1; background: rgba(56, 128, 255, 0.1);">
+      <span class="stat-num" style="color: #3880ff;">{{ $any(perfil).statsDobles?.winRate || 0 }}%</span>
+      <span class="stat-desc">Win Rate</span>
+    </div>
+    <div class="bento-card bento-small" style="flex: 1; background: rgba(45, 211, 111, 0.1);">
+      <span class="stat-num text-success">{{ $any(perfil).statsDobles?.victorias || 0 }}</span>
+      <span class="stat-desc">Wins Dobles</span>
+    </div>
+  </div>
+
+  <div class="bento-card bento-full ion-margin-top" style="background: linear-gradient(90deg, rgba(56,128,255,0.1) 0%, rgba(0,0,0,0) 100%);">
+    <div class="card-label">Partner de Oro</div>
+    <div style="display: flex; align-items: center;" class="ion-padding-top">
+      <ion-avatar style="width: 32px; height: 32px;">
+        <img [src]="$any(perfil).statsDobles?.fotoPartner || 'assets/img/default-avatar.png'" />
+      </ion-avatar>
+      <div class="ion-margin-start">
+        <span style="color: white; font-weight: 700;">{{ $any(perfil).statsDobles?.mejorPartner || 'Sin pareja fija' }}</span>
+        <p style="font-size: 0.7rem; color: #3880ff; margin: 0;">{{ $any(perfil).statsDobles?.matchesJuntos || 0 }} matches compartidos</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div> <div *ngIf="segmentoActual === 'edit'" class="ion-padding animate__animated animate__fadeIn">
+    <ion-card class="edit-card glass-card">
+      <ion-list lines="none" class="bg-transparent-list">
+        <ion-item class="custom-input">
+          <ion-label position="stacked">Nombre Público</ion-label>
+          <ion-input [(ngModel)]="perfil.infoBasica.nombre" placeholder="¿Cómo te llaman?"></ion-input>
+        </ion-item>
+        <ion-item class="custom-input">
+          <ion-label position="stacked">Bio / Estado</ion-label>
+          <ion-textarea [(ngModel)]="perfil.infoBasica.bio" rows="2" placeholder="Bio..."></ion-textarea>
+        </ion-item>
+        <ion-item class="custom-input">
+          <ion-label position="stacked">Nivel (NTRP)</ion-label>
+          <ion-select [(ngModel)]="perfil.infoBasica.nivel" interface="popover">
+            <ion-select-option *ngFor="let n of ['1.0','1.5','2.0','2.5','3.0','3.5','4.0','4.5','5.0','5.5','6.0']" [value]="n">{{n}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item class="custom-input">
+          <ion-label position="stacked">Sede Principal</ion-label>
+          <ion-select [(ngModel)]="perfil.infoBasica.ubicacion">
+            <ion-select-option value="CDB">Club Deportivo Bancario</ion-select-option>
+            <ion-select-option value="CBT">Club Britania Tijuana</ion-select-option>
+            <ion-select-option value="UDT">Unidad Deportiva Tijuana</ion-select-option>
+            <ion-select-option value="CCT">Club Campestre Tijuana</ion-select-option>
+            <ion-select-option value="PA">Punta Azul</ion-select-option>
+            <ion-select-option value="PT">Playas de Tijuana</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item class="custom-input">
+          <ion-label position="stacked">Mano Dominante</ion-label>
+          <ion-select [(ngModel)]="perfil.infoBasica.manoDominante" interface="popover">
+            <ion-select-option value="Derecho">Derecho</ion-select-option>
+            <ion-select-option value="Zurdo">Zurdo</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <ion-button expand="block" class="main-save-btn ion-margin-top" (click)="guardarCambios()">
+      <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+      Actualizar Perfil
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" color="danger" (click)='logout()' class="ion-margin-top">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Cerrar Sesión
+    </ion-button>
+  </div>
+
+</ion-content>
+
+<ion-modal #modalResumenPremium [initialBreakpoint]="0.75" [breakpoints]="[0, 0.75, 1]" class="modal-burbuja">
+  <ng-template>
+    <ion-content class="bg-summary-premium">
+      <div class="ion-padding ion-text-center">
+        <div class="modal-handle ion-margin-bottom"></div>
+        <div class="share-card-visual">
+          <div class="card-body-premium">
+            <h2 class="player-title">{{ perfil.infoBasica?.nombre || 'Tenista' }}</h2>
+            <p class="subtitle-premium">Actividad de {{ nombreMesActual }}</p>
+            <div class="mini-calendar-view">
+              <div class="dots-grid">
+                <ng-container *ngFor="let dia of diasDelMes">
+                  <div *ngIf="!dia.vacio" class="dot" [class.active]="dia.activo" [class.today]="dia.esHoy"></div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="stats-highlights ion-margin-top">
+              <div class="highlight-item">
+                <ion-icon name="flame" color="danger"></ion-icon>
+                <span class="val">{{ perfil.stats?.streak || 0 }}</span>
+                <span class="lab">Racha</span>
+              </div>
+              <div class="highlight-item">
+                <ion-icon name="trophy" color="warning"></ion-icon>
+                <span class="val">{{ perfil.stats?.puntos || 0 }}</span>
+                <span class="lab">XP Total</span>
+              </div>
+            </div>
+            <p class="footer-tag">Generado en BagelsOnly 🎾</p>
+          </div>
+        </div>
+        <div class="modal-actions ion-padding-top">
+          <ion-button expand="block" color="primary" class="btn-share-native" (click)="compartirNativo()">
+            <ion-icon name="share-social-outline" slot="start"></ion-icon>
+            Compartir Resumen
+          </ion-button>
+          <ion-button expand="block" fill="clear" color="medium" (click)="modalResumenPremium.dismiss()">
+            Cerrar
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

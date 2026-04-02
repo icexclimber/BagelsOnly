@@ -1,22 +1,151 @@
-:host {
-  display: block;
-  position: relative;
-  z-index: 10; // Un valor moderado para que no tape los modales de las páginas
-}
-
-.logo-wrapper {
-  display: flex;
-  align-items: center;
-  padding: 5px;
+ion-toolbar {
+  // 1. FONDO BLANCO PREMIUM: El tono exacto de tus Tabs
+  --background: #f8f9fa; 
+  --border-width: 0;
   
-  .header-logo {
-    height: 38px; // Tamaño ideal para el logo de BagelsOnly
-    width: auto;
-    object-fit: contain;
+  // 2. LOOK NATIVO: Sin sombras pesadas, solo una línea de división elegante
+  box-shadow: none; 
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  
+  // 3. BOTONES E ICONOS: Azul Bagels sobre el blanco para máxima visibilidad
+  ion-menu-button, 
+  ion-button.btn-premium,
+  ion-button[color="primary"] {
+    --color: #368dc7 !important; 
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Efecto táctil de alta gama al presionar
+    &:active {
+      transform: scale(0.88);
+      opacity: 0.6;
+    }
+
+    ion-icon {
+      font-size: 1.4rem; // Un toque más grande para facilitar el toque
+      filter: drop-shadow(0 2px 4px rgba(54, 141, 199, 0.1));
+    }
   }
 }
 
-ion-toolbar {
-  --padding-top: 4px;
-  --padding-bottom: 4px;
+// 4. TÍTULO PREMIUM (DASHBOARD / COMUNIDAD / PERFIL)
+ion-title {
+  color: #1a1a1a; // Un negro casi puro, muy profundo y elegante
+  font-weight: 850; // Tipografía con mucha autoridad
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 1px; // Espaciado estilo marca de lujo
+  text-align: center;
+  
+  // Sombra de texto casi invisible para dar profundidad a las letras
+  text-shadow: 0 1px 1px rgba(0,0,0,0.05);
+}
+
+// 5. LOGOTIPO "BO"
+.logo-wrapper {
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+
+  .header-logo {
+    height: 40px; 
+    width: auto;
+    object-fit: contain;
+    // Filtro sutil para que el logo resalte perfectamente sobre el blanco
+    filter: brightness(0.95) contrast(1.05) drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+  }
+}
+
+// 6. BADGE DE NOTIFICACIONES (RECORTE PERFECTO)
+.custom-badge {
+  position: absolute;
+  top: -3px; 
+  right: -3px;
+  font-size: 9px;
+  background: #eb445a; // Rojo vibrante de competencia
+  color: white;
+  
+  // EL SECRETO: El borde del mismo color del fondo crea el efecto de "perforación"
+  border: 2px solid #f8f9fa; 
+  border-radius: 50%;
+  min-width: 17px;
+  height: 17px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  
+  // Sombra rojiza sutil para que el badge flote
+  box-shadow: 0 2px 5px rgba(235, 68, 90, 0.3);
+}
+
+// 7. SOPORTE AUTOMÁTICO PARA MODO OSCURO (Para que no se rompa nada)
+
+/* Estilo para el nombre del emisor en el popover */
+.user-name-glass {
+  color: #ffffff !important; /* Blanco sólido para que resalte */
+  font-weight: 700;          /* Negrita para darle fuerza */
+  font-size: 0.95rem;        /* Tamaño equilibrado */
+  margin-bottom: 2px;        /* Espacio con el subtítulo */
+  display: block;            /* Asegura que tome su propia línea */
+}
+
+/* Opcional: Mejora el subtítulo "Quiere ser tu amigo" */
+.user-sub-glass {
+  color: rgba(255, 255, 255, 0.7) !important; /* Blanco traslúcido */
+  font-size: 0.8rem;
+}
+
+/* Ajuste para el avatar dentro del popover */
+.glass-avatar {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  img {
+    object-fit: cover;
+  }
+}
+
+.notif-item {
+  --padding-start: 12px;
+  --inner-padding-end: 8px;
+  
+  ion-label {
+    h2 { font-weight: 700; font-size: 0.95rem; }
+    p { 
+      font-size: 0.85rem; 
+      display: flex; 
+      align-items: center; 
+      gap: 5px; 
+    }
+  }
+
+  .action-buttons-container {
+    display: flex;
+    gap: 0;
+    
+    ion-button {
+      --padding-start: 4px;
+      --padding-end: 4px;
+      margin: 0;
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.glass-popover {
+  --width: 320px; // Aumentamos el ancho para que el texto respire
+  
+  .glass-item {
+    --min-height: 70px; // Un poco más de altura por si el nombre ocupa 2 líneas
+    --padding-start: 8px;
+    --padding-end: 0px;
+    background: transparent;
+  }
+
+  // Esto evita que los botones "empujen" el texto hacia afuera
+  ion-label {
+    margin-inline-end: 8px;
+  }
 }

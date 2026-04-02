@@ -1,0 +1,120 @@
+<app-header-global titulo="Rankings"></app-header-global>
+
+<ion-content [fullscreen]="true" class="bg-dark">
+  
+  <div class="header-ranking ion-padding">
+    <ion-item lines="none" class="select-item glass-card mb-3">
+      <ion-icon name="location-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>Sede:</ion-label>
+      <ion-select [(ngModel)]="filtros.sede" (ionChange)="aplicarFiltros()" interface="popover">
+        <ion-select-option value="CDB">Club Deportivo Bancario</ion-select-option>
+        <ion-select-option value="CBT">Club Britania Tijuana</ion-select-option>
+        <ion-select-option value="UDT">Unidad Deportiva Tijuana</ion-select-option>
+        <ion-select-option value="CCT">Club Campestre Tijuana</ion-select-option>
+        <ion-select-option value="PA">Punta Azul</ion-select-option>
+        <ion-select-option value="PT">Playas de Tijuana</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="horizontal-filters">
+      <div class="filter-chip">
+        <ion-select [(ngModel)]="filtros.genero" (ionChange)="aplicarFiltros()" interface="popover" placeholder="Género">
+          <ion-select-option value="Todos">Género: Todos</ion-select-option>
+          <ion-select-option value="Masculino">Masculino</ion-select-option>
+          <ion-select-option value="Femenino">Femenino</ion-select-option>
+        </ion-select>
+      </div>
+
+      <div class="filter-chip" [class.active-filter]="filtros.categoria !== 'Todas'">
+    <ion-select [(ngModel)]="filtros.categoria" (ionChange)="aplicarFiltros()" interface="popover">
+      <ion-select-option value="Todas">Categoría: Todas</ion-select-option>
+      <ion-select-option value="Open">Open</ion-select-option>
+      <ion-select-option value="1.0">1.0</ion-select-option>
+      <ion-select-option value="1.5">1.5</ion-select-option>
+      <ion-select-option value="2">2</ion-select-option>
+      <ion-select-option value="2.5">2.5</ion-select-option>
+      <ion-select-option value="3">3</ion-select-option>
+      <ion-select-option value="3.5">3.5</ion-select-option>
+      <ion-select-option value="4">4</ion-select-option>
+      <ion-select-option value="4.5">4.5</ion-select-option>
+    </ion-select>
+  </div>
+
+      <div class="filter-chip" [class.active-filter]="filtros.verificado !== 'Todos'">
+        <ion-select [(ngModel)]="filtros.verificado" (ionChange)="aplicarFiltros()" interface="popover" placeholder="Verificados">
+          <ion-select-option value="Todos">Verificación: Todas</ion-select-option>
+          <ion-select-option value="Si">Verificados ✅</ion-select-option>
+          <ion-select-option value="No">No Verificados</ion-select-option>
+        </ion-select>
+      </div>
+
+      <div class="filter-chip">
+        <ion-select [(ngModel)]="filtros.modalidad" (ionChange)="aplicarFiltros()" interface="popover">
+          <ion-select-option value="Sencillos">Sencillos</ion-select-option>
+          <ion-select-option value="Dobles">Dobles</ion-select-option>
+        </ion-select>
+      </div>
+
+      <div class="filter-chip ranking-toggle">
+        <ion-select [(ngModel)]="filtros.tipoRanking" (ionChange)="aplicarFiltros()" interface="popover">
+          <ion-select-option value="XP">Ranking XP</ion-select-option>
+          <ion-select-option value="BTRP">Ranking BTRP</ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+  </div>
+
+  <ion-list lines="full" class="ranking-list bg-transparent">
+    
+    <ng-container *ngIf="jugadores$ | async as listaJugadores; else cargando">
+      
+      <ion-item *ngFor="let jugador of listaJugadores; let i = index" 
+                class="ranking-item animate__animated animate__fadeInUp">
+        
+        <div slot="start" class="position-container">
+          <ion-icon *ngIf="i < 3" name="trophy" [class]="'medal-rank-' + i"></ion-icon>
+          <span *ngIf="i >= 3" class="rank-number">{{ i + 1 }}</span>
+        </div>
+
+        <ion-avatar slot="start" class="border-neon">
+          <img [src]="jugador.infoBasica?.fotoURL || 'assets/img/default-avatar.png'" />
+        </ion-avatar>
+
+        <ion-label>
+          <h2 class="font-bold">
+            {{ jugador.infoBasica?.nombre }}
+            <ion-icon *ngIf="jugador.infoBasica?.nivelVerificado" name="checkmark-circle" color="primary" class="verif-icon"></ion-icon>
+          </h2>
+          <p class="text-dim">NTRP: {{ jugador.infoBasica?.nivel || '1.0' }} | {{ jugador.infoBasica?.genero }}</p>
+        </ion-label>
+
+        <div slot="end" class="ion-text-end">
+          <div class="points-box">
+            <h3 class="points-text">
+              {{ filtros.tipoRanking === 'XP' ? (jugador.stats?.puntos || 0) : (jugador.stats?.btrp || 0) }}
+            </h3>
+            <small class="unit-text">{{ filtros.tipoRanking }}</small>
+          </div>
+        </div>
+      </ion-item>
+
+      <div *ngIf="listaJugadores.length === 0" class="ion-text-center ion-padding empty-state">
+        <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+        <p>No se encontraron tenistas con estos filtros.</p>
+      </div>
+
+    </ng-container>
+
+    <ng-template #cargando>
+      <ion-item *ngFor="let s of [1,2,3,4,5]" class="ranking-item">
+        <ion-avatar slot="start"><ion-skeleton-text animated></ion-skeleton-text></ion-avatar>
+        <ion-label>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+    </ng-template>
+
+  </ion-list>
+
+</ion-content>

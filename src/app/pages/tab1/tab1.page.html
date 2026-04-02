@@ -1,106 +1,258 @@
 <app-header-global titulo="Dashboard"></app-header-global>
 
-<ion-content [fullscreen]="true">
-  <ng-container *ngIf="usuarioActual$ | async as user; else cargando">
-    
-    <div class="full-page-wrapper">
-      
-      <div class="content-flex-area">
-        
-        <div class="profile-header ion-padding ion-text-center" 
-             [ngStyle]="getBannerStyle(user.bannerSeleccionado)">
-          
-          <div class="avatar-wrapper">
-            <img [src]="user.foto || 'assets/img/default-avatar.png'" class="main-avatar">
-            <ion-button fill="clear" size="small" class="edit-photo-btn" (click)="cambiarFoto(user.uid)">
-              <ion-icon name="camera-reverse"></ion-icon>
-            </ion-button>
-          </div>
+<ion-content [fullscreen]="true" class="main-dashboard-bg">
 
-          <h2 class="user-name">{{ user.nombre }}</h2>
-          <p class="user-bio">{{ user.descripcion || 'Tenista BagelsOnly | Tijuana' }}</p>
-          
-          <ion-card class="xp-card ion-margin-top">
-            <ion-card-content>
-              <div class="xp-header">
-                <ion-badge color="tertiary" mode="ios">Nivel {{ user.nivel || 1 }}</ion-badge>
-                <span class="small-text">{{ user.xp || 0 }} / 1000 XP</span>
-              </div>
-              <ion-progress-bar color="success" [value]="(user.xp || 0) / 1000" class="ion-margin-vertical"></ion-progress-bar>
-            </ion-card-content>
-          </ion-card>
-        </div>
-
-        <div class="segment-container">
-          <ion-segment (ionChange)="segmentChanged($event)" [value]="segmentoActual" mode="ios">
-            <ion-segment-button value="stats"><ion-label>Estadísticas</ion-label></ion-segment-button>
-            <ion-segment-button value="banners"><ion-label>Logros</ion-label></ion-segment-button>
-          </ion-segment>
-        </div>
-
-        <div *ngIf="segmentoActual === 'stats'" class="animate__animated animate__fadeIn">
-          <ion-grid class="ion-padding">
-            <ion-row>
-              <ion-col size="4">
-                <div class="mini-stat-card">
-                  <span class="stat-label">G / P</span>
-                  <span class="stat-value">{{ user.record?.ganados || 0 }}-{{ user.record?.perdidos || 0 }}</span>
-                </div>
-              </ion-col>
-              <ion-col size="4">
-                <div class="mini-stat-card">
-                  <span class="stat-label">Win Rate</span>
-                  <span class="stat-value">{{ user.winRate || 0 }}%</span>
-                </div>
-              </ion-col>
-              <ion-col size="4">
-                <div class="mini-stat-card bagel-stat">
-                  <span class="stat-label">🥯 Bagels</span>
-                  <span class="stat-value">{{ user.bagelsEntregados || 0 }}</span>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </div>
-
-        <div *ngIf="segmentoActual === 'banners'" class="animate__animated animate__fadeIn">
-          <ion-grid class="ion-padding">
-            <ion-row>
-              <ion-col size="6" *ngFor="let banner of listaBanners">
-                <div class="banner-item" 
-                     [class.locked]="(user.nivel || 1) < banner.nivelRequerido"
-                     (click)="seleccionarBanner(banner, user)">
-                  
-                  <div class="banner-preview" 
-                       [ngStyle]="getBannerStyle(banner.imagenBanner)"
-                       [attr.data-leyenda]="banner.leyenda">
-                    
-                    <ion-icon *ngIf="(user.nivel || 1) < banner.nivelRequerido" name="lock-closed" class="lock-icon"></ion-icon>
-                    <ion-icon *ngIf="(user.nivel || 1) >= banner.nivelRequerido" [name]="banner.icono" class="achievement-icon"></ion-icon>
-                  </div>
-
-                  <div class="banner-info">
-                    <span class="banner-name">{{ banner.nombre }}</span>
-                    <span class="banner-req">LVL {{ banner.nivelRequerido }}</span>
-                  </div>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </div>
-      </div> <div class="footer-button-container">
-        <ion-button expand="block" shape="round" color="primary" (click)="guardarCambios()">
-          <ion-icon slot="start" name="save-outline"></ion-icon> 
-          Guardar Perfil
-        </ion-button>
-      </div>
-
-    </div> </ng-container>
-
-  <ng-template #cargando>
-    <div class="loading-container ion-text-center ion-padding">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Sincronizando con la red AMT...</p>
+  <div *ngIf="isAdmin" class="admin-dashboard-glass animate__animated animate__fadeIn">
+    <div class="section-header ion-padding-horizontal">
+      <h2 class="section-title text-white">Gestión de Contenido</h2>
+      <ion-badge color="light" mode="ios">Admin Control</ion-badge>
     </div>
-  </ng-template>
+
+    <ion-grid class="ion-no-padding ion-padding-horizontal ion-margin-bottom">
+      <ion-row>
+        <ion-col size="6" class="ion-padding-end">
+          <div class="glass-action-card" (click)="isModalTorneoOpen = true">
+            <div class="action-icon-box">
+              <ion-icon name="add-circle"></ion-icon>
+            </div>
+            <span>Nuevo Torneo</span>
+          </div>
+        </ion-col>
+        <ion-col size="6" class="ion-padding-start">
+          <div class="glass-action-card" (click)="isModalEscaleraOpen = true">
+            <div class="action-icon-box">
+              <ion-icon name="stats-chart"></ion-icon>
+            </div>
+            <span>Nueva Escalera</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="section-wrapper ion-padding-top animate__animated animate__fadeIn">
+    <div class="section-header ion-padding-horizontal">
+      <h2 class="section-title">Torneos Abiertos</h2>
+      <ion-button fill="clear" size="small" class="view-all-btn">Ver todos</ion-button>
+    </div>
+
+    <div class="horizontal-scroll-container">
+      <div class="scroll-wrapper">
+        <div *ngIf="torneosProximos.length === 0" class="ion-padding-horizontal">
+          <p style="color: rgba(0,0,0,0.4); font-size: 0.8rem;">Buscando torneos disponibles...</p>
+        </div>
+
+        <div *ngFor="let torneo of torneosProximos" class="torneo-card-modern">
+          <ion-button *ngIf="isAdmin" class="btn-delete-admin" fill="clear" (click)="confirmarEliminacion(torneo.id, 'torneos', torneo.basica?.titulo || torneo.nombre)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+
+          <div class="card-media" [ngClass]="'banner-' + (torneo.basica?.colorLayout || 'primary')" (click)="irATorneo(torneo)">
+            <img *ngIf="torneo.imagen" [src]="torneo.imagen" alt="Torneo" />
+            <div *ngIf="!torneo.imagen" class="gradient-placeholder"></div>
+
+            <div class="media-overlay"></div>
+            <div class="category-badge" [ngClass]="torneo.color">{{ torneo.basica?.subhead || torneo.categoria }}</div>
+            <div class="event-name-overlay">
+              <h3>{{ torneo.basica?.titulo || torneo.nombre }}</h3>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <div class="date-row">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{ torneo.fecha || 'Próximamente' }}</span>
+            </div>
+            <div class="cupo-container">
+              <div class="cupo-text">
+                <span>Inscritos</span>
+                <strong>{{ torneo.jugadoresCount || 0 }}/{{ torneo.totalCupos || 16 }}</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" [style.width.%]="((torneo.jugadoresCount || 0) / (torneo.totalCupos || 16)) * 100"></div>
+              </div>
+            </div>
+            <div class="tournament-actions-row">
+              <ion-button fill="clear" size="small" (click)="verTablaInscritos(torneo)" class="btn-table">
+                <ion-icon name="people-outline" slot="start"></ion-icon> Tabla
+              </ion-button>
+              <ion-button fill="solid" size="small" color="primary" (click)="seguirTorneo(torneo)" class="btn-follow">
+                <ion-icon name="heart-outline" slot="start"></ion-icon> Seguir
+              </ion-button>
+            </div>
+          </div>
+        </div> </div> 
+    </div> 
+  </div>
+
+  <div class="section-wrapper ion-margin-top animate__animated animate__fadeInUp">
+    <div class="section-header ion-padding-horizontal">
+      <h2 class="section-title">Mis Escaleras</h2>
+    </div>
+    <div class="ion-padding-horizontal">
+      <div *ngFor="let esc of escalerasActivas" class="ladder-card-modern clickable-card">
+        <ion-button *ngIf="isAdmin" class="btn-delete-admin" fill="clear" style="top: 15px; right: 15px;" (click)="confirmarEliminacion(esc.id, 'escaleras', esc.nombre)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+        <div class="ladder-main-info" (click)="irAEscalera(esc)">
+          <div class="ladder-icon-box"><ion-icon name="stats-chart"></ion-icon></div>
+          <div class="ladder-text">
+            <h4>{{ esc.nombre }}</h4>
+            <p>{{ esc.jugadores }} tenistas en Tijuana</p>
+          </div>
+          <div class="ranking-circle"><small>TOP</small><span>{{ esc.tuPosicion || '-' }}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-wrapper ion-margin-top ion-padding-bottom" *ngIf="retosDisponibles.length > 0">
+    <div class="section-header ion-padding-horizontal">
+      <h2 class="section-title">Challenges en Vivo</h2>
+      <ion-badge color="danger" mode="ios" class="pulse-badge">LIVE</ion-badge>
+    </div>
+
+    <div class="horizontal-scroll-container">
+      <div class="scroll-wrapper">
+        <div *ngFor="let reto of retosDisponibles" class="challenge-card-modern animate__animated animate__fadeInRight">
+          <div class="challenge-content">
+            <div class="challenge-header-row">
+              <ion-badge color="dark" mode="ios">NTRP {{ reto.ntrpRetador || '4.0' }}</ion-badge>
+              <div class="timer-badge">
+                <ion-icon name="time-outline"></ion-icon>
+                <span>{{ getTiempoRestante(reto.timestamp) }}</span>
+              </div>
+            </div>
+
+            <div class="challenger-info ion-margin-top">
+              <ng-container *ngIf="reto.tipo === 'dobles'; else vistaSencillos">
+                <div class="team-names-wrapper">
+                  <h3 class="challenge-title">{{ reto.retadorNombre }}</h3>
+                  <span class="ampersand">&</span>
+                  <h3 class="challenge-title">{{ reto.companeroNombre }}</h3>
+                </div>
+                <p class="type-tag-dobles"><ion-icon name="people"></ion-icon> Dobles</p>
+              </ng-container>
+
+              <ng-template #vistaSencillos>
+                <h3 class="challenge-title">{{ reto.retadorNombre }}</h3>
+                <p class="history-text">Racha: <span class="record-tag">{{ formatearHistorial(reto.historialRetador) }}</span></p>
+              </ng-template>
+            </div>
+            
+            <div class="divider-line"></div>
+
+            <div class="challenge-details-grid">
+              <div class="detail-item">
+                <ion-icon name="location-outline"></ion-icon>
+                <span>{{ reto.sede }}</span>
+              </div>
+              <div class="detail-item">
+                <ion-icon name="time-outline"></ion-icon>
+                <span>
+                  {{ reto.fechaPropuesta | date:'EEE, d MMM':'UTC' }} | 
+                  <strong>{{ reto.horaPartido || 'TBD' }}</strong>
+                </span>
+              </div>
+              <div class="detail-item">
+                <ion-icon name="tennisball-outline"></ion-icon>
+                <span>{{ reto.cancha || 'Cancha por definir' }} • <small>{{ reto.formatoSet || '2 de 3 sets' }}</small></span>
+              </div>
+            </div>
+
+            <ng-container *ngIf="reto.retadorId !== authService.currentUserId && reto.companeroId !== authService.currentUserId; else esMiReto">
+              <ion-button expand="block" color="primary" class="ion-margin-top accept-btn" mode="ios" (click)="aceptarReto(reto)">
+                ACEPTAR RETO
+                <ion-icon name="checkmark-circle-outline" slot="end"></ion-icon>
+              </ion-button>
+            </ng-container>
+
+            <ng-template #esMiReto>
+              <div class="ion-text-center ion-padding-top">
+                <p class="waiting-text"><ion-spinner name="dots" color="primary"></ion-spinner> Esperando rival...</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ion-modal [isOpen]="isModalTorneoOpen" (didDismiss)="isModalTorneoOpen = false" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85, 1]" class="custom-admin-modal">
+    <ng-template>
+      <div class="modal-header-custom">
+        <div class="handle"></div>
+        <div class="header-content">
+          <ion-title>Configurar Torneo</ion-title>
+          <ion-button fill="clear" (click)="isModalTorneoOpen = false">Cerrar</ion-button>
+        </div>
+      </div>
+      
+      <ion-content class="ion-padding modal-bg">
+        <div class="form-card">
+          <div class="input-group">
+            <label>Título</label>
+            <ion-input [(ngModel)]="nuevoTorneo.titulo" placeholder="Nombre del Torneo"></ion-input>
+          </div>
+          <div class="input-group">
+            <label>Categoría</label>
+            <ion-input [(ngModel)]="nuevoTorneo.subhead" placeholder="Ej. Individual Clase A"></ion-input>
+          </div>
+          <div class="input-group">
+            <label>Sede</label>
+            <ion-input [(ngModel)]="nuevoTorneo.sede" placeholder="Club Anfitrión"></ion-input>
+          </div>
+          <ion-row>
+            <ion-col size="6">
+              <div class="input-group">
+                <label>Modalidad</label>
+                <ion-select [(ngModel)]="nuevoTorneo.modalidad" interface="popover">
+                  <ion-select-option value="singles">Singles</ion-select-option>
+                  <ion-select-option value="dobles">Dobles</ion-select-option>
+                </ion-select>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="input-group">
+                <label>Pts Victoria</label>
+                <ion-input type="number" [(ngModel)]="nuevoTorneo.victoria"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <div class="input-group">
+            <label>Descripción</label>
+            <ion-textarea [(ngModel)]="nuevoTorneo.descripcion" rows="3"></ion-textarea>
+          </div>
+        </div>
+        <button class="challenge-button-premium ion-margin-top" (click)="publicarTorneo()">LANZAR TORNEO</button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="isModalEscaleraOpen" (didDismiss)="isModalEscaleraOpen = false" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 1]" class="custom-admin-modal">
+    <ng-template>
+      <div class="modal-header-custom">
+        <div class="handle"></div>
+        <div class="header-content">
+          <ion-title>Nueva Escalera</ion-title>
+          <ion-button fill="clear" (click)="isModalEscaleraOpen = false">Cerrar</ion-button>
+        </div>
+      </div>
+      
+      <ion-content class="ion-padding modal-bg">
+        <div class="form-card">
+          <div class="input-group">
+            <label>Nombre del Ranking</label>
+            <ion-input [(ngModel)]="nuevaEscalera.nombre" placeholder="Ej. Ladder Global TJ"></ion-input>
+          </div>
+          <div class="input-group">
+            <label>Jugadores Iniciales</label>
+            <ion-input type="number" [(ngModel)]="nuevaEscalera.jugadores"></ion-input>
+          </div>
+        </div>
+        <button class="challenge-button-premium ion-margin-top" (click)="publicarEscalera()">CREAR ESCALERA</button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>

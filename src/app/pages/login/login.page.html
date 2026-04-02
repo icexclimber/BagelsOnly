@@ -2,9 +2,11 @@
   <div class="login-wrapper">
     
     <div class="logo-section">
-      <h1>🥯</h1>
-      <h2>BagelsOnly</h2>
-      <p style="color: #666;">El club de los 6-0</p>
+      <div class="logo-wrapper">
+        <img src="assets/icon/logo-bagels.png" alt="Bagels Only Logo" class="main-logo" />
+      </div>
+      <h2>Bagels Only</h2>
+      <p style="color: #666; font-weight: 600;">GG's Only...</p>
     </div>
 
     <div class="form-card">
@@ -22,9 +24,12 @@
         <ion-input 
           label="Contraseña" 
           labelPlacement="stacked" 
-          type="password" 
+          [type]="verClave ? 'text' : 'password'" 
           placeholder="••••••" 
           [(ngModel)]="clave">
+          <ion-button fill="clear" slot="end" (click)="toggleVerClave()" class="eye-button">
+            <ion-icon [name]="verClave ? 'eye-off-outline' : 'eye-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
         </ion-input>
       </ion-item>
 

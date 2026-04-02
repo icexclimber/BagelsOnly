@@ -1,0 +1,175 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Torneos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <div class="header-section ion-margin-bottom">
+    <h2 class="ion-no-margin greeting-text">
+      ¡Hola, {{ nombreSaludo }}!
+    </h2>
+    <p class="ion-no-margin text-muted">Gestiona tus eventos desde aquí.</p>
+  </div>
+
+  <div *ngIf="misTorneos.length > 0; else emptyState">
+    <ion-card *ngFor="let torneo of misTorneos" class="tournament-card">
+      <ion-card-header>
+        <div class="card-top-row">
+          <ion-badge [color]="torneo.estado === 'activo' ? 'success' : 'medium'">
+            {{ torneo.estado | uppercase }}
+          </ion-badge>
+          
+          <div class="followers-badge">
+            <ion-icon name="eye-outline"></ion-icon>
+            <ion-note>{{ torneo.seguidoresCount || 0 }}</ion-note>
+          </div>
+        </div>
+
+        <ion-card-title class="ion-margin-top">
+          {{ torneo.basica?.titulo || torneo.nombre || 'Torneo sin nombre' }}
+        </ion-card-title>
+
+        <ion-card-subtitle>
+          {{ (torneo.modalidad || torneo.basica?.subhead) | titlecase }} | {{ torneo.sistema | uppercase }}
+        </ion-card-subtitle>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <div class="stats-row">
+          <span><strong>{{ torneo.jugadoresCount || 0 }}</strong> Jugadores</span>
+          
+          <div class="action-buttons">
+            <ion-button fill="clear" color="danger" (click)="confirmarEliminacion(torneo.id, torneo.basica?.titulo || torneo.nombre)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+
+            <ion-button fill="clear" color="medium" (click)="abrirClonacion(torneo)">
+              <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+            </ion-button>
+
+            <ion-button fill="clear" size="small" (click)="verDetalles(torneo.id)">
+              Gestionar <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-container ion-text-center ion-padding">
+      <ion-icon name="trophy-outline" class="big-icon"></ion-icon>
+      <h3>Aún no has organizado torneos</h3>
+      <p>¡Lidera la comunidad de Tijuana y crea tu primera competencia!</p>
+      <ion-button (click)="comenzarNuevoTorneo()" shape="round" color="success" class="ion-margin-top">
+        Crear mi primer Torneo
+      </ion-button>
+    </div>
+  </ng-template>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="misTorneos.length > 0">
+    <ion-fab-button color="success" (click)="comenzarNuevoTorneo()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-modal [isOpen]="isModalCrearOpen" (didDismiss)="isModalCrearOpen = false">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar color="primary">
+          <ion-title>Nuevo Torneo</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="isModalCrearOpen = false">Cancelar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding modal-bg">
+        <div class="stepper-bar">
+          <div class="step" [class.active]="pasoActual >= 1"></div>
+          <div class="step" [class.active]="pasoActual >= 2"></div>
+          <div class="step" [class.active]="pasoActual >= 3"></div>
+        </div>
+
+        <div *ngIf="pasoActual === 1" class="step-container">
+          <h2>Tipo de Torneo</h2>
+          <p>¿Cómo se organizará el cuadro de juego?</p>
+          <ion-button expand="block" fill="outline" class="wizard-btn" (click)="setFormato('individual')">
+            <ion-icon slot="start" name="person-outline"></ion-icon> Cuadro Único
+          </ion-button>
+          <ion-button expand="block" fill="outline" class="wizard-btn" (click)="setFormato('categorias')">
+            <ion-icon slot="start" name="layers-outline"></ion-icon> Por Categorías
+          </ion-button>
+        </div>
+
+        <div *ngIf="pasoActual === 2" class="step-container">
+          <ion-button fill="clear" (click)="pasoActual = 1" color="medium">
+            <ion-icon name="arrow-back" slot="start"></ion-icon> Volver
+          </ion-button>
+          <h2>Modalidad</h2>
+          <ion-button expand="block" fill="outline" class="wizard-btn" (click)="setModalidad('singles')">Singles</ion-button>
+          <ion-button expand="block" fill="outline" class="wizard-btn" (click)="setModalidad('parejas')">Dobles</ion-button>
+        </div>
+
+        <div *ngIf="pasoActual === 3" class="step-container">
+          <ion-button fill="clear" (click)="pasoActual = 2" color="medium">
+            <ion-icon name="arrow-back" slot="start"></ion-icon> Volver
+          </ion-button>
+          <h2>Sistema de Juego</h2>
+          <ion-card class="sistema-card" (click)="setSistema('rr')">
+            <ion-item lines="none" detail="false">
+              <ion-icon slot="start" name="git-network-outline" color="primary"></ion-icon>
+              <ion-label><h3>Round Robin</h3></ion-label>
+            </ion-item>
+          </ion-card>
+          <ion-card class="sistema-card" (click)="setSistema('rr-ko')">
+            <ion-item lines="none" detail="false">
+              <ion-icon slot="start" name="flame-outline" color="warning"></ion-icon>
+              <ion-label><h3>RR + Knockout</h3></ion-label>
+            </ion-item>
+          </ion-card>
+          <ion-card class="sistema-card" (click)="setSistema('ko')">
+            <ion-item lines="none" detail="false">
+              <ion-icon slot="start" name="flash-outline" color="danger"></ion-icon>
+              <ion-label><h3>Knockout Rounds</h3></ion-label>
+            </ion-item>
+          </ion-card>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="isModalClonarOpen" (didDismiss)="isModalClonarOpen = false">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar color="primary">
+          <ion-title>Opciones de Copia</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="isModalClonarOpen = false">Cancelar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding modal-bg">
+        <div class="clonacion-container">
+          <h2>Configura tu copia</h2>
+          <ion-list lines="none" class="clon-list">
+            <ion-item class="input-item">
+              <ion-label position="stacked">Nuevo Nombre</ion-label>
+              <ion-input [(ngModel)]="opcionesClonacion.nuevoNombre" placeholder="Nombre del torneo"></ion-input>
+            </ion-item>
+          </ion-list>
+          <ion-button expand="block" color="success" shape="round" (click)="confirmarClonacion()" class="ion-margin-top">
+            GENERAR COPIA
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

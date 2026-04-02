@@ -1,12 +1,53 @@
 :root {
   /** primary - Verde Tenis (Volt) **/
-  --ion-color-primary: #d7ff1a;
+  --ion-color-primary: #53a8ee;
   --ion-color-primary-rgb: 215, 255, 26;
   --ion-color-primary-contrast: #000000; // Texto negro para que resalte
   --ion-color-primary-contrast-rgb: 0, 0, 0;
   --ion-color-primary-shade: #bd3c17; // Un tono más oscuro para el click
-  --ion-color-primary-tint: #dbff31;
+  --ion-color-primary-tint: #31beff;
 
   /* También podemos ajustar el success para que sea un verde más pasto */
-  --ion-color-success: #2dd36f;
+  --ion-color-success: #2da4d3;
+}
+
+@media (prefers-color-scheme: dark) {
+  
+  /* 🔵 AJUSTE PARA ANDROID (Material Design) */
+  :root.md {
+    // Un azul noche profundo que permite que el 'Glass' resalte
+    --ion-background-color: rgba(7, 20, 29, 0.555); 
+    --ion-background-color-rgb: 11, 14, 20;
+    
+    // El fondo de los ítems ahora tiene un tinte azulado sutil
+    --ion-item-background: #141b24; 
+    
+    // Colores de paso (Steps) para que los degradados nativos sean azulados
+    --ion-color-step-50: #0f131a;
+    --ion-color-step-100: #151a22;
+    --ion-color-step-150: #1a212b;
+    
+    // Forzamos que las barras y tarjetas sigan la línea oscura
+    --ion-toolbar-background: #0b0e14;
+    --ion-tab-bar-background: #0b0e14;
+    --ion-card-background: #141b24;
+    
+    // Líneas divisorias en un azul muy tenue
+    --ion-item-border-color: rgba(54, 141, 199, 0.15);
+  }
+  
+  /* 🔵 AJUSTE PARA iOS */
+  :root.ios {
+    --ion-background-color: #0b0e14;
+    --ion-background-color-rgb: 11, 14, 20;
+    --ion-item-background: #141b24;
+    
+    // En iOS el header suele ser traslúcido, lo teñimos de azul noche
+    --ion-toolbar-background: rgba(11, 14, 20, 0.8);
+  }
+
+  /* ⚪️ TEXTO AZULADO (Opcional para mayor cohesión) */
+  body {
+    --ion-text-color: #f0f4f8; // Un blanco azulado más limpio que el gris
+  }
 }

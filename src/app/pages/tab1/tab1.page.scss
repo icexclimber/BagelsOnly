@@ -1,248 +1,388 @@
 /* ==========================================================================
-   1. ESTRUCTURA Y FONDO (FULL VIEWPORT)
+   1. VARIABLES Y CONFIGURACIÓN BASE
    ========================================================================== */
-:host {
-  display: block;
-  height: 100vh;
+.main-dashboard-bg {
+  --background: #f8f9fa; 
+  background-color: #f8f9fa;
 }
 
-ion-content {
-  --background: #0f1115; // Fondo oscuro profundo base
-  height: 100vh;
-  --overflow: hidden;
+%flex-center { display: flex; align-items: center; }
 
-  &::part(scroll) {
-    &::-webkit-scrollbar { display: none; width: 0 !important; }
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+%card-base { 
+  background: #ffffff; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); 
+  overflow: hidden; 
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.section-wrapper { 
+  padding-top: 24px; 
+  &.ion-margin-top { margin-top: 16px; } 
+  &.ion-padding-bottom { padding-bottom: 40px; }
+}
+
+.section-header {
+  @extend %flex-center; 
+  justify-content: space-between; 
+  margin-bottom: 16px;
+  
+  .section-title { 
+    font: 850 1.35rem/1 var(--ion-font-family); 
+    color: #1a1a1a; 
+    letter-spacing: -0.5px; 
+    margin: 0; 
+  }
+  
+  .view-all-btn { 
+    --color: #7044ff; 
+    font-weight: 800; 
+    font-size: 0.9rem;
   }
 }
 
-.full-page-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
+.clickable-card {
+  cursor: pointer; 
+  transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+  &:active { transform: scale(.96); }
 }
 
-.content-flex-area {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 20px;
+/* --- BOTÓN ELIMINAR (DISCRETO Y FUNCIONAL) --- */
+.btn-delete-admin {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  --background: rgba(255, 59, 48, 0.1);
+  --color: #ff3b30;
+  --border-radius: 10px;
+  --padding-start: 0;
+  --padding-end: 0;
+  width: 34px;
+  height: 34px;
+  z-index: 20;
+  margin: 0;
+  backdrop-filter: blur(4px);
+  ion-icon { font-size: 1.2rem; }
 }
 
 /* ==========================================================================
-   2. HEADER DE PERFIL (ESTILO ESTANDARTE)
+   2. PANEL ADMIN (BLUE GLASS)
    ========================================================================== */
-.profile-header {
-  position: relative;
-  padding: 30px 0 20px;
-  min-height: 220px;
-  background-size: cover !important;
-  background-position: center !important;
-  transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+.admin-dashboard-glass {
+  background: linear-gradient(135deg, rgba(58, 123, 213, 0.95) 0%, rgba(58, 96, 213, 1) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 28px;
+  margin: 16px;
+  padding: 24px 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 12px 32px rgba(58, 123, 213, 0.35);
+
+  .text-white { 
+    color: #ffffff !important; 
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+}
+
+.glass-action-card {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: 22px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 60%;
-    background: linear-gradient(to top, #0f1115, transparent);
-  }
-
-  .avatar-wrapper, .user-name, .user-bio, .xp-card {
-    position: relative;
-    z-index: 2;
-  }
-
-  .main-avatar {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    border: 3px solid #f1ff2f;
-    box-shadow: 0 0 20px rgba(241, 255, 47, 0.3);
-    object-fit: cover;
-  }
-
-  .user-name {
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin: 10px 0 2px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-  }
-
-  .user-bio {
-    color: #ccc;
-    font-size: 0.85rem;
-    margin-bottom: 15px;
-  }
-}
-
-/* ==========================================================================
-   3. ESTADÍSTICAS (MINI STAT CARDS DARK)
-   ========================================================================== */
-.mini-stat-card {
-  background: #1c1f26;
-  padding: 12px 5px;
-  border-radius: 12px;
-  text-align: center;
-  border: 1px solid #333;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease;
-
-  .stat-label { 
-    font-size: 0.6rem; 
-    color: #f1ff2f; 
-    text-transform: uppercase; 
-    display: inline-block;
-    background: rgba(241, 255, 47, 0.1);
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-bottom: 6px;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
+  border: 1px solid rgba(255, 255, 255, 0.15);
   
-  .stat-value {
+  .action-icon-box {
+    font-size: 2.4rem;
     color: #ffffff;
-    font-weight: 800;
-    font-size: 1.1rem;
-    display: block;
+    margin-bottom: 8px;
+  }
+  span {
+    color: #ffffff;
+    font-weight: 850;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+}
+
+/* ==========================================================================
+   3. TORNEO CARD (VISTA ACTUALIZADA)
+   ========================================================================== */
+.torneo-card-modern {
+  @extend %card-base; 
+  min-width: 285px; 
+  border-radius: 26px;
+  position: relative;
+  
+  .card-media {
+    position: relative; 
+    height: 160px;
+    
+    &.banner-primary { background: linear-gradient(135deg, #3880ff 0%, #1d5ec9 100%); }
+    &.banner-secondary { background: linear-gradient(135deg, #7044ff 0%, #4c28c7 100%); }
+    &.banner-success { background: linear-gradient(135deg, #2dd36f 0%, #1e8e4a 100%); }
+    &.banner-warning { background: linear-gradient(135deg, #ffc409 0%, #cc9c07 100%); }
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .event-name-overlay {
+      position: absolute;
+      bottom: 0; left: 0; width: 100%;
+      padding: 45px 16px 14px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+      z-index: 2;
+      h3 { color: #ffffff !important; font-weight: 900; font-size: 1.2rem; margin: 0; }
+    }
+    
+    .category-badge {
+      position: absolute; top: 12px; left: 12px; 
+      padding: 6px 12px; border-radius: 10px; 
+      font: 900 .75rem/1 var(--ion-font-family); color: #fff; z-index: 3;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
   }
   
-  &.bagel-stat {
-    border: 1px solid rgba(255, 68, 68, 0.5);
-    .stat-label { color: #ff4444; background: rgba(255, 68, 68, 0.1); }
-    .stat-value { color: #ff4444; }
+  .card-body {
+    padding: 18px;
+    background: #ffffff;
+    .date-row { 
+      @extend %flex-center; gap: 6px; 
+      color: #444 !important; font-weight: 700; font-size: 0.9rem; margin-bottom: 14px; 
+      ion-icon { color: #7044ff; }
+    }
+    .cupo-container {
+      .cupo-text { 
+        @extend %flex-center; justify-content: space-between; font-size: .85rem; 
+        color: #666 !important; strong { color: #1a1a1a; font-weight: 900; } 
+      }
+      .progress-track { height: 7px; background: #f0f0f0; border-radius: 10px; margin-top: 8px; overflow: hidden; .progress-fill { height: 100%; background: #7044ff; border-radius: 10px; } }
+    }
   }
-
-  &:active { transform: scale(0.95); }
 }
 
 /* ==========================================================================
-   4. BANNERS DE LOGROS (ESTILO VIDEOJUEGO)
+   4. ESCALERA CARD (FIX CÍRCULO Y TEXTO)
    ========================================================================== */
-.banners-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 15px;
-}
-
-.banner-item {
-  background: #1c1f26;
-  border-radius: 12px;
-  overflow: hidden;
+.ladder-card-modern {
+  @extend %card-base; 
+  border-radius: 24px; padding: 20px; margin-bottom: 16px;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-
-  .banner-preview {
-    height: 70px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease;
-
-    // Overlay con la leyenda de desbloqueo
-    &::before {
-      content: attr(data-leyenda);
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
-      color: #f1ff2f;
-      font-size: 0.65rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 2;
+  
+  .ladder-main-info {
+    @extend %flex-center; gap: 16px;
+    
+    .ladder-icon-box { 
+      width: 50px; height: 50px; background: #f0f7ff; color: #007bff; 
+      border-radius: 16px; @extend %flex-center; justify-content: center; 
+      ion-icon { font-size: 1.6rem; }
     }
-
-    ion-icon { 
-      font-size: 24px; 
-      color: white; 
-      z-index: 1;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    
+    .ladder-text { 
+      flex: 1; 
+      h4 { margin: 0; font-weight: 850; font-size: 1.2rem; color: #1a1a1a !important; } 
+      p { margin: 2px 0 0; font-weight: 600; font-size: 0.85rem; color: #666 !important; } 
     }
-  }
-
-  // Hover/Active para mostrar la leyenda (estilo videojuego)
-  &:hover .banner-preview::before, 
-  &:active .banner-preview::before {
-    opacity: 1;
-  }
-
-  .banner-info {
-    padding: 8px;
-    background: #121418;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .banner-name {
-      font-size: 0.7rem;
-      font-weight: 800;
-      color: white;
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    
+    .ranking-circle { 
+      width: 54px; height: 54px; border: 3px solid #7044ff; border-radius: 50%; 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
+      background: #fff; flex-shrink: 0;
+      small { font-weight: 900; font-size: 0.6rem; color: #7044ff; text-transform: uppercase; } 
+      span { font-weight: 900; font-size: 1.1rem; color: #1a1a1a; } 
     }
-
-    .banner-req {
-      font-size: 0.6rem;
-      color: #f1ff2f;
-      font-weight: 700;
-    }
-  }
-
-  &.locked {
-    filter: grayscale(1);
-    opacity: 0.7;
-    .banner-preview ion-icon { opacity: 0.8; }
   }
 }
 
 /* ==========================================================================
-   5. COMPONENTES IONIC
+   5. MODALES - VISIBILIDAD DE INPUTS
    ========================================================================== */
-ion-segment {
-  --background: #1c1f26;
-  margin: 10px 15px;
-  width: auto;
-  border-radius: 12px;
+.custom-admin-modal {
+  --border-radius: 28px 28px 0 0;
+  
+  .modal-header-custom {
+    background: #ffffff !important;
+    .handle { width: 40px; height: 5px; background: #e0e0e0; border-radius: 10px; margin: 12px auto; }
+    ion-title { color: #000000 !important; font-weight: 850; }
+    ion-button { --color: #7044ff !important; font-weight: 700; }
+  }
+
+  .modal-bg { --background: #ffffff; background: #ffffff; }
+
+  .form-card {
+    background: #ffffff;
+    .input-group {
+      margin-bottom: 20px;
+      label {
+        display: block; color: #7044ff !important; font-weight: 800;
+        font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px;
+      }
+      ion-input, ion-textarea, ion-select {
+        --color: #1a1a1a !important; 
+        color: #1a1a1a !important; 
+        --placeholder-color: #999 !important;
+        --background: #f4f7f6 !important;
+        --padding-start: 16px; border-radius: 14px; font-weight: 600; min-height: 52px;
+      }
+    }
+  }
 }
 
-ion-segment-button {
-  --color: #888;
-  --color-checked: #f1ff2f;
-  --indicator-color: transparent;
-  font-weight: 700;
-  font-size: 0.8rem;
+.challenge-button-premium {
+  width: 100%; height: 58px; 
+  background: linear-gradient(135deg, #7044ff 0%, #5632d4 100%); 
+  color: #ffffff; border-radius: 18px; font-weight: 900; border: none;
+  box-shadow: 0 8px 24px rgba(112, 68, 255, 0.35);
 }
 
-.footer-button-container {
-  background: #0f1115;
-  padding-top: 10px;
-  ion-button {
-    --border-radius: 12px;
-    --background: #f1ff2f;
-    --color: #000;
-    font-weight: 800;
-    margin: 0;
+/* ==========================================================================
+   6. CHALLENGES & ANIMACIONES
+   ========================================================================== */
+/* ==========================================================================
+   5. CHALLENGE CARD (RESTAURADO)
+   ========================================================================== */
+.challenge-card-modern {
+  @extend %card-base;
+  min-width: 290px; 
+  border-radius: 24px; 
+  padding: 22px;
+  display: flex; 
+  flex-direction: column;
+  margin-bottom: 10px;
+
+  .challenge-header-row {
+    @extend %flex-center; 
+    justify-content: space-between; 
+    margin-bottom: 14px;
+    
+    .timer-badge {
+      @extend %flex-center; 
+      gap: 4px; 
+      font-weight: 800; 
+      font-size: 0.8rem;
+      color: #ff3b30; 
+      background: rgba(255, 59, 48, 0.1); 
+      padding: 5px 10px; 
+      border-radius: 8px;
+    }
+  }
+
+  .challenger-info {
+    .challenge-title { 
+      font: 850 1.5rem/1.1 var(--ion-font-family); 
+      color: #1a1a1a !important; 
+      margin: 0; 
+    }
+    
+    .history-text { 
+      margin: 6px 0 0; 
+      font-size: 0.9rem; 
+      color: #0b1494 !important; 
+      font-weight: 600;
+      .record-tag { color: #7044ff; font-weight: 900; } 
+    }
+
+    .type-tag-dobles { 
+      color: #3e2dd3 !important; 
+      font-size: 0.8rem; 
+      font-weight: 800; 
+      text-transform: uppercase; 
+      margin-top: 6px; 
+      display: flex; 
+      align-items: center; 
+      gap: 4px; 
+    }
+  }
+
+  /* Vista especial para nombres de Parejas */
+  .team-names-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    
+    .challenge-title {
+      margin: 0;
+      line-height: 1.1;
+    }
+    
+    .ampersand {
+      color: #3880ff;
+      font-weight: 900;
+      font-size: 0.9rem;
+      margin: 2px 0;
+    }
+  }
+
+  .divider-line { 
+    width: 100%; 
+    height: 1px; 
+    background: #f0f0f0; 
+    margin: 18px 0; 
+  }
+
+  .challenge-details-grid {
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    
+    .detail-item { 
+      @extend %flex-center; 
+      gap: 8px; 
+      font-weight: 700; 
+      font-size: 0.9rem; 
+      color: #444 !important; 
+      ion-icon { font-size: 1.2rem; color: #7044ff; } 
+    }
+  }
+
+  .accept-btn { 
+    margin-top: 20px; 
+    --border-radius: 14px; 
+    font-weight: 800; 
+    --background: #7044ff; 
+    height: 48px;
+  }
+}
+
+/* Animación del Badge Live */
+.pulse-badge { 
+  animation: pulse-red 2s infinite; 
+  font-weight: 900; 
+  border-radius: 8px;
+}
+
+.card-media {
+  position: relative; 
+  height: 160px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Estilo para cuando no hay imagen
+  .gradient-placeholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  // Definición de degradados premium por categoría/color
+  &.banner-primary { 
+    background: linear-gradient(135deg, #3880ff 0%, #1d5ec9 100%); 
+  }
+  &.banner-secondary { 
+    background: linear-gradient(135deg, #7044ff 0%, #4c28c7 100%); 
+  }
+  &.banner-success { 
+    background: linear-gradient(135deg, #2dd36f 0%, #1e8e4a 100%); 
+  }
+  &.banner-warning { 
+    background: linear-gradient(135deg, #ffc409 0%, #cc9c07 100%); 
+  }
+
+  img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    z-index: 1;
   }
 }

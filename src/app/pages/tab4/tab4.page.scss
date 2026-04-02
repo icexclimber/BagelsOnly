@@ -1,0 +1,126 @@
+:host {
+  /* Fondo principal de la app */
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255, 255, 255;
+
+  /* Color del texto principal */
+  --ion-text-color: #1a1a1a;
+  --ion-text-color-rgb: 26, 26, 26;
+
+  /* Color de los items y tarjetas */
+  --ion-item-background: #ffffff;
+  --ion-card-background: #ffffff;
+
+  /* Ajuste de Toolbar */
+  --ion-toolbar-background: #ffffff;
+  --ion-toolbar-color: #1a1a1a;
+}
+
+/* --- Ajustes para el Ranking en modo claro --- */
+
+.header-ranking {
+  background: #f8f9fa; // Un gris muy sutil para diferenciar la zona de filtros
+  border-bottom: 1px solid #eeeeee;
+}
+
+.glass-card {
+  /* En modo claro, usamos un fondo blanco semi-transparente con sombra suave */
+  --background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(10px);
+  color: #1a1a1a;
+}
+
+.horizontal-filters {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.filter-chip {
+  background: #f0f2f5; // Gris claro para los chips
+  border: 1px solid #e4e6eb;
+  border-radius: 25px;
+  padding: 0 15px;
+  min-width: fit-content;
+  font-size: 0.85rem;
+  color: #4b4b4b;
+  
+  ion-select {
+    --padding-start: 0;
+    --padding-end: 0;
+    font-size: 0.85rem;
+    color: #4b4b4b;
+  }
+
+  &.active-filter {
+    border-color: var(--ion-color-primary);
+    background: rgba(var(--ion-color-primary-rgb), 0.1);
+    color: var(--ion-color-primary);
+  }
+
+  &.ranking-toggle {
+    background: var(--ion-color-primary);
+    color: #ffffff;
+    border: none;
+    ion-select { color: #ffffff; }
+  }
+}
+
+.ranking-item {
+  --background: #ffffff;
+  --border-color: #f0f0f0;
+  margin-bottom: 2px;
+  
+  h2 {
+    color: #1a1a1a;
+    font-size: 1rem;
+  }
+  
+  .text-dim {
+    color: #666666;
+  }
+}
+
+.position-container {
+  min-width: 30px;
+  text-align: center;
+  font-weight: bold;
+  
+  .rank-number {
+    color: #888888;
+  }
+}
+
+.border-neon {
+  border: 2px solid var(--ion-color-primary);
+  padding: 2px;
+  background: white;
+}
+
+.points-box {
+  background: #f0f7ed; // Un verde muy suave para los puntos
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.2);
+  
+  .points-text {
+    margin: 0;
+    color: var(--ion-color-primary);
+    font-weight: 800;
+  }
+  .unit-text {
+    color: #555555;
+    font-size: 0.65rem;
+    font-weight: 600;
+  }
+}
+
+/* Medallas para los Top 3 */
+.medal-rank-0 { color: #FFD700; font-size: 1.4rem; } // Oro
+.medal-rank-1 { color: #C0C0C0; font-size: 1.4rem; } // Plata
+.medal-rank-2 { color: #CD7F32; font-size: 1.4rem; } // Bronce

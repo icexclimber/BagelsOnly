@@ -1,51 +1,77 @@
-<ion-content [fullscreen]="true">
-  <div class="tennis-setup-container">
+<ion-content>
+  <div class="register-wrapper">
     
-    <div class="ball-glow"></div>
-
     <div class="header-section">
-      <div class="icon-badge">
-        <ion-icon name="tennisball"></ion-icon>
+      <div class="logo-wrapper">
+        <img src="assets/icon/bagels-logo.png" class="main-logo" alt="Bagels Logo" />
       </div>
-      <h1>Tu Perfil</h1>
-      <p>Configura tu identidad en BagelsOnly.</p>
+      <h2>Bagels Only</h2>
+      <p>Configura tu perfil para empezar a jugar.</p>
     </div>
 
-    <div class="setup-card">
-      <div class="card-edge"></div>
-      
+    <div class="form-card">
       <ion-list lines="none">
-        <ion-item class="custom-item">
-          <ion-label position="stacked">Nombre de Jugador</ion-label>
-          <ion-input [(ngModel)]="perfil.nombre" placeholder="Tu nombre"></ion-input>
+        
+        <ion-item class="custom-input">
+          <ion-input label="¿Cómo te llamas?" labelPlacement="stacked" 
+                     [(ngModel)]="perfil.infoBasica.nombre" 
+                     placeholder="Tu nombre y apellido">
+          </ion-input>
         </ion-item>
 
-        <ion-item class="custom-item">
-          <ion-label position="stacked">Ciudad Principal</ion-label>
-          <ion-select [(ngModel)]="perfil.ubicacion" interface="action-sheet" placeholder="Selecciona">
-            <ion-select-option value="Tijuana">Tijuana</ion-select-option>
-            <ion-select-option value="Ensenada">Ensenada</ion-select-option>
-            <ion-select-option value="Rosarito">Rosarito</ion-select-option>
+        <ion-item class="custom-input">
+          <ion-label position="stacked" class="custom-label">Género</ion-label>
+          <ion-select [(ngModel)]="perfil.infoBasica.genero" interface="popover" toggleIcon="chevron-down-outline" placeholder="Selecciona">
+            <ion-select-option value="Masculino">Masculino</ion-select-option>
+            <ion-select-option value="Femenino">Femenino</ion-select-option>
+            <ion-select-option value="Otro">Otro / No decir</ion-select-option>
           </ion-select>
         </ion-item>
 
-        <ion-item class="custom-item">
-          <ion-label position="stacked">Descripción de Juego</ion-label>
-          <ion-textarea 
-            [(ngModel)]="perfil.descripcion" 
-            placeholder="Ej. Agresivo desde el fondo..."
-            [autoGrow]="true">
+        <ion-item class="custom-input">
+          <ion-label position="stacked" class="custom-label">Tu Nivel (NTRP)</ion-label>
+          <ion-select [(ngModel)]="perfil.infoBasica.nivel" interface="popover" toggleIcon="chevron-down-outline">
+            <ion-select-option value="1.0">1.0 - Principiante</ion-select-option>
+            <ion-select-option value="2.0">2.0 - Intermedio Bajo</ion-select-option>
+            <ion-select-option value="3.0">3.0 - Intermedio</ion-select-option>
+            <ion-select-option value="4.0">4.0 - Avanzado</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="custom-input">
+          <ion-label position="stacked" class="custom-label">Mano Dominante</ion-label>
+          <ion-select [(ngModel)]="perfil.infoBasica.manoDominante" interface="popover">
+            <ion-select-option value="Derecho">Derecho</ion-select-option>
+            <ion-select-option value="Zurdo">Zurdo</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="custom-input">
+          <ion-label position="stacked" class="custom-label">Sede Principal</ion-label>
+          <ion-select [(ngModel)]="perfil.infoBasica.ubicacion" interface="popover">
+            <ion-select-option value="CDB">Club Deportivo Bancario</ion-select-option>
+            <ion-select-option value="CBT">Club Britania Tijuana</ion-select-option>
+            <ion-select-option value="UDT">Unidad Deportiva Tijuana</ion-select-option>
+            <ion-select-option value="CCT">Club Campestre Tijuana</ion-select-option>
+            <ion-select-option value="PA">Punta Azul</ion-select-option>
+            <ion-select-option value="PT">Playas de Tijuana</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="custom-input">
+          <ion-textarea label="Cuéntanos de tu juego" labelPlacement="stacked"
+                        [(ngModel)]="perfil.infoBasica.bio" 
+                        placeholder="Ej: Revés a una mano, juego agresivo...">
           </ion-textarea>
         </ion-item>
-      </ion-list>
 
-      <ion-button 
-        expand="block" 
-        (click)="finalizarSetup()" 
-        class="btn-play">
-        ¡LISTO PARA JUGAR!
-        <ion-icon slot="end" name="play-forward"></ion-icon>
-      </ion-button>
+      </ion-list>
     </div>
+
+    <ion-button expand="block" (click)="finalizarSetup()" class="register-button">
+      ¡Entrar a la cancha!
+      <ion-icon name="play-forward" slot="end"></ion-icon>
+    </ion-button>
+
   </div>
 </ion-content>

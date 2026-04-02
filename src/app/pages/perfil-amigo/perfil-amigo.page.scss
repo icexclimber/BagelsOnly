@@ -1,0 +1,129 @@
+/* src/app/pages/perfil-amigo/perfil-amigo.page.scss */
+
+// Usamos las variables globales de tu app (dashboard-bg)
+.main-dashboard-bg {
+  --background: #0b0e14; /* Fondo oscuro profundo */
+}
+
+// HEADER
+.profile-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 15px;
+
+  .profile-avatar-large {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px;
+    border: 3px solid #368dc7; /* Azul Bagels */
+    padding: 3px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .friend-name {
+    font-weight: 900;
+    color: white;
+    font-size: 1.6rem;
+    margin: 0;
+  }
+
+  .friend-location {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin: 5px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+}
+
+// SECTION HEADERS
+.section-header {
+  background: transparent;
+  ion-label {
+    color: #368dc7 !important; /* Azul Bagels */
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+}
+
+// BENTO GRID
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.bento-item {
+  background: rgba(255, 255, 255, 0.04); /* Efecto Glass muy sutil */
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  .bento-icon {
+    font-size: 1.5rem;
+    color: #368dc7;
+    margin-bottom: 10px;
+  }
+
+  .bento-value {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+  }
+
+  .bento-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// LOGROS
+.achievements-list {
+  background: transparent;
+}
+
+.achievement-item {
+  --background: rgba(255, 255, 255, 0.03);
+  --border-radius: 16px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+
+  .achievement-icon-wrapper {
+    background: rgba(54, 141, 199, 0.1);
+    padding: 5px;
+    border-radius: 12px;
+  }
+
+  .achievement-title {
+    font-weight: 700;
+    color: white;
+  }
+
+  .achievement-description {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+  }
+
+  .achievement-date {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+// EMPTY STATE
+.empty-state {
+  color: #666;
+  .big-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+  }
+}

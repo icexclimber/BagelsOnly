@@ -1,139 +1,175 @@
-.tennis-setup-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
-  padding: 25px;
-  background: #0f1115; // Negro azulado profundo
-  position: relative;
-  overflow: hidden;
+ion-content {
+  // Mantenemos el fondo deportivo claro de la aplicación
+  --background: #f8f7f7; 
 
-  // Efecto de brillo de pelota de tenis de fondo
-  .ball-glow {
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(241, 255, 47, 0.15) 0%, transparent 70%);
-    pointer-events: none;
+  .register-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%; 
+    padding: 24px;
   }
-}
 
+  // 1. HEADER DEL REGISTRO (CON ANIMACIÓN CORREGIDA)
 .header-section {
   text-align: center;
-  margin-bottom: 40px;
-  z-index: 10;
-
-  .icon-badge {
-    background: #f1ff2f; // Amarillo pelota de tenis
-    width: 70px;
-    height: 70px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 20px;
-    transform: rotate(-10deg);
-    box-shadow: 0 10px 20px rgba(241, 255, 47, 0.3);
-
-    ion-icon {
-      font-size: 40px;
-      color: #000;
-    }
-  }
-
-  h1 {
-    color: #fff;
-    font-weight: 900;
-    font-size: 2rem;
-    text-transform: uppercase;
-    letter-spacing: -1px;
-    margin: 0;
-  }
-
-  p {
-    color: #a0a0a0;
-    font-size: 0.95rem;
-    margin-top: 10px;
-  }
-}
-
-.setup-card {
-  background: #1c1f26; // Gris oscuro
-  width: 100%;
-  border-radius: 30px;
-  padding: 30px 20px;
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-
-  // Línea verde de acento lateral
-  .card-edge {
-    position: absolute;
-    left: 0;
-    top: 20%;
-    height: 60%;
-    width: 4px;
-    background: #f1ff2f;
-    border-radius: 0 10px 10px 0;
-  }
-
-  .custom-item {
-    --background: transparent;
-    --padding-start: 0;
-    margin-bottom: 20px;
-
-    ion-label {
-      color: #f1ff2f !important;
-      font-weight: 700 !important;
-      text-transform: uppercase;
-      font-size: 0.75rem !important;
-      letter-spacing: 1px;
-      margin-bottom: 8px !important;
-    }
-
-    ion-input, ion-select, ion-textarea {
-      background: #282c35;
-      border-radius: 12px;
-      color: #fff;
-      --padding-start: 15px;
-      --placeholder-color: #666;
-      border: 1px solid #353a45;
-      min-height: 50px;
-    }
-  }
-}
-
-.btn-play {
-  margin-top: 30px;
-  --background: #f1ff2f;
-  --color: #000;
-  --border-radius: 15px;
-  height: 60px;
-  font-weight: 900;
-  font-size: 1.1rem;
-  --box-shadow: 0 10px 25px rgba(241, 255, 47, 0.4);
+  margin-bottom: 30px;
   
-  ion-icon {
-    font-size: 20px;
+  .logo-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
+    background: white;
+    border-radius: 20px;
+    padding: 12px;
+    box-shadow: 0 8px 20px rgba(54, 141, 199, 0.15);
+
+    .main-logo { width: 100%; height: auto; }
+  }
+
+  h2 {
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    color: #000; // Negro Bagels Only
+    font-size: 2.2rem;
+    margin-top: 10px;
+    text-transform: none; 
+  }
+  
+  // --- PEQUEÑA ANIMACIÓN: ELEVA TU JUEGO ---
+  p {
+    // Definimos el degradado de base (Gris -> Azul Bagels -> Gris)
+    background: linear-gradient(
+      -45deg, 
+      #666 0%,     // Color original (opacity 0.6)
+      #368dc7 45%, // Tu azul neón
+      #666 100%    // Color original
+    );
+    background-size: 200% auto; // Engañamos al fondo para moverlo
+    
+    // Hacemos que el degradado rellene el texto
+    background-clip: text;
+    -webkit-background-clip: text;
+    
+    // Volvemos el texto transparente para que se vea el degradado
+    color: transparent !important;
+    
+    // Aplicamos la animación
+    animation: shine-glow 2.5s ease-in-out infinite;
+    
+    font-weight: 800; // Un poco más grueso para que la animación se note
+    font-size: 0.95rem; 
+    margin-top: -5px;
+    letter-spacing: 0.5px;
   }
 }
 
-.footer-note {
-  color: #555;
-  font-size: 0.75rem;
-  margin-top: 25px;
+// ----------------------------------------------------
+// KEYFRAMES DE LA ANIMACIÓN CSS
+// ----------------------------------------------------
+@keyframes shine-glow {
+  0% {
+    background-position: 200% center; // Empezamos a la derecha
+  }
+  50% {
+    background-position: 50% center; // El azul neón pasa por el centro
+  }
+  100% {
+    background-position: -200% center; // Terminamos a la izquierda
+  }
 }
+// --- TARJETA DE FORMULARIO: ESTILO GLASS AZUL ---
+  .form-card {
+    // Azul translúcido con efecto cristal
+    background: rgba(109, 165, 202, 0.12) !important; 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    padding: 25px 18px;
+    border-radius: 30px;
+    border: 1px solid rgba(54, 141, 199, 0.2);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04);
 
-.btn-play {
-  --background: #f1ff2f; // Amarillo Volt
-  --color: #000;
-  --border-radius: 16px;
-  height: 55px;
-  font-weight: 800;
-  font-size: 1.1rem;
-  margin-top: 30px;
-  --box-shadow: 0 8px 20px rgba(241, 255, 47, 0.4);
+    // CRÍTICO: Quitar el fondo a la lista que contiene los inputs
+    ion-list {
+      background: transparent !important;
+      --ion-item-background: transparent !important;
+    }
+
+    ion-item {
+      // Forzamos transparencia total para evitar el bloque oscuro interno
+      --background: transparent !important;
+      --background-focused: transparent !important;
+      --background-hover: transparent !important;
+      --ion-item-background: transparent !important;
+      
+      --padding-start: 10px;
+      --inner-padding-end: 10px;
+      margin-bottom: 15px;
+      
+      ion-label {
+        color: #5ba9dd !important; // Gris medio/oscuro
+        font-weight: 700;          // Para que no pierda fuerza al ser gris
+        opacity: 0.9;              // Un poco de transparencia si prefieres
+      }
+      
+      // Estilo de los inputs, selectores y texto
+      ion-input, ion-select, ion-textarea {
+        color: #000 !important;
+        --color: #000 !important;
+        font-weight: 600;
+
+        // Estilo de las etiquetas (Labels)
+        &::part(label) {
+          color: #000 !important;
+          font-weight: 800;
+          opacity: 0.6;
+          letter-spacing: 0.5px;
+        }
+
+        // Estilo específico para el texto dentro de selectores
+        &::part(text) {
+          color: #000 !important;
+        }
+        
+        // Icono del selector (la flechita)
+        &::part(icon) {
+          color: #000;
+          opacity: 0.5;
+        }
+      }
+
+      // Estilo para el botón del ojito
+      .eye-button {
+        --color: #000;
+        margin: 0;
+        opacity: 0.5;
+        --padding-end: 0;
+      }
+    }
+  }
+  .register-button {
+    margin-top: 25px;
+    --border-radius: 18px;
+    height: 58px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    --background: #368dc7; // Tu azul principal
+    --box-shadow: 0 8px 25px rgba(54, 141, 199, 0.3);
+    text-transform: none;
+  }
+
+  // Botón "¿Ya tienes cuenta? Inicia sesión"
+  .footer-button {
+    margin-top: 20px;
+    --color: #666;
+    font-size: 0.95rem;
+    font-weight: 500;
+    
+    strong {
+      color: #368dc7;
+      font-weight: 800;
+      margin-left: 4px;
+    }
+  }
 }

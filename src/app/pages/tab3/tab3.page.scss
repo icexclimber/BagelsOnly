@@ -1,44 +1,304 @@
-.profile-header {
-  background: linear-gradient(to bottom, var(--ion-color-primary), var(--ion-color-primary-tint));
-  color: white;
-  
-  .avatar-wrapper {
+/* --- 1. VARIABLES Y GENERALES --- */
+.dashboard-content {
+  --background: #f8faff !important;
+  background: #f8faff !important;
+}
+
+/* --- 2. HEADER DE NIVEL Y XP (ESTILO PREMIUM PRO) --- */
+.stats-card {
+  background: #ffffff;
+  border-radius: 24px;
+  margin: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 123, 255, 0.05);
+
+  .nivel-badge {
+    background: linear-gradient(135deg, #007bff 0%, #00d4ff 100%);
+    color: #ffffff;
+    width: 75px;
+    height: 75px;
+    border-radius: 22px; // Estilo Squircle
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    display: inline-block;
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
     
-    .main-avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 4px solid white;
-      object-fit: cover;
-    }
-    
-    ion-button {
+    &::after {
+      content: '';
       position: absolute;
-      bottom: 0;
-      right: 0;
-      --background: white;
-      --border-radius: 50%;
-      height: 40px;
-      width: 40px;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(255,255,255,0.2), transparent);
+      border-radius: 22px;
+    }
+
+    .nivel-numero { 
+      font-size: 2rem; 
+      font-weight: 900; 
+      line-height: 1;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .nivel-label { 
+      font-size: 0.55rem; 
+      font-weight: 800; 
+      opacity: 0.9; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  .xp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 8px;
+
+    .next-level-text { font-size: 0.95rem; font-weight: 800; color: #1a1a1a; }
+    .xp-count {
+      font-size: 0.8rem; font-weight: 700; color: #007bff;
+      background: rgba(0, 123, 255, 0.1); padding: 2px 8px; border-radius: 8px;
+    }
+  }
+
+  .xp-bar-container {
+    height: 12px; background: #f0f4f8; border-radius: 10px; overflow: hidden;
+    .xp-progress-fill {
+      height: 100%; background: linear-gradient(90deg, #007bff, #00d4ff);
+      border-radius: 10px; transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  }
+
+  .quick-stats {
+    margin-top: 12px;
+    .racha-pill {
+      background: #fff8f0; border: 1px solid #ffe8cc; color: #ff9800;
+      padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;
+      font-weight: 700; display: inline-flex; align-items: center;
+      ion-icon { margin-right: 4px; font-size: 1.1rem; }
     }
   }
 }
 
-.stat-card {
-  text-align: center;
-  padding: 15px 0;
-  margin: 0;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+/* --- 3. ITEMS Y CARDS DE ACTIVIDAD --- */
+ion-card, ion-list {
+  --background: #ffffff !important;
+  background: #ffffff !important;
+  border-radius: 16px;
+}
+
+ion-item {
+  --background: #ffffff;
+  --color: #1a1a1a;
   
-  ion-card-title {
-    font-size: 1.8rem;
-    font-weight: bold;
+  ion-label {
+    h2, .font-bold { color: #000000 !important; font-weight: 800 !important; font-size: 1.1rem; }
+    h3 { color: #2c3e50 !important; font-weight: 600; }
+    p { color: #666666 !important; font-size: 0.85rem; }
   }
 }
-.user-name {
-  color: #000000 !important;
-  font-weight: 700;
+
+.pending-card {
+  margin: 12px 16px;
+  border-radius: 20px;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 123, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  .status-indicator { 
+    width: 40px; height: 40px; background: #f0f7ff; 
+    border-radius: 12px; display: flex; align-items: center; 
+    justify-content: center; color: var(--ion-color-primary);
+  }
+}
+
+/* --- 4. SEGMENTOS Y HEADERS --- */
+ion-segment {
+  background: #f0f7ff; border-radius: 14px; padding: 4px; margin: 12px 16px; width: auto;
+}
+
+ion-segment-button {
+  --color: #7a9bb8; --color-checked: #007bff; --indicator-color: #ffffff;
+  --border-radius: 11px; font-weight: 700;
+  &::part(indicator-background) { box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15); }
+}
+
+.header-actividad {
+  background: #f0f7ff; border-radius: 12px; margin: 16px 16px 8px 16px; padding: 8px 12px;
+  ion-label { color: #007bff !important; font-size: 0.75rem; font-weight: 850; text-transform: uppercase; letter-spacing: 1.2px; }
+}
+
+/* --- 5. BOTÓN CHALLENGE (CON ESTADO DESHABILITADO) --- */
+.challenge-container { padding: 0 16px; margin: 24px 0 32px 0; }
+
+.challenge-button-premium {
+  width: 100%; height: 65px;
+  background: linear-gradient(135deg, #0066ff 0%, #8d00de 100%); 
+  border-radius: 18px; border: none;
+  box-shadow: 0 8px 22px rgba(68, 0, 255, 0.35);
+  cursor: pointer; transition: all 0.2s ease;
+
+  &:active { transform: scale(0.96); }
+
+  &.button-disabled {
+    background: #cbd5e1 !important; box-shadow: none !important;
+    opacity: 0.7; cursor: not-allowed;
+    .button-text { color: #64748b !important; }
+    .pulse-icon { animation: none !important; color: #64748b !important; }
+  }
+
+  .button-content {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    .button-text { color: #ffffff !important; font-size: 1.3rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+    .pulse-icon { font-size: 1.4rem; color: #ffffff; animation: pulse-mini 1.5s infinite; }
+  }
+}
+
+/* --- 6. MODALES Y FORMULARIOS --- */
+ion-modal {
+  --height: 85%; --width: 94%; --border-radius: 28px;
+  &::part(content) { margin-bottom: 20px; }
+}
+
+.modal-bg {
+  --background: #ffffff; padding: 16px;
+  .input-item {
+    --background: rgba(35, 97, 221, 0.08); --border-radius: 16px;
+    --color: #1a1a1a; margin-bottom: 12px; border: 1px solid rgba(35, 97, 221, 0.1);
+    ion-label { font-weight: 700; color: #2c3e50; }
+  }
+}
+
+/* --- 7. ANIMACIONES --- */
+@keyframes pulse-mini {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.limit-info {
+  color: var(--ion-color-danger); margin-top: 8px; font-weight: 600;
+}
+
+.btn-cancelar {
+  --padding-start: 0; font-size: 0.75rem; text-transform: none; font-weight: 600;
+}
+
+/* --- 8. EFECTO BLUE GLASS (REGISTRAR RESULTADO) --- */
+
+// Fondo del modal para que resalte el vidrio
+.modal-bg-dark {
+  --background: #2977ec; // Gris azulado muy oscuro
+}
+
+.score-card-blue-glass {
+  background: linear-gradient(135deg, rgba(32, 104, 212, 0.7) 0%, rgba(53, 103, 179, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 24px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  margin: 8px;
+  
+  .player-name-glass {
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    margin: 0;
+  }
+
+  .vs-divider-light {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+  }
+
+  .label-light {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+  }
+}
+
+/* --- 9. INPUTS NUMÉRICOS (ESTILO CAJA CRISTAL) --- */
+.inputs-container-glass {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 15px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  small {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+  }
+}
+
+.score-input-number {
+  --background: rgba(255, 255, 255, 0.12);
+  --color: #ffffff;
+  --placeholder-color: rgba(255, 255, 255, 0.3);
+  --padding-start: 0;
+  --padding-end: 0;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  font-size: 1.8rem;
+  font-weight: 900;
+  text-align: center;
+  height: 65px;
+  transition: all 0.3s ease;
+
+  &.has-focus {
+    border-color: #00d4ff;
+    --background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Quitar flechas de incremento en el input de número */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+/* --- 10. AJUSTES EXTRAS DE UI --- */
+.segment-winner {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 14px;
+  padding: 4px;
+  
+  ion-segment-button {
+    --color: rgba(255, 255, 255, 0.6);
+    --color-checked: #ffffff;
+    --indicator-color: rgba(255, 255, 255, 0.2);
+    font-weight: 800;
+  }
+}
+
+.shadow-neon-blue {
+  box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5) !important;
+  &:active {
+    box-shadow: 0 4px 10px rgba(0, 102, 255, 0.3) !important;
+  }
+}
+
+.format-badge-light {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: inline-block;
+  margin-bottom: 15px;
+  text-transform: uppercase;
 }

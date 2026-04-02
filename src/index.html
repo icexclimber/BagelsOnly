@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8" />
-  <title>Ionic App</title>
+  <title>BagelsOnly</title>
 
   <base href="/" />
 
@@ -14,12 +14,29 @@
 
   <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
 
-  <!-- add to homescreen for ios -->
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#368dc7">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="BagelsOnly" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="assets/icon/icon-180x180.png" />
+
 </head>
 
 <body>
+  <div id="custom-splash">
+    <div class="splash-content">
+      <img src="assets/icon/icon-180x180.png" class="splash-logo" alt="BagelsOnly Logo">
+      <div class="splash-text">Siguiente Nivel</div>
+      
+      <div class="loader-container">
+        <div class="loader-bar"></div>
+        <div id="splash-msg" class="loading-msg">Preparando el set...</div>
+      </div>
+    </div>
+  </div>
+
   <app-root></app-root>
 </body>
 

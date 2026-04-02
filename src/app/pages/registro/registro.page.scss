@@ -1,69 +1,150 @@
 ion-content {
-  --background: #f8f9fa; // El mismo gris claro deportivo
+  // Mantenemos el fondo deportivo claro de la aplicación
+  --background: #f8f7f7; 
 
   .register-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 100%; // Usamos min-height por si el teclado desplaza el contenido
-    padding: 20px;
+    min-height: 100%; 
+    padding: 24px;
   }
 
-  .header-section {
-    text-align: center;
-    margin-bottom: 30px;
-    
-    h1 {
-      font-size: 3.5rem;
-      margin: 0;
-    }
-    
-    h2 {
-      font-weight: 800;
-      color: var(--ion-color-primary);
-      text-transform: uppercase;
-      margin-top: 5px;
-    }
-  }
-
- .form-card {
+  // 1. HEADER DEL REGISTRO (CON ANIMACIÓN CORREGIDA)
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  .logo-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
     background: white;
-    padding: 20px;
-    border-radius: 25px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    padding: 12px;
+    box-shadow: 0 8px 20px rgba(54, 141, 199, 0.15);
+
+    .main-logo { width: 100%; height: auto; }
+  }
+
+  h2 {
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    color: #000; // Negro Bagels Only
+    font-size: 2.2rem;
+    margin-top: 10px;
+    text-transform: none; 
+  }
+  
+  // --- PEQUEÑA ANIMACIÓN: ELEVA TU JUEGO ---
+  p {
+    // Definimos el degradado de base (Gris -> Azul Bagels -> Gris)
+    background: linear-gradient(
+      -45deg, 
+      #666 0%,     // Color original (opacity 0.6)
+      #368dc7 45%, // Tu azul neón
+      #666 100%    // Color original
+    );
+    background-size: 200% auto; // Engañamos al fondo para moverlo
+    
+    // Hacemos que el degradado rellene el texto
+    background-clip: text;
+    -webkit-background-clip: text;
+    
+    // Volvemos el texto transparente para que se vea el degradado
+    color: transparent !important;
+    
+    // Aplicamos la animación
+    animation: shine-glow 2.5s ease-in-out infinite;
+    
+    font-weight: 800; // Un poco más grueso para que la animación se note
+    font-size: 0.95rem; 
+    margin-top: -5px;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ----------------------------------------------------
+// KEYFRAMES DE LA ANIMACIÓN CSS
+// ----------------------------------------------------
+@keyframes shine-glow {
+  0% {
+    background-position: 200% center; // Empezamos a la derecha
+  }
+  50% {
+    background-position: 50% center; // El azul neón pasa por el centro
+  }
+  100% {
+    background-position: -200% center; // Terminamos a la izquierda
+  }
+}
+  // --- TARJETA DE FORMULARIO: ESTILO GLASS AZUL ---
+  .form-card {
+    // Azul translúcido con efecto cristal
+    background: rgba(54, 141, 199, 0.12) !important; 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    padding: 25px 18px;
+    border-radius: 30px;
+    border: 1px solid rgba(54, 141, 199, 0.2);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04);
 
     ion-item {
-      --background: #f4f4f4;
-      --border-radius: 12px;
-      margin-bottom: 12px;
-      border: 1px solid #eee;
-      border-radius: 12px;
+      // Vital: Transparencia total para que no se vean parches grises
+      --background: transparent !important;
+      --ion-item-background: transparent !important;
+      --padding-start: 10px;
+      --inner-padding-end: 10px;
+      margin-bottom: 15px;
       
-      // 👇 FUERZA EL COLOR DEL TEXTO QUE ESCRIBES
+      // Estilo de los inputs y el texto que escribe el usuario
       ion-input {
-        color: #1a1a1a !important; // Un negro casi total
-        --color: #1a1a1a !important;
+        color: #000 !important;
+        --color: #000 !important;
+        font-weight: 600;
+
+        // Estilo de las etiquetas (Labels)
+        &::part(label) {
+          color: #000 !important;
+          font-weight: 800;
+          opacity: 0.6;
+          letter-spacing: 0.5px;
+        }
       }
 
-      // 👇 FUERZA EL COLOR DEL TÍTULO (Label)
-      ion-label {
-        color: #444 !important; // Gris oscuro para el label
-        font-weight: 600;
+      // Estilo para el botón del ojito en el registro
+      .eye-button {
+        --color: #000;
+        margin: 0;
+        opacity: 0.5;
+        --padding-end: 0;
       }
     }
-  }
-
-  // Si el texto de "Nuevo Perfil" o los párrafos tampoco se ven:
-  .header-section {
-    h2 { color: var(--ion-color-primary); }
-    p { color: #333 !important; } // Forzamos gris oscuro
   }
 
   .register-button {
+    margin-top: 25px;
+    --border-radius: 18px;
+    height: 58px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    --background: #368dc7; // Tu azul principal
+    --box-shadow: 0 8px 25px rgba(54, 141, 199, 0.3);
+    text-transform: none;
+  }
+
+  // Botón "¿Ya tienes cuenta? Inicia sesión"
+  .footer-button {
     margin-top: 20px;
-    --border-radius: 12px;
-    height: 55px;
-    font-weight: 700;
-    --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+    --color: #666;
+    font-size: 0.95rem;
+    font-weight: 500;
+    
+    strong {
+      color: #368dc7;
+      font-weight: 800;
+      margin-left: 4px;
+    }
   }
 }

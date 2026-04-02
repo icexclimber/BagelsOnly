@@ -1,135 +1,116 @@
 ion-content {
-  // Ocultamos la barra de scroll visualmente en esta página
+  // Mantenemos el fondo claro deportivo de la app
   --overflow: hidden;
-  --background: #f8f9fa; // Un gris muy claro deportivo
+  --background: #f8f7f7; 
 
   .login-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    padding: 20px;
+    padding: 24px;
   }
 
   .logo-section {
     text-align: center;
     margin-bottom: 40px;
     
-    h1 {
-      font-size: 5rem;
-      margin: 0;
-      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+    .logo-wrapper {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 15px;
+      background: white;
+      border-radius: 25%;
+      padding: 15px;
+      box-shadow: 0 10px 25px rgba(54, 141, 199, 0.2);
+
+      .main-logo {
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    h2 {
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      color: #000;
+      font-size: 2.2rem;
+      margin-top: 10px;
+      text-transform: none; // Estilo Bagels Only
     }
     
-    h2 {
-      font-weight: 800;
-      letter-spacing: -1px;
-      color: var(--ion-color-primary);
-      margin-top: 10px;
-      text-transform: uppercase;
+    p {
+      color: #666;
+      font-weight: 600;
+      margin-top: -5px;
     }
   }
 
+  // --- NUEVA FORM CARD: ESTILO GLASS AZUL ---
   .form-card {
-    background: white;
-    padding: 20px;
-    border-radius: 25px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    background: rgba(54, 141, 199, 0.12) !important; // Azul translúcido
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 25px 18px;
+    border-radius: 30px;
+    border: 1px solid rgba(54, 141, 199, 0.2);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04);
 
     ion-item {
-      --background: #f4f4f4;
-      --border-radius: 12px;
-      --padding-start: 15px;
+      // Importante: Transparencia total para dejar ver el efecto Glass
+      --background: transparent !important;
+      --ion-item-background: transparent !important;
       margin-bottom: 15px;
-      --inner-padding-end: 15px;
-      border: 1px solid #eee;
-      border-radius: 12px;
+      --padding-start: 10px;
+      --inner-padding-end: 10px;
       
-      &::part(native) {
-        border: none;
-      }
-    }
-  }
-
-  .login-button {
-    margin-top: 20px;
-    --border-radius: 12px;
-    height: 55px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
-  }
-}ion-content {
-  // Ocultamos la barra de scroll visualmente en esta página
-  --overflow: hidden;
-  --background: #f8f9fa; // Un gris muy claro deportivo
-
-  .login-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-    padding: 20px;
-  }
-
-  .logo-section {
-    text-align: center;
-    margin-bottom: 40px;
-    
-    h1 {
-      font-size: 5rem;
-      margin: 0;
-      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
-    }
-    
-    h2 {
-      font-weight: 800;
-      letter-spacing: -1px;
-      color: var(--ion-color-primary);
-      margin-top: 10px;
-      text-transform: uppercase;
-    }
-  }
-
-  .form-card {
-    background: white;
-    padding: 20px;
-    border-radius: 25px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-
-    ion-item {
-      --background: #f4f4f4;
-      --border-radius: 12px;
-      margin-bottom: 12px;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      
-      // 👇 FUERZA EL COLOR DEL TEXTO QUE ESCRIBES
+      // Estilo del input y texto que escribes
       ion-input {
-        color: #1a1a1a !important; // Un negro casi total
-        --color: #1a1a1a !important;
+        color: #000 !important;
+        --color: #000 !important;
+        font-weight: 600;
+
+        // Estilo de las etiquetas (Labels)
+        &::part(label) {
+          color: #000 !important;
+          font-weight: 800;
+          opacity: 0.6;
+          letter-spacing: 0.5px;
+        }
       }
 
-      // 👇 FUERZA EL COLOR DEL TÍTULO (Label)
-      ion-label {
-        color: #444 !important; // Gris oscuro para el label
-        font-weight: 600;
+      // Botón del ojito (Password toggle)
+      .eye-button {
+        --color: #000;
+        margin: 0;
+        opacity: 0.5;
+        --padding-end: 0;
       }
     }
   }
 
-  // Si el texto de "Nuevo Perfil" o los párrafos tampoco se ven:
-  .header-section {
-    h2 { color: var(--ion-color-primary); }
-    p { color: #333 !important; } // Forzamos gris oscuro
+  .login-button {
+    margin-top: 25px;
+    --border-radius: 18px;
+    height: 58px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    --background: #368dc7; // Tu azul principal (neon-green)
+    --box-shadow: 0 8px 25px rgba(54, 141, 199, 0.3);
+    text-transform: none;
   }
 
-  .login-button {
+  // Botón de "¿Eres nuevo? Regístrate"
+  .footer-button {
     margin-top: 20px;
-    --border-radius: 12px;
-    height: 55px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+    --color: #666;
+    font-size: 0.95rem;
+    font-weight: 500;
+    
+    strong {
+      color: #368dc7;
+      font-weight: 800;
+      margin-left: 4px;
+    }
   }
 }

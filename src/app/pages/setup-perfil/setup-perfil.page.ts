@@ -7,10 +7,10 @@ import {
   IonSelect, IonSelectOption, IonTextarea, LoadingController, 
   ToastController, IonIcon, IonList 
 } from '@ionic/angular/standalone';
-import { RankingsService, PerfilTenista } from '../../core/services/rankings.service';
+import { RankingsService } from '../../core/services/rankings.service';
 import { AuthService } from '../../core/services/auth.service';
 import { addIcons } from 'ionicons';
-import { tennisball, playForward } from 'ionicons/icons';
+import { playForward } from 'ionicons/icons';
 
 @Component({
   selector: 'app-setup-perfil',
@@ -29,30 +29,26 @@ export class SetupPerfilPage {
   private router = inject(Router);
   private loadingCtrl = inject(LoadingController);
   private toastCtrl = inject(ToastController);
-  private zone = inject(NgZone); // 🚀 Necesario para desbloquear la UI
+  private zone = inject(NgZone);
 
-  perfil: Partial<PerfilTenista> = {
-    nombre: '',
-    ubicacion: 'Tijuana',
-    descripcion: '',
-    xp: 0,
-    nivel: 1,
-    bagelsEntregados: 0,
-    record: { ganados: 0, perdidos: 0 }
+  perfil = {
+    infoBasica: {
+      nombre: '',
+      genero: '', // <-- Agregado
+      bio: '',
+      nivel: '1.0',
+      ubicacion: '',
+      manoDominante: 'Derecho'
+    }
   };
 
   constructor() {
-    addIcons({ tennisball, playForward });
+    addIcons({ playForward });
   }
 
   async finalizarSetup() {
-    if (!this.perfil.nombre) {
-      const toast = await this.toastCtrl.create({
-        message: 'Por favor, dinos tu nombre',
-        duration: 2000,
-        color: 'warning'
-      });
-      await toast.present();
+    if (!this.perfil.infoBasica.nombre || this.perfil.infoBasica.nombre.length < 3) {
+      this.mostrarToast('Por favor, ingresa tu nombre', 'warning');
       return;
     }
 
@@ -66,30 +62,37 @@ export class SetupPerfilPage {
       const user = await this.authService.getCurrentUser();
       
       if (user) {
-        // 1. Guardar en Firestore (con el contexto protegido en el servicio)
-        await this.rankingsService.updateUserData(user.uid, this.perfil);
-        
-        // 2. Cerramos el loader ANTES de navegar
-        await loader.dismiss();
+        const updates = {
+          'infoBasica.nombre': this.perfil.infoBasica.nombre.trim(),
+          'infoBasica.nombreLower': this.perfil.infoBasica.nombre.trim().toLowerCase(),
+          'infoBasica.genero': this.perfil.infoBasica.genero, // <-- Agregado
+          'infoBasica.ubicacion': this.perfil.infoBasica.ubicacion,
+          'infoBasica.bio': this.perfil.infoBasica.bio,
+          'infoBasica.nivel': this.perfil.infoBasica.nivel,
+          'infoBasica.manoDominante': this.perfil.infoBasica.manoDominante,
+          'infoBasica.lastActive': new Date()
+        };
 
-        // 3. Forzamos la navegación de vuelta a la zona de Angular
+        await this.rankingsService.updateUserData(user.uid, updates as any);
+        
+        await loader.dismiss();
         this.zone.run(() => {
           this.router.navigate(['/tabs/tab1'], { replaceUrl: true });
         });
 
       } else {
         await loader.dismiss();
+        this.mostrarToast('Sesión no encontrada', 'danger');
       }
     } catch (error) {
-      console.error('Error al finalizar setup:', error);
-      if (loader) await loader.dismiss();
-      
-      const errToast = await this.toastCtrl.create({
-        message: 'Error al conectar con la red de BagelsOnly',
-        duration: 2000,
-        color: 'danger'
-      });
-      await errToast.present();
+      console.error(error);
+      await loader.dismiss();
+      this.mostrarToast('Error al guardar perfil', 'danger');
     }
+  }
+
+  async mostrarToast(msg: string, color: string) {
+    const t = await this.toastCtrl.create({ message: msg, duration: 2000, color: color });
+    await t.present();
   }
 }

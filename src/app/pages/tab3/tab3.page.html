@@ -1,132 +1,293 @@
-<app-header-global titulo="Mi Perfil"></app-header-global>
+<app-header-global titulo="Stats"></app-header-global>
 
-<ion-content>
-  <div class="profile-header ion-padding ion-text-center" *ngIf="usuario$ | async as user">
-    <div class="avatar-wrapper">
-      <img [src]="user.foto || 'assets/img/default-avatar.png'" 
-           class="main-avatar"
-           (click)="cambiarFoto()"
-           style="cursor: pointer;">
-      
-      <ion-button fill="clear" size="small" class="edit-photo-btn" (click)="cambiarFoto()">
-        <ion-icon name="camera-reverse"></ion-icon>
-      </ion-button>
-    </div>
-    
-    <h2 class="user-name">{{ user.nombre }}</h2>
-    <p class="user-bio">{{ user.descripcion || 'Tenista de la AMT | Tijuana' }}</p>
-    
-    <ion-badge color="light" class="level-badge-large">
-      <ion-icon name="star"></ion-icon> Nivel {{ user.nivel || '1.0' }}
-    </ion-badge>
-  </div>
-
-  <ion-segment [(ngModel)]="segmentoActual" mode="ios" class="ion-padding-horizontal">
-    <ion-segment-button value="stats">
-      <ion-label>Estadísticas</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="edit">
-      <ion-label>Editar Perfil</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-
-  <div *ngIf="segmentoActual === 'stats'" class="animate__animated animate__fadeIn">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="4">
-          <div class="mini-stat-card">
-            <span class="stat-label">Win Rate</span>
-            <span class="stat-value">75%</span>
-          </div>
-        </ion-col>
-        <ion-col size="4">
-          <div class="mini-stat-card">
-            <span class="stat-label">Partidos</span>
-            <span class="stat-value">{{ estadisticas.partidosJugados }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="4">
-          <div class="mini-stat-card success">
-            <span class="stat-label">Victorias</span>
-            <span class="stat-value">{{ estadisticas.victorias }}</span>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <div class="section-header">
-      <ion-label>Torneos Inscritos</ion-label>
-    </div>
-
-    <ion-list lines="none" class="torneos-list">
-      <ion-item *ngFor="let torneo of torneosInscritos" class="torneo-card">
-        <div class="torneo-icon" slot="start">
-          <ion-icon name="trophy"></ion-icon>
+<ion-content [fullscreen]="true" class="dashboard-content">
+  
+  <div class="stats-card animate__animated animate__fadeIn">
+    <ion-row class="ion-align-items-center">
+      <ion-col size="3">
+        <div class="nivel-badge shadow-neon">
+          <span class="nivel-numero">{{ usuarioStats.nivel }}</span>
+          <span class="nivel-label">Nivel</span>
         </div>
+      </ion-col>
+      <ion-col size="9">
+        <div class="xp-header">
+          <span class="next-level-text">Siguiente Nivel</span>
+          <span class="xp-count">{{ usuarioStats.xp % 1000 }}/1000 XP</span>
+        </div>
+        <div class="xp-bar-container">
+          <div class="xp-progress-fill" [style.width.%]="progresoXP * 100"></div>
+        </div>
+        <div class="quick-stats">
+          <div class="racha-pill">
+            <ion-icon name="flame"></ion-icon>
+            Racha: {{ usuarioStats.racha }} victorias
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div class="segment-container ion-padding-vertical">
+    <ion-segment [(ngModel)]="segmentoActual" (ionChange)="cambioSegmento($event)" mode="ios">
+      <ion-segment-button value="actividad">
+        <ion-label>Actividad</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="logros">
+        <ion-label>Logros</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div *ngIf="segmentoActual === 'actividad'" class="animate__animated animate__fadeIn">
+    
+    <div *ngIf="retosPendientes && retosPendientes.length > 0">
+  <ion-list-header class="header-actividad">
+    <ion-label>Retos Activos ({{ retosPendientes.length }}/{{ LIMITE_CHALLENGES }})</ion-label>
+  </ion-list-header>
+
+  <div class="ion-padding-horizontal">
+    <ion-card *ngFor="let reto of retosPendientes" 
+              class="pending-card animate__animated animate__fadeInUp"
+              [class.confirm-needed]="reto.estado === 'Pendiente_Confirmacion'">
+      
+      <ion-item lines="none" class="item-glass">
+        <div slot="start" class="status-indicator">
+          <ion-icon [name]="reto.estado === 'Pendiente_Confirmacion' ? 'alert-circle' : 'tennisball'" 
+                    [color]="reto.estado === 'Pendiente_Confirmacion' ? 'warning' : 'success'"></ion-icon>
+        </div>
+        
         <ion-label>
-          <h3>{{ torneo.nombre }}</h3>
-          <p [class]="torneo.estado === 'En curso' ? 'status-active' : 'status-done'">
-            {{ torneo.estado }}
-          </p>
+          <h2 class="font-bold">Match en {{ reto.sede }}</h2>
+          
+          <div *ngIf="reto.estado === 'Pendiente_Confirmacion' && reto.quienRegistroId !== authService.currentUserId">
+            <p class="confirm-alert">⚠️ ¡Confirma el resultado!</p>
+            <p class="status-text">Tu rival marcó: <strong>{{ reto.marcadorPropuesto }}</strong></p>
+            <div class="ion-margin-top action-group">
+              <ion-button size="small" color="success" (click)="validarResultadoRival(reto, true)">Es correcto</ion-button>
+              <ion-button size="small" color="danger" fill="outline" (click)="validarResultadoRival(reto, false)">Error</ion-button>
+            </div>
+          </div>
+
+          <div *ngIf="reto.estado !== 'Pendiente_Confirmacion' || reto.quienRegistroId === authService.currentUserId">
+            <div class="matchup-container" *ngIf="reto.rivalId; else esperando">
+              <ion-text color="primary"><strong>{{ reto.retadorNombre }}</strong></ion-text>
+              <span class="vs-text"> VS </span>
+              <ion-text color="secondary"><strong>{{ reto.rivalNombre }}</strong></ion-text>
+            </div>
+            <ng-template #esperando>
+              <p class="status-text italic">Buscando rival en Home...</p>
+            </ng-template>
+
+            <div class="match-details-row">
+              <p class="status-text">
+                <ion-icon name="calendar-outline" class="mini-icon"></ion-icon> {{ reto.fechaPropuesta }}
+              </p>
+              <p class="status-text">
+                <ion-icon name="time-outline" class="mini-icon"></ion-icon> {{ reto.horaPartido }}
+              </p>
+              <p class="status-text">
+                <ion-icon name="tennisball-outline" class="mini-icon"></ion-icon> {{ reto.formatoSet }}
+              </p>
+            </div>
+
+            <div class="ion-margin-top">
+              <ion-button size="small" color="danger" fill="clear" (click)="eliminarMatch(reto.id)" class="btn-cancelar ion-no-padding">
+                <ion-icon name="trash-outline" slot="start"></ion-icon>
+                Cancelar Match
+              </ion-button>
+            </div>
+          </div>
         </ion-label>
-        <div slot="end" class="points-badge">+{{ torneo.puntos }}</div>
+
+        <ion-button *ngIf="reto.estado === 'Aceptado' && reto.rivalId" 
+                    fill="solid" color="primary" size="small" 
+                    (click)="irAResultados(reto)" class="btn-action shadow-neon">
+          Subir Score
+        </ion-button>
+      </ion-item>
+    </ion-card>
+  </div>
+</div>
+
+    <ion-list lines="none" class="bg-transparent ion-padding-top">
+      <ion-list-header class="header-actividad">
+        <ion-label>Historial Reciente</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let act of actividades" class="activity-item ion-margin-bottom">
+        <ion-thumbnail slot="start" [class]="act.tipo === 'torneo' ? 'icon-torneo' : 'icon-amistoso'">
+          <ion-icon [name]="act.tipo === 'torneo' ? 'trophy-outline' : 'tennisball-outline'"></ion-icon>
+        </ion-thumbnail>
+        <ion-label>
+          <h2 class="font-bold">{{ act.nombre }}</h2>
+          <p>{{ act.detalle }}</p>
+          <ion-note color="medium">{{ act.fecha | date:'mediumDate' }}</ion-note>
+        </ion-label>
+        <div slot="end" class="ion-text-end">
+          <ion-badge [color]="act.gano ? 'success' : 'danger'" class="score-badge">{{ act.resultado }}</ion-badge>
+          <p class="xp-gain">+{{ act.puntos }} XP</p>
+        </div>
       </ion-item>
     </ion-list>
+
+    <div class="ion-padding-horizontal ion-margin-top ion-margin-bottom">
+      <button class="challenge-button-premium" 
+              [disabled]="limiteAlcanzado"
+              [class.button-disabled]="limiteAlcanzado"
+              (click)="abrirModalReto()">
+        <div class="button-content">
+          <ion-icon [name]="limiteAlcanzado ? 'lock-closed-outline' : 'flash'" class="pulse-icon"></ion-icon>
+          <span class="button-text">
+            {{ limiteAlcanzado ? 'LÍMITE ALCANZADO (7/7)' : 'NUEVO CHALLENGE' }}
+          </span>
+          <ion-icon *ngIf="!limiteAlcanzado" name="flash" class="pulse-icon"></ion-icon>
+        </div>
+      </button>
+    </div>
   </div>
 
-  <div *ngIf="segmentoActual === 'edit'" class="ion-padding animate__animated animate__fadeIn">
-    <ion-list lines="full" class="edit-list">
+  <ion-modal [isOpen]="isModalRetoOpen" (didDismiss)="isModalRetoOpen = false" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85, 1]">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>Configurar Match</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="isModalRetoOpen = false" color="primary">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
       
-      <ion-item>
-        <ion-label position="stacked">Nombre</ion-label>
-        <ion-input type="text" [(ngModel)]="editUser.nombre" placeholder="Tu nombre"></ion-input>
-      </ion-item>
+      <ion-content class="ion-padding modal-bg">
+        <ion-list lines="none">
+          <ion-item class="input-item ion-margin-bottom">
+            <ion-label position="stacked">Modalidad de Match</ion-label>
+            <ion-segment [(ngModel)]="nuevoReto.tipo" mode="ios" class="ion-margin-top segment-tipo">
+              <ion-segment-button value="sencillos"><ion-label>Sencillos</ion-label></ion-segment-button>
+              <ion-segment-button value="dobles"><ion-label>Dobles</ion-label></ion-segment-button>
+            </ion-segment>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Descripción Personal</ion-label>
-        <ion-textarea 
-          [(ngModel)]="editUser.descripcion" 
-          placeholder="Escribe algo sobre tu estilo de juego..."
-          [autoGrow]="true">
-        </ion-textarea>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label position="stacked">Nivel AMT</ion-label>
-        <ion-select [(ngModel)]="editUser.nivel" interface="action-sheet">
-          <ion-select-option value="4.5">4.5 (Avanzado)</ion-select-option>
-          <ion-select-option value="3.5">3.5 (Intermedio)</ion-select-option>
-          <ion-select-option value="2.5">2.5 (Principiante)</ion-select-option>
-        </ion-select>
-      </ion-item>
+          <ion-item class="input-item ion-margin-bottom">
+            <ion-icon name="location-outline" slot="start"></ion-icon>
+            <ion-label position="stacked">Sede</ion-label>
+            <ion-select [(ngModel)]="nuevoReto.sede" interface="popover">
+              <ion-select-option value="Club Campestre">Club Campestre</ion-select-option>
+              <ion-select-option value="Club Britania">Club Britania</ion-select-option>
+              <ion-select-option value="Playas de Tijuana">Playas de Tijuana</ion-select-option>
+              <ion-select-option value="Club Bancario">Club Bancario</ion-select-option>
+              <ion-select-option value="Unidad Deportiva">Unidad Deportiva Tijuana</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item class="input-item ion-margin-bottom">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-label position="stacked">Fecha</ion-label>
+            <ion-select [(ngModel)]="nuevoReto.fecha" interface="popover">
+              <ion-select-option *ngFor="let dia of proximasFechas" [value]="dia.valor">{{ dia.label }}</ion-select-option>
+            </ion-select>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Sede Principal (Tijuana)</ion-label>
-        <ion-select [(ngModel)]="editUser.sede" interface="popover" placeholder="Selecciona un club">
-          <ion-select-option value="Club Britania Tijuana">Club Britania Tijuana</ion-select-option>
-          <ion-select-option value="Club Campestre Tijuana">Club Campestre Tijuana</ion-select-option>
-          <ion-select-option value="Club Bancario Tijuana">Club Bancario Tijuana</ion-select-option>
-          <ion-select-option value="Unidad Deportiva Tijuana">Unidad Deportiva Tijuana</ion-select-option>
-        </ion-select>
-      </ion-item>
+         <ion-item class="input-item ion-margin-bottom">
+  <ion-icon name="time-outline" slot="start"></ion-icon>
+  <ion-label position="stacked">Hora del Match</ion-label>
+  
+  <input type="time" 
+         [(ngModel)]="nuevoReto.hora" 
+         class="native-time-picker"
+         style="background: transparent; color: rgb(0, 0, 0); border: none; width: 100%; padding: 10px 0; font-size: 1.1rem;">
+</ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Mano Dominante</ion-label>
-        <ion-select [(ngModel)]="editUser.mano" interface="action-sheet">
-          <ion-select-option value="derecha">Derecha</ion-select-option>
-          <ion-select-option value="izquierda">Izquierda</ion-select-option>
-        </ion-select>
-      </ion-item>
-      
-      <ion-button 
-        expand="block" 
-        shape="round" 
-        class="save-btn ion-margin-top" 
-        (click)="guardarCambios()"
-        style="--background: #d4e157; --color: black; font-weight: bold;">
-        <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
-        Guardar cambios en mi perfil
-      </ion-button>
-    </ion-list>
-  </div>
+          <ion-item class="input-item">
+            <ion-icon name="tennisball-outline" slot="start"></ion-icon>
+            <ion-label position="stacked">Formato</ion-label>
+            <ion-select [(ngModel)]="nuevoReto.formato" interface="popover">
+              <ion-select-option value="2 de 3 sets">2 de 3 sets</ion-select-option>
+              <ion-select-option value="Pro Set (8 games)">Pro Set (8 games)</ion-select-option>
+              <ion-select-option value="1a10">1 set a 10</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+        <button class="challenge-button-premium ion-margin-top" (click)="publicarReto()">LANZAR CHALLENGE</button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+ <ion-modal [isOpen]="isModalScoreOpen" (didDismiss)="isModalScoreOpen = false" [initialBreakpoint]="0.7" [breakpoints]="[0, 0.7, 0.9]">
+    <ng-template>
+      <ion-header class="ion-no-border header-glass">
+        <ion-toolbar class="toolbar-glass">
+          <ion-title color="light">Registrar Resultado</ion-title>
+          <ion-buttons slot="start">
+            <ion-button (click)="isModalScoreOpen = false" color="light">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding modal-bg-dark">
+        
+        <div class="score-card-blue-glass animate__animated animate__zoomIn">
+          <div class="format-badge-light">{{ retoSeleccionado?.formatoSet }}</div>
+          
+          <ion-grid>
+            <ion-row class="ion-align-items-center ion-text-center ion-margin-bottom">
+              <ion-col size="5">
+                <h2 class="player-name-glass text-white">
+                  {{ authService.currentUserId === retoSeleccionado?.retadorId ? 'Tú' : (retoSeleccionado?.retadorNombre | slice:0:10) }}
+                </h2>
+              </ion-col>
+              <ion-col size="2"><span class="vs-divider-light">VS</span></ion-col>
+              <ion-col size="5">
+                <h2 class="player-name-glass text-white">
+                  {{ authService.currentUserId === retoSeleccionado?.rivalId ? 'Tú' : (retoSeleccionado?.rivalNombre | slice:0:10) }}
+                </h2>
+              </ion-col>
+            </ion-row>
+
+            <div class="inputs-container-glass">
+              
+              <div *ngIf="retoSeleccionado?.formatoSet === '2 de 3 sets'">
+                <ion-row class="labels-row">
+                  <ion-col class="ion-text-center"><small>Set 1</small></ion-col>
+                  <ion-col class="ion-text-center"><small>Set 2</small></ion-col>
+                  <ion-col class="ion-text-center"><small>Set 3 (STB)</small></ion-col>
+                </ion-row>
+                
+                <ion-row class="inputs-row">
+                  <ion-col>
+                    <ion-input [(ngModel)]="scoreInputs.s1" type="number" placeholder="00" class="score-input-number"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input [(ngModel)]="scoreInputs.s2" type="number" placeholder="00" class="score-input-number"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input [(ngModel)]="scoreInputs.s3" type="number" placeholder="00" class="score-input-number"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </div>
+
+              <div *ngIf="retoSeleccionado?.formatoSet !== '2 de 3 sets'">
+                <ion-label position="stacked" class="label-light ion-margin-bottom">Marcador Final</ion-label>
+                <ion-input [(ngModel)]="marcadorFinal" type="number" placeholder="Ej: 85" class="score-input-number large"></ion-input>
+              </div>
+            </div>
+          </ion-grid>
+
+          <div class="winner-selection ion-margin-top">
+            <ion-label class="ion-text-center d-block ion-margin-bottom label-light">¿Quién se llevó la victoria?</ion-label>
+            <ion-segment [(ngModel)]="ganoPartido" mode="ios" color="light" class="segment-winner">
+              <ion-segment-button [value]="true"><ion-label>Yo gané</ion-label></ion-segment-button>
+              <ion-segment-button [value]="false"><ion-label>Perdí</ion-label></ion-segment-button>
+            </ion-segment>
+          </div>
+        </div>
+
+        <button class="challenge-button-premium ion-margin-top shadow-neon-blue" (click)="confirmarResultado()">
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          GUARDAR SCORE
+        </button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>

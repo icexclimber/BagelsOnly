@@ -1,10 +1,12 @@
-<ion-content>
+<ion-content scroll-y="false">
   <div class="register-wrapper">
     
     <div class="header-section">
-      <h1>🎾</h1>
-      <h2>Nuevo Perfil</h2>
-      <p style="color: #666;">Únete al club BagelsOnly</p>
+      <div class="logo-wrapper">
+        <img src="assets/icon/logo-bagels.png" alt="Bagels Only Logo" class="main-logo" />
+      </div>
+      <h2>Bienvenido al siguiente nivel del tenis local</h2>
+      <p>Eleva tu juego</p>
     </div>
 
     <div class="form-card">
@@ -32,9 +34,13 @@
         <ion-input 
           label="Contraseña" 
           labelPlacement="stacked" 
-          type="password" 
+          [type]="verClave ? 'text' : 'password'" 
           placeholder="Mínimo 6 caracteres" 
           [(ngModel)]="nuevoUsuario.password">
+          
+          <ion-button fill="clear" slot="end" (click)="toggleVerClave()" class="eye-button">
+            <ion-icon [name]="verClave ? 'eye-off-outline' : 'eye-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
         </ion-input>
       </ion-item>
 
@@ -43,7 +49,7 @@
       </ion-button>
     </div>
 
-    <ion-button expand="block" fill="clear" color="medium" routerLink="/login" style="margin-top: 20px;">
+    <ion-button expand="block" fill="clear" class="footer-button" routerLink="/login">
       ¿Ya tienes cuenta? <strong>Inicia sesión</strong>
     </ion-button>
 

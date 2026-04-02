@@ -1,93 +1,125 @@
-/* 1. CONFIGURACIÓN GLOBAL DEL MODAL */
-ion-modal {
-  --z-index: 99999; // Asegura que el ranking salga por encima de todo
+// Fondo general de la página (Azul Clarito)
+.main-dashboard-bg {
+  --background: #f0f7ff; 
 }
 
-/* 2. TARJETAS DE SEDES (Ranking) */
-.ranking-card {
-  position: relative;
-  z-index: 10 !important;
-  cursor: pointer !important;
-  pointer-events: auto !important; // Habilita el clic en la tarjeta
-  
-  overflow: hidden;
+// Estilo del Segmento (Azul Sky)
+.segment-toolbar {
+  --background: #f0f7ff;
+  padding: 8px 16px;
+
+  .custom-segment {
+    background: #e1efff; 
+    border-radius: 12px;
+    padding: 4px;
+
+    ion-segment-button {
+      --color: #7a9bb8;
+      --color-checked: #007bff;
+      --indicator-color: #ffffff;
+      --border-radius: 10px;
+      font-weight: 700;
+      text-transform: none;
+      min-height: 38px;
+
+      &::part(indicator-background) {
+        box-shadow: 0 2px 6px rgba(0, 123, 255, 0.1);
+      }
+    }
+  }
+}
+
+// Estilo de las Tarjetas (Blanco Puro)
+.post-card {
+  --background: #ffffff;
+  background: #ffffff;
   border-radius: 20px;
-  margin-bottom: 20px;
-  height: 200px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-  border: none;
-  transition: transform 0.2s ease;
+  margin: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.02);
 
-  &:active {
-    transform: scale(0.96); // Efecto visual de pulsado
-  }
+  .post-header {
+    --background: transparent;
+    padding-top: 8px;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    pointer-events: none; // Evita que la imagen "atrapé" el clic
-  }
-
-  .card-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 11 !important;
-    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-    padding: 15px;
-    pointer-events: none; // CRÍTICO: El texto no bloquea el clic hacia la tarjeta
-
-    ion-card-title {
-      color: white;
-      font-weight: 800;
-      font-size: 1.5rem;
-      margin: 0;
+    .username-text {
+      font-weight: 850; // Legibilidad máxima
+      color: #000;
+      font-size: 1rem;
     }
-
-    ion-card-subtitle {
-      color: #ccc;
-      margin: 0;
+    
+    .time-text {
+      font-weight: 600;
+      color: #888;
     }
   }
-}
 
-/* 3. HEADER Y LOGO */
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  height: 100%;
-
-  .header-logo {
-    height: 32px;
-    width: auto;
-    max-height: 100%;
-    margin-right: 12px;
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.15));
+  .post-action {
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 12px;
   }
 
-  .brand-text {
-    font-weight: 800;
-    font-size: 1.2rem;
-    color: #000;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
+  // El detalle de la actividad (Highlight)
+  .activity-highlight {
+    background: #f8faff; // Un azulito casi blanco
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 4px solid #00b7ff; // El toque neón lateral
+
+    .neon-ball {
+      color: #009fde;
+      font-size: 1.4rem;
+    }
+
+    span {
+      font-weight: 700;
+      color: #000;
+      font-size: 0.9rem;
+    }
+  }
+
+  .post-footer {
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-start;
+    padding: 4px 8px;
+
+    .footer-btn {
+      --color: #666;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
   }
 }
 
-/* 4. AJUSTES DE COMPONENTES IONIC */
-ion-title {
-  padding-inline: 8px;
-  font-weight: 700;
+// Estado Vacío
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  
+  .big-icon {
+    font-size: 4.5rem;
+    color: #cedef0;
+    margin-bottom: 15px;
+  }
+
+  h3 {
+    font-weight: 850;
+    color: #444;
+  }
+
+  p {
+    color: #888;
+    font-weight: 600;
+  }
+}
+strong {
+  color: #7044ff; // Un morado premium y moderno
+  font-weight: 800; // Un poco más de peso para que destaque
 }
 
-ion-toolbar {
-  --background: var(--ion-color-primary);
-  --color: black;
-}

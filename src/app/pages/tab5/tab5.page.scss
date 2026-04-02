@@ -1,0 +1,653 @@
+// Variables de diseño BagelsOnly
+:host {
+  --neon-green: #368dc7; 
+  --dark-card: #1e1e1e;
+  --bg-black: #f8f7f7;
+  --streak-orange: #ff9800; 
+}
+
+.bg-dark {
+  --background: var(--bg-black);
+}
+
+// 1. HEADER: Perfil Visual (ACTUALIZADO A BLANCO PREMIUM)
+.profile-header {
+  position: relative;
+  /* --- CAMBIO: De degradado azul/gris a Blanco Premium --- */
+  background: #f8f9fa; 
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08); // Línea de división sutil
+  border-radius: 0; // Look más nativo y limpio
+  padding-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); 
+
+  .avatar-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    .avatar-main {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      padding: 4px;
+      background: white;
+      /* Aro de luz azul sutil alrededor de la foto */
+      box-shadow: 0 0 15px rgba(54, 141, 199, 0.2); 
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .camera-fab {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        --background: #ffffff;
+        --color: #368dc7;
+        --border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        margin: 0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      }
+    }
+  }
+
+  .user-name {
+    color: #1a1a1a; // Negro profundo elegante
+    font-weight: 850; // Tipografía con autoridad
+    font-size: 1.8rem;
+    margin-top: 15px;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+
+  .user-bio {
+    color: rgba(0, 0, 0, 0.5);
+    font-style: normal; // Más limpio que el italic
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    ion-badge {
+      padding: 6px 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+      &.ntrp-badge { background: #1a1a1a; color: white; }
+    }
+  }
+}
+
+// 2. NAVEGACIÓN: Segmentos (ACTUALIZADO A AZUL TRANSLÚCIDO)
+.custom-segment {
+  margin-top: -20px;
+  // --- CAMBIO A AZUL TRANSLÚCIDO ---
+  --background: rgba(54, 141, 199, 0.15); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(54, 141, 199, 0.2);
+  // --------------------------------
+  border-radius: 16px;
+  height: 50px;
+
+  ion-segment-button {
+    --color: rgba(0, 0, 0, 0.5); // Texto no seleccionado en gris oscuro
+    --color-checked: #000;      // Texto seleccionado en negro para visibilidad
+    --indicator-color: var(--neon-green);
+    font-weight: bold;
+    font-size: 0.85rem;
+  }
+}
+
+// 3. ESTADÍSTICAS: Cards
+.stats-container {
+  padding: 20px 10px;
+  .stat-card {
+    background: rgba(54, 141, 199, 0.15); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(54, 141, 199, 0.2);
+    border-radius: 16px;
+    padding: 15px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .stat-val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: white;
+      &.text-neon { color: var(--neon-green); }
+      &.text-success { color: #2dd36f; }
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: #888;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+  }
+}
+
+// 4. LISTA DE TORNEOS
+.list-card {
+  background: rgba(54, 141, 199, 0.15) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(54, 141, 199, 0.2);
+  border-radius: 20px;
+  margin: 0 16px;
+  
+  ion-list {
+    background: transparent;
+    padding: 0;
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: white;
+    h2 { color: white; font-weight: 700; }
+    p { color: #888; }
+  }
+}
+
+// 5. GAMIFICACIÓN: Streak Card
+.section-title {
+  --color: #000;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+  margin-top: 25px; 
+
+  &.mini-title {
+    margin-top: 25px; 
+    margin-bottom: 15px; 
+    min-height: auto;
+    ion-label { font-size: 0.75rem; opacity: 0.9; color: #000; }
+  }
+}
+
+.streak-card-mini {
+  position: relative;
+  // Fondo azul translúcido (Glassmorphism)
+  background: rgba(54, 141, 199, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(54, 141, 199, 0.2);
+  border-radius: 20px;
+  padding: 20px 16px; 
+  margin: 0 16px 25px 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  .watermark-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 35px;
+    opacity: 0.1; // Más sutil sobre fondo claro
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .mini-streak-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px; 
+    position: relative;
+    z-index: 1;
+
+    .flame-box {
+      display: flex;
+      align-items: center;
+      ion-icon { color: var(--streak-orange); font-size: 1.4rem; filter: drop-shadow(0 0 5px rgba(255,152,0,0.3)); }
+      span { color: #000; font-weight: 800; font-size: 1.1rem; margin-left: 4px; }
+    }
+
+    .streak-info-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .streak-label { color: rgba(0, 0, 0, 0.6); font-size: 0.75rem; font-weight: 600; }
+      .best-streak-text {
+        font-size: 0.65rem;
+        color: var(--neon-green);
+        text-transform: uppercase;
+        font-weight: 800;
+        margin-top: 2px;
+      }
+    }
+    ion-badge { font-size: 0.65rem; border-radius: 8px; }
+  }
+
+  .share-action-area {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    .share-btn { --color: var(--neon-green); font-size: 0.75rem; font-weight: 700; margin: 0; text-transform: none; }
+  }
+}
+
+// GRID DE BURBUJAS (CALENDARIO)
+.month-grid-mini {
+  padding: 0 4px;
+  position: relative;
+  z-index: 1;
+
+  .day-labels-mini {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 10px;
+    span { font-size: 0.65rem; color: rgba(0,0,0,0.4); font-weight: 800; text-align: center; text-transform: uppercase; }
+  }
+
+  .days-grid-mini {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px; 
+    width: 100%; 
+    justify-items: center;
+
+    .day-bubble {
+      aspect-ratio: 1/1;
+      width: 100%;
+      max-width: 35px; 
+      min-width: 24px;
+      // Reemplazamos gris oscuro por azul muy claro translúcido
+      background: rgba(54, 141, 199, 0.1); 
+      border: 1px solid rgba(54, 141, 199, 0.1);
+      border-radius: 50%; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span { font-size: 0.65rem; font-weight: 700; color: #000; } // Números en NEGRO
+      
+      &.bubble-empty { background: transparent; border: none; }
+      
+      &.bubble-active { 
+        background: var(--neon-green); // Azul neón sólido para días con racha
+        border: none;
+        box-shadow: 0 0 10px rgba(54, 141, 199, 0.4);
+        span { color: white; } // Número en blanco para resaltar sobre el sólido
+      }
+      
+      &.bubble-today { 
+        border: 2px solid var(--streak-orange);
+        span { color: var(--streak-orange); }
+      }
+    }
+  }
+}
+
+// 5. MODAL BURBUJA (PREMIUM)
+.modal-burbuja {
+  --height: 75%; 
+  --border-radius: 32px 32px 0 0;
+  --background: #2c5086;
+  
+  &::part(content) {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    background: #216196;
+  }
+}
+
+.bg-summary-premium {
+  --background: #c1daffda;
+  height: 100%; 
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 30px;
+
+  .modal-handle {
+    width: 45px;
+    height: 6px;
+    background: #444;
+    border-radius: 10px;
+    margin: 12px auto 25px;
+    flex-shrink: 0;
+  }
+
+  .share-card-visual {
+    position: relative;
+    background: linear-gradient(145deg, #fdfdfd 0%, #3367a3 100%);
+    border-radius: 24px;
+    padding: 30px 20px;
+    margin: 0 16px 20px 16px;
+    border: 1px solid rgba(54, 141, 199, 0.2);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    overflow: hidden;
+
+    .watermark-main {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      width: 50px;
+      opacity: 0.3;
+      filter: drop-shadow(0 0 10px rgb(65, 165, 231));
+    }
+
+    .card-body-premium {
+      text-align: center;
+      margin-top: 25px;
+
+      .player-title { color: rgb(94, 164, 211); font-size: 1.8rem; font-weight: 900; margin-bottom: 5px; }
+      .subtitle-premium { color: var(--neon-green); text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; font-weight: 700; margin-bottom: 25px; }
+
+      .stats-highlights {
+        display: flex;
+        justify-content: center;
+        gap: 35px;
+        margin-bottom: 30px;
+
+        .highlight-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          ion-icon { font-size: 2.2rem; color: white; margin-bottom: 8px; }
+          .val { font-size: 2.2rem; font-weight: 900; color: white; }
+          .lab { color: #666; font-size: 0.65rem; text-transform: uppercase; font-weight: bold; }
+        }
+      }
+    }
+
+ .mini-calendar-view {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    .dots-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px; // Más espacio para que se vea limpio
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px; // Estilo cuadrado redondeado tipo GitHub (más pro)
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+
+        &.active {
+          background: #00e5ff; // Un azul cian eléctrico
+          box-shadow: 0 0 15px rgba(0, 229, 255, 0.4), inset 0 0 5px rgba(255,255,255,0.5);
+          transform: scale(1.1);
+        }
+        &.today {
+          border: 1px solid #fff;
+        }
+      }
+    }
+  }
+}
+
+  .btn-share-native {
+    --border-radius: 16px;
+    --background: var(--neon-green);
+    --box-shadow: 0 4px 15px rgba(54, 141, 199, 0.3);
+    font-weight: 800;
+    height: 56px;
+    margin: 0 24px;
+    text-transform: none;
+  }
+}
+
+// 6. RESUMEN ÚLTIMAS 2 SEMANAS (BENTO AZUL TRANSLÚCIDO - TEXTO NEGRO)
+.bento-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+
+  .bento-card {
+    background: rgba(54, 141, 199, 0.15); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 28px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(54, 141, 199, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-label {
+    color: rgba(0, 0, 0, 0.6); 
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .bento-main {
+    .rank-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 0 10px 0;
+
+      .rank-value { color: #000; font-size: 2.2rem; font-weight: 900; }
+      .rank-trend { font-size: 0.8rem; color: #1a874b; margin-top: 4px; font-weight: 600; }
+    }
+    .rank-labels-footer {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+  }
+
+  .bento-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    .bento-small {
+      padding: 18px 12px;
+      min-height: 110px;
+      .stat-num { color: #000; font-size: 1.5rem; font-weight: 900; }
+      .stat-desc { color: rgba(0, 0, 0, 0.6); font-size: 0.6rem; font-weight: 700; }
+    }
+  }
+
+  .bento-wide {
+    .wide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .add-icon { color: rgba(0, 0, 0, 0.5); font-size: 1.2rem; }
+    }
+    .history-bars-container {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      height: 40px;
+      margin: 15px 0;
+      
+      .history-bar {
+        flex: 1;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.1);
+        &.win { background: var(--neon-green); height: 100%; box-shadow: 0 0 10px rgba(54, 141, 199, 0.4); }
+        &.loss { background: #e74c3c; height: 40%; opacity: 0.7; }
+      }
+    }
+    .wide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #000;
+      font-weight: 800;
+      font-size: 0.9rem;
+      ion-icon { color: var(--neon-green); }
+    }
+  }
+}
+
+// GRÁFICA CIRCULAR SVG
+.rank-chart-box {
+  width: 80px;
+  .circular-chart { display: block; margin: 0 auto; max-width: 100%; }
+  .circle-bg { fill: none; stroke: rgba(0, 0, 0, 0.1); stroke-width: 3.8; }
+  .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; stroke: var(--neon-green); filter: drop-shadow(0 0 5px var(--neon-green)); }
+  .percentage { fill: #000; font-size: 0.6rem; font-weight: 900; text-anchor: middle; }
+}
+
+// 7. OTROS BOTONES / CONFIGURACIÓN
+.edit-card {
+  // Aplicamos el azul translúcido pedido
+  background: rgba(54, 141, 199, 0.15) !important; 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(54, 141, 199, 0.2);
+  border-radius: 20px;
+  margin: 0;
+
+  // IMPORTANTE: Limpiar los fondos grises internos de Ionic
+  ion-list {
+    background: transparent !important;
+    --ion-item-background: transparent !important;
+  }
+
+  .custom-input {
+    // Forzamos transparencia en cada item para que se vea el azul de fondo
+    --background: transparent !important; 
+    --ion-item-background: transparent !important;
+    
+    --color: #000; 
+    margin-bottom: 10px;
+
+    ion-label { 
+      color: #000 !important; 
+      font-weight: 800; 
+      font-size: 0.8rem; 
+      opacity: 0.7;
+    }
+
+    ion-input, ion-textarea, ion-select {
+      --color: #000;
+      color: #000;
+    }
+  }
+}
+
+.main-save-btn {
+  --border-radius: 16px;
+  font-weight: 800;
+  height: 52px;
+  margin-top: 20px;
+  --background: var(--neon-green);
+  box-shadow: 0 8px 20px rgba(54, 141, 199, 0.3);
+}
+
+.team-icon {
+  background: rgba(66, 215, 125, 0.2) !important; // Un verde suave
+  ion-icon {
+    color: #42d77d !important;
+  }
+}
+
+.text-white {
+  color: #327a9b !important;
+  font-weight: 600;
+}
+
+.text-dim {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.streak-history-container {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-start;
+
+  .streak-pill {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px; // Estilo Squircle
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+
+    &:active { transform: scale(0.9); }
+  }
+
+  .pill-win {
+    background: linear-gradient(135deg, #2dd36f 0%, #28a745 100%);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .pill-loss {
+    background: linear-gradient(135deg, #eb445a 0%, #c0392b 100%);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .empty-streak {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    font-style: italic;
+  }
+}
+
+// Estilo para la card que ocupa todo el ancho
+.bento-full {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.doubles-accent {
+  border-left: 4px solid #3880ff !important;
+  background: rgba(56, 128, 255, 0.05) !important;
+}
+
+.doubles-icon-visual {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  
+  ion-icon {
+    font-size: 2rem;
+    position: absolute;
+    color: #ccff00; // Amarillo tennis
+    filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.4));
+  }
+
+  .ball-1 { top: 0; left: 0; z-index: 2; }
+  .ball-2 { top: 15px; left: 15px; opacity: 0.5; z-index: 1; }
+}
+
+.partner-highlight {
+  display: flex;
+  align-items: center;
+}
+
+.text-primary {
+  color: #3880ff !important;
+}

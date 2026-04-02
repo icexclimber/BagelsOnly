@@ -1,86 +1,209 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+/* ==========================================================================
+   BAGELS ONLY - GLOBAL STYLES (REVOLUTION UPDATE + PWA SUPPORT)
+   ========================================================================== */
 
-/* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
-
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
+/* --- 1. SPLASH SCREEN (Siguiente Nivel) --- */
+#custom-splash {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  
+  // MEJORA: Gradiente radial para eliminar el azul plano
+  background: radial-gradient(circle at center, #3da1e3 0%, #368dc7 100%);
+  
+  display: none; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
-/* Tarjetas de Home estilo burbuja */
-.bubble-card {
-  border-radius: 25px !important;
-  margin: 10px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  &.show {
+    display: flex;
+    opacity: 1;
+  }
+
+  .splash-content {
+    text-align: center;
+    transform: scale(0.85); // Efecto pop-up más dinámico
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    .splash-logo {
+      width: 160px;
+      filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2));
+      animation: pulse-bagels 2.5s infinite ease-in-out;
+    }
+
+    .splash-text {
+      margin-top: 25px;
+      line-height: 1.1;
+      
+      font-weight: 900;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      
+      background: linear-gradient(-45deg, #fff 0%, #b2d8f1 45%, #fff 100%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent !important;
+      animation: shine-glow-splash 3s ease-in-out infinite;
+    }
+
+    /* --- NUEVA BARRA DE CARGA PREMIUM --- */
+    .loader-container {
+      margin-top: 30px;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+
+      .loader-bar {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: #ffffff;
+          box-shadow: 0 0 10px #ffffff;
+          animation: loading-progress 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+      }
+
+      .loading-msg {
+        margin-top: 12px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        animation: fade-msg 0.5s ease-in-out;
+      }
+    }
+  }
+
+  &.show .splash-content {
+    transform: scale(1);
+  }
 }
 
-/* Modal específico para Home */
-.burbuja-modal-home {
-  --height: fit-content;
-  --width: 90%;
-  --border-radius: 28px;
-  
-  .modal-bubble-wrapper {
-    background: white;
-    overflow: hidden;
+/* --- 2. COMUNIDAD TENÍSTICA (Glass Azul definitivo) --- */
+ion-modal.comunidad-modal {
+  --background: transparent !important;
+  --ion-background-color: transparent !important; 
+
+  &::part(content) {
+    background: linear-gradient(
+      180deg, 
+      rgba(54, 141, 199, 0.45) 0%,   
+      rgba(28, 31, 38, 0.9) 100%
+    ) !important;
     
-    .modal-banner {
-      height: 180px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      
-      .close-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        --padding-start: 0;
-        --padding-end: 0;
+    backdrop-filter: blur(25px) saturate(160%);
+    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    
+    border-top: 1px solid rgba(54, 141, 199, 0.5);
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+  }
+
+  &::part(handle) {
+    background: rgba(255, 255, 255, 0.4);
+    width: 45px;
+    height: 5px;
+  }
+}
+
+.comunidad-header {
+  background: #f8f9fa !important; 
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+  ion-searchbar {
+    --background: #ffffff !important; 
+    --color: #2d2d2d !important;      
+    --placeholder-color: #8e8e93;
+    --icon-color: #368dc7;           
+    --border-radius: 12px;
+    
+    padding: 8px 16px;
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .searchbar-input {
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      font-weight: 500;
+    }
+  }
+}
+
+.comunidad-content-glass {
+  --background: transparent !important;
+  background: transparent !important;
+
+  ion-item {
+    --background: transparent !important;
+    --color: white;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --padding-start: 16px;
+    
+    margin: 4px 0;
+    transition: background 0.2s ease;
+
+    &:active {
+      background: rgba(54, 141, 199, 0.15) !important;
+    }
+
+    ion-label {
+      h3 {
+        font-weight: 700;
+        color: white;
+      }
+      p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.85rem;
       }
     }
   }
 }
 
-/* Ajuste para los slides horizontales */
-.slides-container {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  &::-webkit-scrollbar { display: none; }
-  
-  .card-wrapper {
-    min-width: 85%;
-    scroll-snap-align: center;
-  }
+/* --- 3. ANIMACIONES --- */
+@keyframes shine-glow-splash {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes pulse-bagels {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes loading-progress {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes fade-msg {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

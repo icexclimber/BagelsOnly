@@ -1,39 +1,89 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="primary">
+  <ion-toolbar class="main-header-toolbar">
     
     <ion-buttons slot="start">
-      <ion-menu-button menu="main-menu"></ion-menu-button>
+      <ion-menu-button menu="main-menu" color="primary"></ion-menu-button>
       <div class="logo-wrapper">
-        <img src="assets/icon/logo-bagels.png" class="header-logo" alt="Logo">
+        <img src="assets/icon/logo-bagels.png" width="40" height="40" class="header-logo" alt="Logo Bagels">
       </div>
     </ion-buttons>
 
-    <ion-title>{{ titulo }}</ion-title>
+    <ion-title color="primary">{{ titulo }}</ion-title>
 
-    <ion-buttons slot="end">
-      <ion-button (click)="abrirModalBusqueda()">
+    <ion-buttons slot="end" *ngIf="notificaciones$ | async as listaNotificaciones">
+      <ion-button (click)="abrirModalBusqueda()" color="primary">
         <ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
       </ion-button>
       
-      <ion-button id="open-notificaciones-global">
+      <ion-button id="click-trigger" color="primary">
         <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+        <ion-badge *ngIf="listaNotificaciones.length > 0" color="danger" mode="ios" class="custom-badge">
+          {{ listaNotificaciones.length }}
+        </ion-badge>
       </ion-button>
+
+      <ion-popover trigger="click-trigger" triggerAction="click" mode="ios" cssClass="glass-popover">
+        <ng-template>
+          <ion-content class="glass-content">
+            <ion-list-header class="glass-header">
+              <ion-label style="color: #368dc7; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">
+                Notificaciones
+              </ion-label>
+            </ion-list-header>
+
+            <div *ngIf="listaNotificaciones.length === 0" class="ion-text-center ion-padding empty-state">
+              <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem; font-style: italic;">
+                No tienes notificaciones pendientes.
+              </p>
+            </div>
+
+            <ion-list lines="full" class="glass-list" *ngIf="listaNotificaciones.length > 0">
+              <ion-item *ngFor="let notif of listaNotificaciones" 
+                        class="glass-item" 
+                        button 
+                        detail="false"
+                        (click)="navegarAlPerfil(notif.de)">
+                
+                <ion-avatar slot="start" class="glass-avatar" style="border: 1px solid rgba(54, 141, 199, 0.3); margin-inline-end: 12px;">
+                  <img [src]="notif.fotoEmisor || 'assets/img/default-avatar.png'" 
+                       (error)="$any($event).target.src = 'https://ui-avatars.com/?name=' + notif.nombreEmisor" />
+                </ion-avatar>
+                
+                <ion-label class="ion-text-wrap">
+                  <h3 style="font-weight: 800; color: #ffffff; margin-bottom: 2px; font-size: 0.95rem;">
+                    {{ notif.nombreEmisor || 'Usuario' }}
+                  </h3>
+
+                  <div [ngSwitch]="notif.tipo">
+                    <p *ngSwitchCase="'amistad'" style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); display: flex; align-items: center; gap: 4px; margin: 0;">
+                      <ion-icon name="person-add-outline" color="primary"></ion-icon>
+                      Quiere ser tu amigo
+                    </p>
+                    <p *ngSwitchCase="'dobles'" style="font-size: 0.8rem; color: #42d77d; display: flex; align-items: center; gap: 4px; font-weight: 600; margin: 0;">
+                      <ion-icon name="people-outline"></ion-icon>
+                      Invitación a Dobles 🎾
+                    </p>
+                    <p *ngSwitchDefault style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); margin: 0;">
+                      {{ notif.mensaje }}
+                    </p>
+                  </div>
+                </ion-label>
+
+                <div slot="end" class="action-buttons-glass" style="display: flex; gap: 2px;">
+                  <ion-button fill="clear" color="success" style="--padding-start: 4px; --padding-end: 4px;" (click)="$event.stopPropagation(); responderSolicitud(notif, 'aceptada')">
+                    <ion-icon slot="icon-only" name="checkmark-circle" style="font-size: 1.4rem;"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" color="danger" style="--padding-start: 4px; --padding-end: 4px;" (click)="$event.stopPropagation(); responderSolicitud(notif, 'rechazada')">
+                    <ion-icon slot="icon-only" name="close-circle" style="font-size: 1.4rem;"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-item>
+            </ion-list>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+
     </ion-buttons>
 
   </ion-toolbar>
 </ion-header>
-
-<ion-modal #modalBusqueda [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.8]">
-  <ng-template> <ion-header>
-      <ion-toolbar>
-        <ion-title>Buscar Tenistas</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="cerrarModalBusqueda()">Cerrar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <ion-searchbar placeholder="Nombre o Club" (ionInput)="onSearch($event)"></ion-searchbar>
-    </ion-content>
-  </ng-template>
-</ion-modal>

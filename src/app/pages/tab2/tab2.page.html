@@ -1,74 +1,145 @@
-<app-header-global titulo="Ranking Local"></app-header-global>
+<app-header-global titulo="Bagels Feed"></app-header-global>
 
-<ion-content [fullscreen]="true">
-  <div class="full-page-wrapper">
+<ion-content [fullscreen]="true" class="main-dashboard-bg">
+  
+  <ion-toolbar class="segment-toolbar ion-no-border">
+    <ion-segment [(ngModel)]="filtroFeed" mode="ios" class="custom-segment">
+      <ion-segment-button value="global">
+        <ion-label>Global</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="amigos">
+        <ion-label>Amigos</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <div class="live-challenges-container ion-padding-vertical">
+    <div class="section-header ion-padding-horizontal">
+      <ion-label>
+        <span class="live-dot"></span>
+        <strong>Partidos en Vivo</strong>
+      </ion-label>
+    </div>
     
-    <div class="content-flex-area">
-      
-      <div class="ranking-intro ion-padding-horizontal ion-padding-top">
-        <h2 style="color: rgb(183, 196, 14); font-weight: bold; margin-bottom: 5px;">Rankings Locales</h2>
-        <p style="color: #666;">Estadísticas históricas de los tenistas en cada sede.</p>
-      </div>
+    <div class="horizontal-scroll ion-padding-start">
+      <ng-container *ngIf="feedItems$ | async as items; else loadingLive">
+        <div *ngFor="let item of items | slice:0:10" class="challenge-story" (click)="verPerfil(item.creadorId || item.ganadorId)">
+          <div class="avatar-ring" [class.live-active]="item.feedType === 'resultado_match'">
+          </div>
+          <ion-note class="challenge-name">
+            {{ (item.basica?.titulo || item.nombre || 'Tenista').split(' ')[0] }}
+          </ion-note>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 
-      <ion-grid class="ion-padding">
-        <ion-row>
-          <ion-col size="12" size-md="6" *ngFor="let club of sedes">
-            <div class="ranking-card bubble-card" 
-                 (click)="abrirRankingClub(club.nombre)" 
-                 [style.background-image]="'url(' + club.img + ')'">
-              
-              <div class="card-overlay">
-                <div class="card-text-content">
-                  <h3 style="color: white; font-weight: bold; margin: 0;">{{ club.nombre }}</h3>
-                  <p style="color: #ddd; margin: 0; font-size: 0.85rem;">{{ club.sub }}</p>
-                </div>
+  <div class="feed-container">
+    <ng-container *ngIf="feedItems$ | async as items; else loadingPosts">
+      
+      <ion-card *ngFor="let item of items" class="post-card animate__animated animate__fadeIn">
+        <ion-item lines="none" class="post-header">
+          <ion-avatar slot="start" (click)="verPerfil(item.creadorId || item.ganadorId)">
+            <img [src]="item.imagen || 'assets/img/bancario.jpg'" />
+          </ion-avatar>
+          <ion-label>
+            <h2 class="username-text" (click)="verPerfil(item.creadorId || item.ganadorId)">
+              {{ item.creadorNombre || item.ganadorNombre || 'Organizador Bagels' }}
+              <ion-icon name="checkmark-circle" color="primary" class="verif-small"></ion-icon>
+            </h2>
+            <ion-note class="time-text">
+              <ion-icon name="time-outline"></ion-icon> 
+              {{ (item.timestamp || item.fechaFinalizado || item.fechaCreacion)?.toDate() | date:'shortTime' }}
+            </ion-note>
+          </ion-label>
+          <ion-badge slot="end" [color]="item.feedType === 'resultado_match' ? 'success' : 'primary'" class="post-badge">
+            {{ item.feedType === 'torneo_nuevo' ? 'TORNEO' : (item.feedType === 'escalera_nueva' ? 'LADDER' : 'RESULTADO') }}
+          </ion-badge>
+        </ion-item>
+
+        <ion-card-content>
+          <div *ngIf="item.feedType !== 'resultado_match'" class="event-announcement">
+            <p class="post-action">Evento creado: <span class="event-name">{{ item.basica?.titulo || item.nombre }}</span></p>
+            
+            <div class="banner-preview" [style.background]="item.basica?.colorLayout || 'var(--ion-color-primary)'">
+              <h3>{{ item.basica?.titulo || item.nombre }}</h3>
+              <p>
+                {{ item.basica?.subhead || item.categoria || 'Open' }} 
+                <span *ngIf="item.basica?.sede"> • {{ item.basica.sede }}</span>
+              </p>
+            </div>
+            <p class="event-description" *ngIf="item.basica?.descripcion">
+              {{ item.basica.descripcion }}
+            </p>
+          </div>
+
+          <div *ngIf="item.feedType === 'resultado_match'" class="match-result-container">
+            <div class="match-score-box-premium">
+              <div class="player-row winner" (click)="verPerfil(item.ganadorId)">
+                <span class="player-name">{{ item.ganadorNombre }}</span>
+                <ion-icon name="trophy" color="warning"></ion-icon>
+                <span class="score-digit">{{ item.puntos?.victoria || item.scoreGanador }}</span>
+              </div>
+              <div class="vs-divider-text">VS</div>
+              <div class="player-row" (click)="verPerfil(item.perdedorId)">
+                <span class="player-name">{{ item.perdedorNombre }}</span>
+                <span class="score-digit">{{ item.puntos?.derrota || item.scorePerdedor }}</span>
               </div>
             </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div> <ion-modal #m class="burbuja-modal-home">
-      <ng-template>
-        <div class="modal-bubble-wrapper">
-          
-          <div class="modal-bubble-header ion-padding" style="background: #222; display: flex; align-items: center; justify-content: space-between;">
-            <h2 style="color: white; margin: 0; font-size: 1.1rem; font-weight: bold;">Ranking: {{ sedeSeleccionada }}</h2>
-            <ion-button fill="clear" (click)="m.dismiss()" style="--color: white;">
-              <ion-icon name="close-circle" style="font-size: 1.8rem;"></ion-icon>
-            </ion-button>
           </div>
+        </ion-card-content>
 
-          <div class="modal-body">
-            <ion-content style="--max-height: 450px; --background: white;">
-              
-              <div *ngIf="rankingActual.length === 0 && sedeSeleccionada" class="ion-padding ion-text-center">
-                <p style="color: #666;">Cargando jugadores...</p>
-              </div>
-
-              <ion-list lines="full" style="padding: 0;">
-                <ion-item *ngFor="let jugador of rankingActual; let i = index" class="animate__animated animate__fadeIn">
-                  <ion-avatar slot="start" style="border: 2px solid #f1ff2f;">
-                    <img [src]="jugador.foto || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + jugador.nombre">
-                  </ion-avatar>
-                  <ion-label>
-                    <h2 style="font-weight: bold; color: black;">{{ i + 1 }}. {{ jugador.nombre }}</h2>
-                    <p style="color: #666;">Puntos: {{ jugador.xp || 0 }}</p>
-                  </ion-label>
-                  <ion-badge slot="end" [color]="i < 3 ? 'warning' : 'medium'" mode="ios">
-                    Nivel {{ jugador.nivel }}
-                  </ion-badge>
-                </ion-item>
-
-                <div class="ion-padding ion-text-center" *ngIf="rankingActual.length === 0 && !sedeSeleccionada" style="background: white;">
-                  <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
-                  <p style="color: #666;">No hay jugadores registrados todavía.</p>
-                </div>
-              </ion-list>
-            </ion-content>
-          </div>
-
+        <div class="post-footer ion-padding-horizontal">
+          <ion-button fill="clear" size="small" class="footer-btn" (click)="reaccionar(item)" [color]="item.likes?.includes(auth.currentUserId) ? 'danger' : 'medium'">
+            <ion-icon [name]="item.likes?.includes(auth.currentUserId) ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
+            {{ item.likes?.length || 0 }}
+          </ion-button>
+          <ion-button fill="clear" size="small" class="footer-btn" color="medium">
+            <ion-icon name="chatbubble-outline" slot="start"></ion-icon> 
+            Comentar
+          </ion-button>
         </div>
-      </ng-template>
-    </ion-modal>
 
-  </div> </ion-content>
+        <div class="comments-section ion-padding-horizontal" *ngIf="item.ultimosComentarios?.length > 0">
+          <div *ngFor="let comment of item.ultimosComentarios" class="comment-bubble">
+            <ion-text (click)="verPerfil(comment.usuarioId)" class="comment-user">
+              <strong>{{ comment.nombre }}</strong>
+            </ion-text>
+            <span class="comment-text">{{ comment.texto }}</span>
+          </div>
+        </div>
+
+        <div class="fast-comment-input">
+          <ion-item lines="none">
+            <ion-avatar slot="start" class="mini-avatar">
+              <img [src]="(auth.user$ | async)?.photoURL || 'assets/img/bancario.jpg'" />
+            </ion-avatar>
+            <ion-input #fastComment 
+                       placeholder="Añade un comentario..." 
+                       (keyup.enter)="comentar(item, fastComment)">
+            </ion-input>
+            <ion-button fill="clear" slot="end" (click)="comentar(item, fastComment)">
+              <ion-icon name="send-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
+      </ion-card>
+    </ng-container>
+
+    <ng-template #loadingLive>
+      <div class="horizontal-scroll ion-padding-start">
+        <ion-skeleton-text animated style="width: 60px; height: 60px; border-radius: 50%;"></ion-skeleton-text>
+      </div>
+    </ng-template>
+
+    <ng-template #loadingPosts>
+      <ion-card *ngFor="let s of [1,2]" class="post-card">
+        <ion-item lines="none">
+          <ion-avatar slot="start"><ion-skeleton-text animated></ion-skeleton-text></ion-avatar>
+          <ion-label><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-label>
+        </ion-item>
+        <ion-card-content><ion-skeleton-text animated style="width: 100%; height: 100px;"></ion-skeleton-text></ion-card-content>
+      </ion-card>
+    </ng-template>
+  </div>
+</ion-content>

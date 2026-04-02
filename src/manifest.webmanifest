@@ -1,0 +1,30 @@
+{
+  "name": "BagelsOnly Tennis App",
+  "short_name": "BagelsOnly",
+  "description": "La plataforma definitiva para tenistas en Tijuana. Organiza retos, escala en el ranking y domina la cancha.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#3880ff",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "assets/icon/favicon.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "assets/icon/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

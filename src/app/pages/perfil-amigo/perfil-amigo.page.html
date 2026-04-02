@@ -1,0 +1,128 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="main-header-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button 
+        defaultHref="/tabs/tab1" 
+        text="" 
+        icon="arrow-back-outline" 
+        color="primary">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title color="primary">Perfil del Rival</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="main-dashboard-bg">
+  
+  <ng-container *ngIf="perfilAmigo$ | async as amigo; else loadingState">
+    
+    <div class="profile-header ion-padding ion-text-center animate__animated animate__fadeIn">
+      <ion-avatar class="profile-avatar-large">
+        <img [src]="amigo.fotoURL || 'assets/img/default-avatar.png'" 
+             (error)="$any($event).target.src = 'assets/img/default-avatar.png'" />
+      </ion-avatar>
+      <h1 class="friend-name">{{ amigo.nombre }}</h1>
+      <p class="friend-location">
+        <ion-icon name="location-outline" color="primary"></ion-icon>
+        {{ amigo.ubicacion || 'Ubicación no disponible' }}
+      </p>
+    </div>
+
+    <div class="ion-padding-horizontal">
+      <ion-list-header class="section-header">
+        <ion-label>Estadísticas de Bagels</ion-label>
+      </ion-list-header>
+      
+      <div class="bento-grid">
+        <div class="bento-item level-card ion-text-center animate__animated animate__zoomIn">
+          <ion-icon name="star-outline" class="bento-icon"></ion-icon>
+          <div class="bento-value">{{ amigo.nivel || '1.0' }}</div>
+          <div class="bento-label">Nivel NTRP</div>
+        </div>
+
+        <div class="bento-item matches-card ion-text-center animate__animated animate__zoomIn animate__delay-1s">
+          <ion-icon name="tennisball-outline" class="bento-icon"></ion-icon>
+          <div class="bento-value">--</div> 
+          <div class="bento-label">Partidos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ion-padding-horizontal ion-margin-top">
+      <ion-list-header class="section-header">
+        <ion-label>Vitrina de Logros</ion-label>
+        <ion-icon name="trophy-outline" slot="end" color="warning"></ion-icon>
+      </ion-list-header>
+
+      <div *ngIf="!amigo.logros || amigo.logros.length === 0" class="empty-state ion-text-center ion-padding">
+        <ion-icon name="medal-outline" class="big-icon" style="opacity: 0.3;"></ion-icon>
+        <p>Aún no ha desbloqueado logros.</p>
+      </div>
+
+      <ion-list lines="none" class="achievements-list" *ngIf="amigo.logros?.length > 0">
+        <ion-item *ngFor="let logro of amigo.logros" class="achievement-item animate__animated animate__fadeInUp">
+          <ion-avatar slot="start" class="achievement-icon-wrapper">
+            <img [src]="logro.icono || 'assets/img/default-achievement.png'" />
+          </ion-avatar>
+          <ion-label>
+            <h2 class="achievement-title">{{ logro.nombre }}</h2>
+            <p class="achievement-description">{{ logro.descripcion }}</p>
+          </ion-label>
+          <ion-note slot="end" class="achievement-date">
+            {{ (logro.fechaDesbloqueo?.seconds * 1000) | date:'shortDate' }}
+          </ion-note>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div class="ion-padding ion-margin-top animate__animated animate__fadeInUp animate__delay-2s">
+      
+      <ng-container *ngIf="esAmigo$ | async; else noEsAmigo">
+        <ion-button expand="block" 
+                    class="btn-premium-action" 
+                    (click)="invitarADobles(amigo)">
+          <ion-icon name="people-outline" slot="start"></ion-icon>
+          Hacer equipo de dobles
+        </ion-button>
+
+        <ion-button expand="block" 
+                    fill="clear" 
+                    color="danger" 
+                    class="btn-remove-friend" 
+                    (click)="confirmarEliminarAmigo(amigo)">
+          <ion-icon name="person-remove-outline" slot="start"></ion-icon>
+          Eliminar de mis amigos
+        </ion-button>
+      </ng-container>
+
+      <ng-template #noEsAmigo>
+        <ion-button expand="block" 
+                    class="btn-add-friend" 
+                    (click)="enviarSolicitudAmistad(amigo)">
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
+          Enviar solicitud de amistad
+        </ion-button>
+      </ng-template>
+
+      <ion-button expand="block" 
+                  fill="clear" 
+                  color="danger" 
+                  class="btn-report" 
+                  style="opacity: 0.6; font-size: 0.85rem;"
+                  (click)="mostrarOpcionesReporte(amigo)">
+        <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+        Reportar comportamiento
+      </ion-button>
+      
+    </div>
+
+  </ng-container>
+
+  <ng-template #loadingState>
+    <div class="ion-padding ion-text-center" style="margin-top: 20%;">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p style="color: rgba(255,255,255,0.5); margin-top: 10px;">Consultando historial del rival...</p>
+    </div>
+  </ng-template>
+
+</ion-content>
